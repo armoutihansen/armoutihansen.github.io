@@ -1,4 +1,4 @@
-baseURL = 'https://armoutihansen.github.io/armoutihansenxyz/'
+baseURL = 'https://armoutihansen.github.io/'
 languageCode = 'en-us'
 title = 'Dr. Jesper Armouti-Hansen'
 theme = "gokarna"
