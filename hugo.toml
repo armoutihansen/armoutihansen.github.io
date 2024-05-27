@@ -1,0 +1,95 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'Dr. Jesper Armouti-Hansen'
+theme = "gokarna"
+enableEmoji = true
+
+# Automatically generate robots.txt
+enableRobotsTXT = true
+
+[menu]
+  [[menu.main]]
+    # Unique identifier for a menu item
+    identifier = "posts"
+
+    url = "/posts/"
+    
+    # You can add extra information before the name (HTML format is supported), such as icons
+    pre = "<span data-feather='book'></span>"
+
+    # You can add extra information after the name (HTML format is supported), such as icons
+    post = ""
+
+    # Display name
+    name = "Posts"
+
+    # Weights are used to determine the ordering
+    weight = 1
+
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 2
+
+    pre = "<span data-feather='tag'></span>"
+
+#  [[menu.main]]
+#    identifier = "mail"
+#    url = "mailto:jesper@armoutihansen.xyz"
+#    weight = 3
+
+#    pre = "<span data-feather='mail'></span>"
+    
+#  [[menu.main]]
+#    identifier = "github"
+#    url = "https://github.com/armoutihansen"
+#    weight = 4
+
+#    pre = "<span data-feather='github'></span>"
+
+#  [[menu.main]]
+#    identifier = "linkedin"
+#    url = "https://www.linkedin.com/in/jesper-a-h/"
+#    weight = 5
+    
+    # We use feather-icons: https://feathericons.com/
+#    pre = "<span data-feather='linkedin'></span>"
+
+#  [[menu.main]]
+#    identifier = "orcid"
+#    url = "https://www.linkedin.com/in/jesper-a-h/"
+#    weight = 5
+    
+    # We use feather-icons: https://feathericons.com/
+#    pre = "<i class='ai ai-orcid'></i>"
+
+[params]
+  footer = "Jesper Armouti-Hansen"
+  # description = "Welcome to my personal website. I am a postdoctoral researcher at the University of Copenhagen. My research interests include the study of the interplay between quantum mechanics and gravity, and the development of quantum technologies. I am also interested in the philosophy of science, and the history of physics."
+  avatarURL = "/images/avatar.webp"
+  AvatarAltText = "avatar"
+  avatarSize = "size-m"
+
+  socialIcons = [
+#    {name = "twitter", url = "https://example.com"},
+    {name = "linkedin", url = "https://www.linkedin.com/in/jesper-a-h/"},
+#    {name = "google", url = "https://example.com"},
+    {name = "github", url = "https://github.com/armoutihansen"},
+    {name = "googlescholar", url = "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"},
+    {name = "researchgate", url = "https://www.researchgate.net/profile/Jesper-Armouti-Hansen"},
+    {name = "orcid_new", url = "https://orcid.org/0000-0001-7776-8016"},
+#    {name = "stackoverflow", url = "https://example.com"},
+#    {name = "dribbble", url = "https://example.com"},
+#    {name = "instagram", url = "https://example.com"},
+#    {name = "twitch", url = "https://example.com"},
+    {name = "email", url = "mailto:jesper@armoutihansen.xyz"}
+  ]
+  metaKeywords = ["blog", "gokarna", "hugo"]
+
+#  [[params.plugins.css]]
+#    link = "plugins/academicicons/css/academicons.css"
+
+#  [[params.social]]
+#    icon = "ai ai-orcid"
+#    link = "https://orcid.org/0000-0002-1832-6805"
