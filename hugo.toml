@@ -8,31 +8,31 @@ enableEmoji = true
 enableRobotsTXT = true
 
 [menu]
-  [[menu.main]]
-    # Unique identifier for a menu item
-    identifier = "posts"
+  # [[menu.main]]
+  #   # Unique identifier for a menu item
+  #   identifier = "posts"
 
-    url = "/posts/"
+  #   url = "/posts/"
     
-    # You can add extra information before the name (HTML format is supported), such as icons
-    pre = "<span data-feather='book'></span>"
+  #   # You can add extra information before the name (HTML format is supported), such as icons
+  #   pre = "<span data-feather='book'></span>"
 
-    # You can add extra information after the name (HTML format is supported), such as icons
-    post = ""
+  #   # You can add extra information after the name (HTML format is supported), such as icons
+  #   post = ""
 
-    # Display name
-    name = "Posts"
+  #   # Display name
+  #   name = "Posts"
 
-    # Weights are used to determine the ordering
-    weight = 1
+  #   # Weights are used to determine the ordering
+  #   weight = 1
 
-  [[menu.main]]
-    identifier = "tags"
-    name = "Tags"
-    url = "/tags/"
-    weight = 2
+  # [[menu.main]]
+  #   identifier = "tags"
+  #   name = "Tags"
+  #   url = "/tags/"
+  #   weight = 2
 
-    pre = "<span data-feather='tag'></span>"
+  #   pre = "<span data-feather='tag'></span>"
 
 #  [[menu.main]]
 #    identifier = "mail"
