@@ -68,7 +68,7 @@ enableRobotsTXT = true
   footer = "Jesper Armouti-Hansen"
   # description = "Welcome to my personal website. I am a postdoctoral researcher at the University of Copenhagen. My research interests include the study of the interplay between quantum mechanics and gravity, and the development of quantum technologies. I am also interested in the philosophy of science, and the history of physics."
   avatarURL = "/images/avatar.webp"
-  AvatarAltText = "avatar"
+  AvatarAltText = "avatar3"
   avatarSize = "size-m"
 
   socialIcons = [
