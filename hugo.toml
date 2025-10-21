@@ -41,11 +41,35 @@ enableRobotsTXT = true
 
 #    pre = "<span data-feather='mail'></span>"
     
-#  [[menu.main]]
-#    identifier = "github"
-#    url = "https://github.com/armoutihansen"
-#    weight = 4
+ [[menu.main]]
+   identifier = "home"
+   name = "Home"
+   url = "/"
+   weight = 1
 
+ [[menu.main]]
+   identifier = "contact"
+   name = "Contact"
+   url = "/contact/"
+   weight = 2
+
+ [[menu.main]]
+   identifier = "cv"
+   name = "CV"
+   url = "/cv/"
+   weight = 3
+
+ [[menu.main]]
+   identifier = "research"
+   name = "Research"
+   url = "/research/"
+   weight = 4
+
+ [[menu.main]]
+   identifier = "teaching"
+   name = "Teaching"
+   url = "/teaching/"
+   weight = 5
 #    pre = "<span data-feather='github'></span>"
 
 #  [[menu.main]]
