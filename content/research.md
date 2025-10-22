@@ -41,3 +41,7 @@ We show that choosing a decentralized channel (retailer or sales representative)
 
 #### Abstract
 We use machine learning methods as a benchmark for evaluating the predictive capability of simple parameterized social preference theories in a random utility framework. To that end, we use panel data from the lab containing experimental observations of binary dictator games and reciprocity games from Bruhin et al. (2019). To evaluate a given model’s predictive capability we apply the concept of a model’s completeness introduced by Fudenberg et al. (2022), which reveals (i) how large a fraction of the predictable variation of the data a given social preference model captures, and (ii) how large a gain in performance the model brings compared to a naive baseline model. To address the potential remaining patterns in the data that are not captured on the level of the representative agent, we extend the methodological contribution to allow for unobserved heterogeneity and show its application in a data sparse environment.
+
+{{< details title="Learn More" >}}
+Collapsed text
+{{< /details >}}
