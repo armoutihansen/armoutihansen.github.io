@@ -1,9 +1,8 @@
-# Gokarna
-Gokarna is a small temple town located in the Uttara Kannada district of Karnataka state in southern India.
-
-## Beaches
-Something about beaches, **which is *very* important**.
-
-- every
-- beach
-- is beautiful
+# Contact
+Jesper Armouti-Hansen
+University of Bonn
+Institute for Applied Microeconomics
+Adenauerallee 24-42
+53113 Bonn
+Germany
+Email: [University](mailto:armoutihansen@uni-bonn.de); [Personal](jesper@armoutihansen.xyz)
