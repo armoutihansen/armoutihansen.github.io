@@ -2,17 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Dr. Jesper Armouti-Hansen</title>
-    <link>http://localhost:1313/</link>
+    <link>https://armoutihansen.github.io/</link>
     <description>Recent content on Dr. Jesper Armouti-Hansen</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://armoutihansen.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title></title>
-      <link>http://localhost:1313/index-about/</link>
+      <link>https://armoutihansen.github.io/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/index-about/</guid>
-      <description>Welcome to my research and teaching page!&#xA;I am a Postdoctoral Researcher at the Institute for Applied Microeconomics (IAME), University of Bonn. Before that, I was a Research Assistant and Doctoral Candidate at the Seminar of Personnel Economics and HRM, University of Cologne.&#xA;My research interests are in the fields of Choice and Decision Theory, Behavioral and Experimental Economics, Behavioral Contract Theory and Machine Learning.&#xA;Download my CV.</description>
+      <guid>https://armoutihansen.github.io/contact/</guid>
+      <description>&lt;h1 id=&#34;gokarna&#34;&gt;Gokarna&lt;/h1&gt;&#xA;&lt;p&gt;Gokarna is a small temple town located in the Uttara Kannada district of Karnataka state in southern India.&lt;/p&gt;&#xA;&lt;h2 id=&#34;beaches&#34;&gt;Beaches&lt;/h2&gt;&#xA;&lt;p&gt;Something about beaches, &lt;strong&gt;which is &lt;em&gt;very&lt;/em&gt; important&lt;/strong&gt;.&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;every&lt;/li&gt;&#xA;&lt;li&gt;beach&lt;/li&gt;&#xA;&lt;li&gt;is beautiful&lt;/li&gt;&#xA;&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://armoutihansen.github.io/index-about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://armoutihansen.github.io/index-about/</guid>
+      <description>&lt;p&gt;Welcome to my research and teaching page!&lt;/p&gt;&#xA;&lt;p&gt;I am a Postdoctoral Researcher at the Institute for Applied Microeconomics (IAME), University of Bonn. Before that, I was a Research Assistant and Doctoral Candidate at the Seminar of Personnel Economics and Human Resource Management, University of Cologne.&lt;/p&gt;&#xA;&lt;p&gt;My research interests are in the fields of Contract Theory, Organizational Economics and Behavioral Economics.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
