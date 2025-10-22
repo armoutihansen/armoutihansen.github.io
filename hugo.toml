@@ -117,3 +117,8 @@ enableRobotsTXT = true
 #  [[params.social]]
 #    icon = "ai ai-orcid"
 #    link = "https://orcid.org/0000-0002-1832-6805"
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.parser]
+      [markup.goldmark.parser.attribute]
+        block = true
