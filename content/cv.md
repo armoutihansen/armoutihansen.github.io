@@ -1,6 +1,6 @@
 # Fields of Interest
 
-# Academic Positions
+# Positions
 
 # Education
 
@@ -26,3 +26,7 @@
 # Other
 
 # References
+- Prof. Dr. Dirk Sliwka
+- Prof. Dr. Matthias Kräkel
+- Prof. Dr. Lea Cassar
+- Prof. Marco Mariotti, PhD
