@@ -1,5 +1,5 @@
 # Research
-
+---
 ## Publications
 > ### [Efficiency Wages with Motivated Agents](https://www.sciencedirect.com/science/article/pii/S0899825624000307) (joint with Lea Cassar, Anna Deréky and Florian Engl)
 > 
@@ -32,7 +32,7 @@
 > {{< details title="Abstract" >}}
 > Decision-makers frequently struggle to base their choices on an exhaustive evaluation of all options at stake. This is particularly so when the choice problem at hand is complex, because the available alternatives are hard (if not impossible) to compare. Rather than striving to choose the most valuable alternative, in such situations decision-makers often settle for the choice of an alternative which is not inferior to any other available alternative instead. In this paper, we extend two established models of boundedly rational choice, the categorize then choose heuristic and the rational shortlist method, to incorporate this kind of “indecisive” choice behavior. We study some properties of these extensions and provide full behavioral characterizations.
 > {{< /details >}}
-
+---
 ## Working Papers
 
 > ### Centralized versus Decentralized Selling of Goods with Uncertain Consumption Quality (joint with Matthias Kräkel) 
@@ -40,7 +40,7 @@
 > {{< details title="Abstract" >}}
 > We show that choosing a decentralized channel (retailer or sales representative) instead of a centralized channel for selling goods with uncertain consumption quality can be optimal for a manufacturer as a self-commitment device. Selling of such goods is typically associated with sales activities (e.g., sales talks, product presentations) that lead to considerable costs. As these costs only accrue to the party that directly interacts with consumers and as sales activities do not play a role in a perfect Bayesian equilibrium, it will be optimal for a manufacturer to leave consumer interactions to a retailer if the double-marginalization problem does not dominate, or to a sales representative if the respective labor costs are not too large. Broadly speaking, manufacturers choose decentralization to avoid costs of interacting with consumers, as these costs will be particularly high if goods are characterized by uncertain consumption quality. In a second step, we show that this argument also holds under product competition, consumer naivety, product innovation, and product quality improvement.
 > {{< /details >}}
- 
+--- 
 ## Work in Progress
 > ### The Completeness of Social Preference Theories with Unobserved Heterogeneity (single-authored)
 > 

@@ -1,4 +1,5 @@
-# Contact
+# Contact information
+---
 * Jesper Armouti-Hansen
 * University of Bonn
 * Institute for Applied Microeconomics
