@@ -1,21 +1,20 @@
 # CV
----
 ## Fields of Interest
+Contract Theory, Organizational Economics, Behavioral Economics
+
 ---
 ## Positions
+- Since 2022 **Postdoctoral Researcher**, Institute for Applied Microeconomics, University of Bonn
+- 2015 - 2021 **Research Assistant**, Seminar for Personel Economics and HRM, University of Cologne
 ---
 ## Education
+- 2015 - 2021 **Dr. rer. pol (Ph.D. equivalent) in Economics**, University of Cologne
+- 2012 - 2014 **M.Sc. International Economics and Public Policy**, University of Mainz
+- 2008 - 2012 **B.A. Financial Management and Services**, Copenhagen Business Academy
 ---
 ## Affiliations
----
-## Research
-### Publications
-
-### Working Papers
-
-### Work in Progress
----
-## Teaching Experience
+- Since 2022 **Junior Researcher**, Econtribute
+- Since 2022 **Affiliated Member**, C-SEB
 ---
 ## Refereeing
 - Economica
@@ -25,6 +24,9 @@
 - Scandinavian Journal of Economics
 ---
 ## Other
+- **Programming**: Python, R, Stata/Mata, Latex, JavaScript, TypeScript, C, C++, Go, Shell
+- **Languages**: Danish, English, German
+- **Personal**: Citizenship: Danish; Married (onen child)
 ---
 ## References
 - Prof. Dr. Dirk Sliwka

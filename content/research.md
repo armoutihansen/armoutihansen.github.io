@@ -1,5 +1,4 @@
 # Research
----
 ## Publications
 > ### [Efficiency Wages with Motivated Agents](https://www.sciencedirect.com/science/article/pii/S0899825624000307) (joint with Lea Cassar, Anna Deréky and Florian Engl)
 > 

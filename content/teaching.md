@@ -1,5 +1,4 @@
 # Teaching Experience
----
 - Seminar on Current Topics in Microeconomics (Lecturer, undergraduate) [since 2025]
 - Research Module on Applied Microeconomics and Management (Lecturer, graduate) [2022 - 2025]
 - Empirical Evaluation of Management Practices, Graduate (Lecturer and tutor, graduate) [2019 - 2022]
