@@ -1,6 +1,6 @@
 # CV
 ## Fields of Interest
-Contract Theory, Organizational Economics, Behavioral Economics
+Behavioral Economics, Personnel Economics, Organizational Economics
 
 ---
 ## Positions
@@ -26,7 +26,7 @@ Contract Theory, Organizational Economics, Behavioral Economics
 ## Other
 - **Programming**: Python, R, Stata/Mata, Latex, JavaScript, TypeScript, C, C++, Go, Shell
 - **Languages**: Danish, English, German
-- **Personal**: Citizenship: Danish; Married (onen child)
+- **Personal**: Citizenship: Danish; Married (one child)
 ---
 ## References
 - Prof. Dr. Dirk Sliwka
