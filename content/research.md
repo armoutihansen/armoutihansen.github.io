@@ -34,10 +34,10 @@
 ---
 ## Working Papers
 
-> ### Centralized versus Decentralized Selling of Goods with Uncertain Consumption Quality (joint with Matthias Kräkel) 
+> ### On the Optimal Mode of Selling Goods with Uncertain Consumption Quality (joint with Matthias Kräkel) 
 > 
 > {{< details title="Abstract" >}}
-> We show that choosing a decentralized channel (retailer or sales representative) instead of a centralized channel for selling goods with uncertain consumption quality can be optimal for a manufacturer as a self-commitment device. Selling of such goods is typically associated with sales activities (e.g., sales talks, product presentations) that lead to considerable costs. As these costs only accrue to the party that directly interacts with consumers and as sales activities do not play a role in a perfect Bayesian equilibrium, it will be optimal for a manufacturer to leave consumer interactions to a retailer if the double-marginalization problem does not dominate, or to a sales representative if the respective labor costs are not too large. Broadly speaking, manufacturers choose decentralization to avoid costs of interacting with consumers, as these costs will be particularly high if goods are characterized by uncertain consumption quality. In a second step, we show that this argument also holds under product competition, consumer naivety, product innovation, and product quality improvement.
+> We show that choosing a decentralized or a hybrid channel—that is, a retailer or an intermediary (e.g., sales representative, social media influencer)— instead of a centralized channel for selling goods with uncertain consumption quality can be optimal for a manufacturer as a self-commitment device. By this policy, the manufacturer can save costs from interacting with consumers (e.g., costs for sales activities). We derive conditions under which this self-commitment argument holds. In a second step, we discuss this argument under product competition, consumer naivety, product innovation, and product quality improvement.
 > {{< /details >}}
 --- 
 ## Work in Progress
