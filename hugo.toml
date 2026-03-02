@@ -70,6 +70,13 @@ enableRobotsTXT = true
    name = "Teaching"
    url = "/teaching/"
    weight = 5
+
+ [[menu.main]]
+    identifier = "notes"
+    name = "Notes"
+    url = "https://notes.armoutihansen.xyz"
+    weight = 4
+
 #    pre = "<span data-feather='github'></span>"
 
 #  [[menu.main]]
