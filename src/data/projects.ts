@@ -35,42 +35,42 @@ export const projects = [
     methods: ["TypeScript", "Quartz", "Obsidian", "static publishing"],
     href: "https://notes.armoutihansen.xyz/"
   },
-  {
-    title: "CI/CD for ML Demo",
-    category: "ML engineering",
-    status: "GitHub project",
-    summary:
-      "Demonstration repository for applying continuous integration and delivery practices to machine learning workflows.",
-    methods: ["CI/CD", "ML workflow", "automation", "testing"],
-    href: "https://github.com/armoutihansen/ci-cd-for-ml-demo"
-  },
-  {
-    title: "Predictive Modelling of Economic Behavior",
-    category: "Research and machine learning",
-    status: "Active research",
-    summary:
-      "Benchmarking social preference theories against machine learning models to quantify predictive completeness in experimental choice data.",
-    methods: ["Python", "model evaluation", "random utility models", "panel data"],
-    href: "/research/"
-  },
-  {
-    title: "Experimental Data Analysis",
-    category: "Econometrics",
-    status: "Research workflow",
-    summary:
-      "Analysis workflows for laboratory and behavioral data, including data cleaning, regression analysis, hypothesis testing, and transparent result communication.",
-    methods: ["econometrics", "hypothesis testing", "data cleaning", "visualization"],
-    href: "/publications/"
-  },
-  {
-    title: "Machine Learning Analysis of Structured Data",
-    category: "Applied data science",
-    status: "Selected project",
-    summary:
-      "Built and evaluated predictive models on structured datasets, comparing model performance and assessing where predictions are reliable enough to support decisions.",
-    methods: ["scikit-learn", "model comparison", "error analysis", "confidence assessment"],
-    href: "/cv/"
-  },
+  // {
+  //   title: "CI/CD for ML Demo",
+  //   category: "ML engineering",
+  //   status: "GitHub project",
+  //   summary:
+  //     "Demonstration repository for applying continuous integration and delivery practices to machine learning workflows.",
+  //   methods: ["CI/CD", "ML workflow", "automation", "testing"],
+  //   href: "https://github.com/armoutihansen/ci-cd-for-ml-demo"
+  // },
+  // {
+  //   title: "Predictive Modelling of Economic Behavior",
+  //   category: "Research and machine learning",
+  //   status: "Active research",
+  //   summary:
+  //     "Benchmarking social preference theories against machine learning models to quantify predictive completeness in experimental choice data.",
+  //   methods: ["Python", "model evaluation", "random utility models", "panel data"],
+  //   href: "/research/"
+  // },
+  // {
+  //   title: "Experimental Data Analysis",
+  //   category: "Econometrics",
+  //   status: "Research workflow",
+  //   summary:
+  //     "Analysis workflows for laboratory and behavioral data, including data cleaning, regression analysis, hypothesis testing, and transparent result communication.",
+  //   methods: ["econometrics", "hypothesis testing", "data cleaning", "visualization"],
+  //   href: "/publications/"
+  // },
+  // {
+  //   title: "Machine Learning Analysis of Structured Data",
+  //   category: "Applied data science",
+  //   status: "Selected project",
+  //   summary:
+  //     "Built and evaluated predictive models on structured datasets, comparing model performance and assessing where predictions are reliable enough to support decisions.",
+  //   methods: ["scikit-learn", "model comparison", "error analysis", "confidence assessment"],
+  //   href: "/cv/"
+  // },
   {
     title: "Efficiency Wages with Motivated Agents",
     category: "Research code",
