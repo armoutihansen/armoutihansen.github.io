@@ -1,0 +1,34 @@
+---
+interface Props {
+  publication: {
+    title: string;
+    authors: string;
+    venue: string;
+    year: string;
+    details: string;
+    href: string;
+    type: string;
+    abstract: string;
+  };
+}
+
+const { publication } = Astro.props;
+---
+
+<article class="publication-item">
+  <div class="publication-topline">
+    <span>{publication.type}</span>
+    <span>{publication.year}</span>
+  </div>
+  <h3>
+    {publication.href ? <a href={publication.href}>{publication.title}</a> : publication.title}
+  </h3>
+  <p class="authors">{publication.authors}</p>
+  <p class="venue">
+    <strong>{publication.venue}</strong>{publication.details && `, ${publication.details}`}
+  </p>
+  <details>
+    <summary>Abstract</summary>
+    <p>{publication.abstract}</p>
+  </details>
+</article>

@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PublicationItem from "../components/PublicationItem.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { publications } from "../data/publications";
+
+const journalPublications = publications.filter((item) => item.type === "Publication");
+const otherWork = publications.filter((item) => item.type !== "Publication");
+---
+
+<BaseLayout title="Publications" description="Journal publications, working papers, and current research by Jesper Armouti-Hansen.">
+  <section class="page-hero">
+    <p class="eyebrow">Publications</p>
+    <h1>Research publications and current work</h1>
+    <p class="lead">Published and ongoing work in behavioral economics, organizational economics, decision theory, and predictive modelling of economic behavior.</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Journal publications" />
+    <div class="publication-list">
+      {journalPublications.map((publication) => <PublicationItem publication={publication} />)}
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Working papers and current research" />
+    <div class="publication-list">
+      {otherWork.map((publication) => <PublicationItem publication={publication} />)}
+    </div>
+  </section>
+</BaseLayout>

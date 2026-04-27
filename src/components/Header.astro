@@ -1,0 +1,43 @@
+---
+import { profile } from "../data/profile";
+
+const nav = [
+  { label: "Projects", href: "/projects/" },
+  { label: "Research", href: "/research/" },
+  { label: "Publications", href: "/publications/" },
+  { label: "CV", href: "/cv/" },
+  { label: "Contact", href: "/contact/" }
+];
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label={`${profile.name} home`}>
+    <span>{profile.name}</span>
+  </a>
+  <nav class="nav" aria-label="Main navigation">
+    {nav.map((item) => <a href={item.href}>{item.label}</a>)}
+  </nav>
+  <button class="theme-toggle" type="button" aria-label="Switch color theme" data-theme-toggle>
+    <span data-theme-label>Dark</span>
+  </button>
+</header>
+
+<script>
+  const toggle = document.querySelector("[data-theme-toggle]");
+  const label = document.querySelector("[data-theme-label]");
+
+  function updateThemeLabel(theme: string) {
+    if (label) label.textContent = theme === "dark" ? "Light" : "Dark";
+  }
+
+  if (toggle) {
+    updateThemeLabel(document.documentElement.dataset.theme || "light");
+    toggle.addEventListener("click", () => {
+      const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+      const next = current === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem("theme", next);
+      updateThemeLabel(next);
+    });
+  }
+</script>

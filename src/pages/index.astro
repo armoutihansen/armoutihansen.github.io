@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import PublicationItem from "../components/PublicationItem.astro";
+import { profile, skills } from "../data/profile";
+import { projects } from "../data/projects";
+import { publications } from "../data/publications";
+
+const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">{profile.title}</p>
+      <h1>{profile.name}</h1>
+      <p class="lead">{profile.summary}</p>
+      <div class="hero-actions">
+        <a class="button primary" href="/projects/">View projects</a>
+        <a class="button secondary" href="/publications/">Read publications</a>
+      </div>
+    </div>
+    <div class="hero-portrait-panel">
+      <img src="/images/avatar3.webp" alt="Illustrated portrait of Jesper Armouti-Hansen" />
+      <div class="hero-panel" aria-label="Profile focus areas">
+        <p class="panel-label">Focus</p>
+        <ul>
+          <li>Econometrics and statistical modelling</li>
+          <li>Machine learning model evaluation</li>
+          <li>Behavioral and organizational research</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading
+      eyebrow="Profile"
+      title="Quantitative work grounded in economic research"
+      intro="My work connects applied data science with formal research training: building models, evaluating evidence, and communicating uncertainty clearly enough to support decisions."
+    />
+    <div class="pillar-grid">
+      <article>
+        <h3>Quantitative modelling</h3>
+        <p>Statistical models, econometrics, model comparison, and hypothesis-driven analysis of structured data.</p>
+      </article>
+      <article>
+        <h3>Applied data science</h3>
+        <p>Machine learning workflows with attention to confidence, error analysis, and the practical conditions under which model outputs are useful.</p>
+      </article>
+      <article>
+        <h3>Research depth</h3>
+        <p>Academic work on behavioral economics, incentives, social preferences, and organizational decision-making.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Selected work" title="Projects" />
+    <div class="card-grid">
+      {projects.slice(0, 3).map((project) => <ProjectCard project={project} />)}
+    </div>
+    <a class="section-link" href="/projects/">All projects</a>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Research" title="Selected publications" />
+    <div class="publication-list compact">
+      {featuredPublications.map((publication) => <PublicationItem publication={publication} />)}
+    </div>
+    <a class="section-link" href="/publications/">All publications</a>
+  </section>
+
+  <section class="section skill-band">
+    <SectionHeading eyebrow="Toolkit" title="Methods and tools" />
+    <div class="skill-columns">
+      <div>
+        <h3>Quantitative</h3>
+        <ul class="tag-list">{skills.quantitative.map((skill) => <li>{skill}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Programming</h3>
+        <ul class="tag-list">{skills.programming.map((skill) => <li>{skill}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Research</h3>
+        <ul class="tag-list">{skills.research.map((skill) => <li>{skill}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

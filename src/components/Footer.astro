@@ -1,0 +1,11 @@
+---
+import { profile } from "../data/profile";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <p>{year} {profile.name}</p>
+  <div class="footer-links">
+    {profile.links.map((link) => <a href={link.href}>{link.label}</a>)}
+  </div>
+</footer>

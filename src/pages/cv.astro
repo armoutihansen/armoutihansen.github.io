@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { experience } from "../data/experience";
+import { profile, skills } from "../data/profile";
+---
+
+<BaseLayout title="CV" description="CV and professional profile for Jesper Armouti-Hansen, quantitative data scientist and economics PhD.">
+  <section class="page-hero">
+    <p class="eyebrow">CV</p>
+    <h1>Quantitative data scientist with an economics PhD</h1>
+    <p class="lead">{profile.summary}</p>
+    <div class="hero-actions">
+      <a class="button primary" href="/CV_JAH.pdf">Download PDF CV</a>
+      <a class="button secondary" href={`mailto:${profile.email}`}>Contact</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Experience" />
+    <div class="timeline">
+      {experience.map((item) => (
+        <article>
+          <div>
+            <p class="period">{item.period}</p>
+            <p class="location">{item.location}</p>
+          </div>
+          <div>
+            <h3>{item.role}</h3>
+            <p class="organization">{item.organization}</p>
+            <ul>
+              {item.bullets.map((bullet) => <li>{bullet}</li>)}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Education" />
+    <div class="resume-grid">
+      <article>
+        <h3>PhD in Economics, Dr. rer. pol.</h3>
+        <p>University of Cologne, 2015-2021. Summa cum laude. Focus on microeconomics, statistics, and econometrics.</p>
+      </article>
+      <article>
+        <h3>MSc International Economics and Public Policy</h3>
+        <p>University of Mainz, 2012-2014. Focus on microeconomics, statistics, and econometrics.</p>
+      </article>
+      <article>
+        <h3>BA Financial Management and Services</h3>
+        <p>Copenhagen Business Academy, 2008-2012.</p>
+      </article>
+      <article>
+        <h3>Exchange semester</h3>
+        <p>European University of Cyprus, 2010.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section skill-band">
+    <SectionHeading title="Skills" />
+    <div class="skill-columns">
+      <div>
+        <h3>Quantitative</h3>
+        <ul class="tag-list">{skills.quantitative.map((skill) => <li>{skill}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Programming</h3>
+        <ul class="tag-list">{skills.programming.map((skill) => <li>{skill}</li>)}</ul>
+      </div>
+      <div>
+        <h3>Languages</h3>
+        <ul class="tag-list">
+          <li>Danish: native</li>
+          <li>English: full professional proficiency</li>
+          <li>German: professional proficiency</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

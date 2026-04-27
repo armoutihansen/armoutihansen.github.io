@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { publications } from "../data/publications";
+---
+
+<BaseLayout title="Research" description="Research profile in behavioral economics, personnel economics, organizational economics, and predictive modelling of economic behavior.">
+  <section class="page-hero">
+    <p class="eyebrow">Research</p>
+    <h1>Behavioral and organizational economics with a quantitative lens</h1>
+    <p class="lead">My academic work studies incentives, motivation, social preferences, reference-dependent choice, and organizational design. Current work connects these themes to predictive modelling and machine learning benchmarks.</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Research areas" />
+    <div class="pillar-grid">
+      <article>
+        <h3>Incentives and motivation</h3>
+        <p>How wages, missions, and organizational design shape effort, selection, and behavior in work environments.</p>
+      </article>
+      <article>
+        <h3>Behavioral choice</h3>
+        <p>Models of social preferences, bounded rationality, reference dependence, and indecisive choice behavior.</p>
+      </article>
+      <article>
+        <h3>Predictive evaluation</h3>
+        <p>Using statistical and machine learning benchmarks to assess the explanatory reach of economic theories.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading
+      eyebrow="Current agenda"
+      title="Predictive completeness of social preference theories"
+      intro="This project evaluates parameterized social preference models against machine learning benchmarks, asking how much predictable variation in experimental behavior these models capture and how heterogeneity changes their explanatory power."
+    />
+    <a class="section-link" href="/publications/">View publications and working papers</a>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Research output" />
+    <div class="metrics-strip">
+      <div>
+        <strong>{publications.filter((item) => item.type === "Publication").length}</strong>
+        <span>Journal publications</span>
+      </div>
+      <div>
+        <strong>3</strong>
+        <span>Main fields</span>
+      </div>
+      <div>
+        <strong>60+</strong>
+        <span>Theses supervised</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

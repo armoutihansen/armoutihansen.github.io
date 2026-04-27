@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { profile } from "../data/profile";
+---
+
+<BaseLayout title="Contact" description="Contact details and professional profiles for Jesper Armouti-Hansen.">
+  <section class="page-hero contact-hero">
+    <p class="eyebrow">Contact</p>
+    <h1>Get in touch</h1>
+    <p class="lead">For professional, research, or project-related inquiries, the easiest way to reach me is by email.</p>
+    <a class="button primary" href={`mailto:${profile.email}`}>{profile.email}</a>
+  </section>
+
+  <section class="section">
+    <div class="contact-grid">
+      {profile.links.map((link) => (
+        <a class="contact-link" href={link.href}>
+          <span>{link.label}</span>
+          <span>Open profile</span>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
