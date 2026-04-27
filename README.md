@@ -1,6 +1,6 @@
 # armoutihansen.xyz
 
-Personal website for Dr. Jesper Armouti-Hansen, positioned around quantitative data science, applied economics, and academic research.
+Personal website positioned around quantitative data science, applied economics, and academic research.
 
 The site is built with [Astro](https://astro.build/) and deployed as a static site through GitHub Pages to [armoutihansen.xyz](https://armoutihansen.xyz).
 
@@ -104,9 +104,3 @@ Most content updates should be made in `src/data/`:
 - Update CV entries in `src/data/experience.ts`.
 
 For page-level copy, edit the relevant file in `src/pages/`.
-
-## Notes
-
-- The legacy Hugo files are still present in the repository history, but the active site is Astro.
-- The old CitiBike case study is preserved at `/DSC/`.
-- The mobile homepage hides the profile image to keep the narrow layout clean.
