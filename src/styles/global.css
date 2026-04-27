@@ -569,7 +569,7 @@ details p {
   }
 
   .hero-portrait-panel img {
-    width: min(100%, 280px);
+    display: none;
   }
 
   .hero-panel {
