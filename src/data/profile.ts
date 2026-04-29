@@ -4,7 +4,7 @@ export const profile = {
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Economics PhD applying theoretical modelling, statistical modelling, and machine learning to understand data, evaluate models, and support better decisions.",
+    "Economics PhD applying statistical modelling, econometrics, and machine learning evaluation to structured data.",
   links: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/jesper-a-h/" },
     { label: "GitHub", href: "https://github.com/armoutihansen" },
@@ -23,6 +23,7 @@ export const skills = {
     "Experimental data analysis",
     "Theoretical modelling",
     "Model evaluation",
+    "Machine learning evaluation",
     "Hypothesis testing",
     "Error analysis",
   ],
@@ -36,7 +37,8 @@ export const skills = {
     "R",
     "Stata",
     "Git",
-    "Linux"
+    "Linux",
+    "CLI tools"
   ],
   research: [
     "Behavioral economics",

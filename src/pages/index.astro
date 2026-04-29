@@ -16,6 +16,17 @@ const featuredPublications = publications.filter((item) => item.type === "Public
       <p class="eyebrow">{profile.title}</p>
       <h1>{profile.name}</h1>
       <p class="lead">{profile.summary}</p>
+      <div class="hero-about">
+        <p>
+          I am a quantitative scientist with a background in economics and a PhD from the University of Cologne. In my current role, I work with machine learning models in an operational context, focusing on how model outputs can be used reliably in practice.
+        </p>
+        <p>
+          My work includes understanding confidence levels, defining thresholds, and supporting decisions on when results can be used directly and when human review is required.
+        </p>
+        <p>
+          My academic research covers theoretical and empirical topics in microeconomics, with a focus on behavioral economics, personnel economics, organizational economics, formal modelling, and careful interpretation of results.
+        </p>
+      </div>
       <div class="hero-actions">
         <a class="button primary" href="/projects/">View projects</a>
         <a class="button secondary" href="/publications/">Read publications</a>
@@ -50,7 +61,7 @@ const featuredPublications = publications.filter((item) => item.type === "Public
         <p>Machine learning workflows with attention to confidence, error analysis, and the practical conditions under which model outputs are useful.</p>
       </article>
       <article>
-        <h3>Research depth</h3>
+        <h3>Microeconomic research</h3>
         <p>Academic work on behavioral economics, incentives, social preferences, and organizational decision-making.</p>
       </article>
     </div>
@@ -59,7 +70,7 @@ const featuredPublications = publications.filter((item) => item.type === "Public
   <section class="section">
     <SectionHeading eyebrow="Selected work" title="Projects" />
     <div class="card-grid">
-      {projects.slice(0, 3).map((project) => <ProjectCard project={project} />)}
+      {projects.slice(0, 4).map((project) => <ProjectCard project={project} />)}
     </div>
     <a class="section-link" href="/projects/">All projects</a>
   </section>

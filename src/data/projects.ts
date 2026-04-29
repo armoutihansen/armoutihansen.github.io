@@ -1,21 +1,12 @@
 export const projects = [
   {
     title: "RAG Search Engine",
-    category: "Retrieval and evaluation",
+    category: "AI search and retrieval",
     status: "GitHub project",
     summary:
-      "Python search system combining BM25, Sentence Transformers, CLIP, reciprocal rank fusion, query enhancement, multimodal search, caching, and evaluation workflows.",
-    methods: ["Python", "RAG", "BM25", "Sentence Transformers", "CLIP"],
+      "CLI-based RAG search engine for movie data combining BM25, semantic and hybrid search, multimodal CLIP search, Gemini query enhancement, reranking, and generation.",
+    methods: ["Python", "RAG", "BM25", "semantic search", "CLIP", "reranking"],
     href: "https://github.com/armoutihansen/rag-search-engine"
-  },
-  {
-    title: "CitiBike Demand, Risk, and Net Flow Analysis",
-    category: "Applied data science",
-    status: "Case study",
-    summary:
-      "Exploratory and risk-oriented analysis of CitiBike usage, bike-type mix, membership patterns, station-level risk, and net-flow dynamics using trip and collision data.",
-    methods: ["Python", "geospatial matching", "risk analysis", "visualization"],
-    href: "/DSC/"
   },
   {
     title: "Economic Theories and Machine Learning",
@@ -23,8 +14,26 @@ export const projects = [
     status: "GitHub project",
     summary:
       "Analysis code connected to research on evaluating economic theories using machine learning techniques.",
-    methods: ["Jupyter Notebook", "machine learning", "economic theory", "model evaluation"],
+    methods: ["Python", "machine learning", "economic theory", "model evaluation"],
     href: "https://github.com/armoutihansen/EETML"
+  },
+  {
+    title: "CitiBike Demand, Risk, and Net Flow Analysis",
+    category: "Applied data science",
+    status: "Case study",
+    summary:
+      "Demand, risk, and net-flow analysis of CitiBike NYC from 2023 to 2025, using trip and collision data to examine usage patterns, station-level risk, and operational dynamics.",
+    methods: ["data science", "data cleaning", "feature engineering", "machine learning"],
+    href: "/DSC/"
+  },
+  {
+    title: "Build AI Agent",
+    category: "AI tooling",
+    status: "GitHub project",
+    summary:
+      "A simple Gemini-powered coding agent that can inspect files, run Python scripts, and write code through tool-calling.",
+    methods: ["Python", "AI agent", "tool-calling", "Gemini API", "CLI"],
+    href: "https://github.com/armoutihansen/build-ai-agent"
   },
   {
     title: "Personal Knowledge System",
@@ -35,42 +44,24 @@ export const projects = [
     methods: ["TypeScript", "Quartz", "Obsidian", "static publishing"],
     href: "https://notes.armoutihansen.xyz/"
   },
-  // {
-  //   title: "CI/CD for ML Demo",
-  //   category: "ML engineering",
-  //   status: "GitHub project",
-  //   summary:
-  //     "Demonstration repository for applying continuous integration and delivery practices to machine learning workflows.",
-  //   methods: ["CI/CD", "ML workflow", "automation", "testing"],
-  //   href: "https://github.com/armoutihansen/ci-cd-for-ml-demo"
-  // },
-  // {
-  //   title: "Predictive Modelling of Economic Behavior",
-  //   category: "Research and machine learning",
-  //   status: "Active research",
-  //   summary:
-  //     "Benchmarking social preference theories against machine learning models to quantify predictive completeness in experimental choice data.",
-  //   methods: ["Python", "model evaluation", "random utility models", "panel data"],
-  //   href: "/research/"
-  // },
-  // {
-  //   title: "Experimental Data Analysis",
-  //   category: "Econometrics",
-  //   status: "Research workflow",
-  //   summary:
-  //     "Analysis workflows for laboratory and behavioral data, including data cleaning, regression analysis, hypothesis testing, and transparent result communication.",
-  //   methods: ["econometrics", "hypothesis testing", "data cleaning", "visualization"],
-  //   href: "/publications/"
-  // },
-  // {
-  //   title: "Machine Learning Analysis of Structured Data",
-  //   category: "Applied data science",
-  //   status: "Selected project",
-  //   summary:
-  //     "Built and evaluated predictive models on structured datasets, comparing model performance and assessing where predictions are reliable enough to support decisions.",
-  //   methods: ["scikit-learn", "model comparison", "error analysis", "confidence assessment"],
-  //   href: "/cv/"
-  // },
+  {
+    title: "Static Site Generator",
+    category: "Software engineering",
+    status: "GitHub project",
+    summary:
+      "A compact Python static site generator that converts Markdown content into templated HTML pages using only the standard library.",
+    methods: ["Python", "Markdown", "HTML", "CSS", "unit testing"],
+    href: "https://github.com/armoutihansen/ssg"
+  },
+  {
+    title: "Maze Solver",
+    category: "Algorithms",
+    status: "GitHub project",
+    summary:
+      "Python maze generator and visual solver using tkinter, recursive backtracking generation, and depth-first search pathfinding animation.",
+    methods: ["Python", "algorithms", "depth-first search", "pathfinding", "tkinter"],
+    href: "https://github.com/armoutihansen/maze_solver"
+  },
   {
     title: "Efficiency Wages with Motivated Agents",
     category: "Research code",
@@ -86,7 +77,7 @@ export const projects = [
     status: "Public website",
     summary:
       "A static, content-driven personal website designed to connect quantitative data science, applied economics, and academic research.",
-    methods: ["Astro", "static site generation", "GitHub Pages", "information architecture"],
+    methods: ["Astro", "data science", "machine learning", "GitHub Pages"],
     href: "https://github.com/armoutihansen/armoutihansen.github.io"
   }
 ];
