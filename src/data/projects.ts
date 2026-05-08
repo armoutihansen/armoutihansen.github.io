@@ -27,13 +27,13 @@ export const projects = [
     href: "/DSC/"
   },
   {
-    title: "Build AI Agent",
-    category: "AI tooling",
+    title: "Efficiency Wages with Motivated Agents",
+    category: "Research code",
     status: "GitHub project",
     summary:
-      "A simple Gemini-powered coding agent that can inspect files, run Python scripts, and write code through tool-calling.",
-    methods: ["Python", "AI agent", "tool-calling", "Gemini API", "CLI"],
-    href: "https://github.com/armoutihansen/build-ai-agent"
+      "Replication data and code for the paper Efficiency Wages with Motivated Agents and its online appendix.",
+    methods: ["Python", "Stata", "experimental economics", "replication", "Jupyter Notebook"],
+    href: "https://github.com/armoutihansen/efficiency-wages"
   },
   {
     title: "Personal Knowledge System",
@@ -63,13 +63,13 @@ export const projects = [
     href: "https://github.com/armoutihansen/maze_solver"
   },
   {
-    title: "Efficiency Wages with Motivated Agents",
-    category: "Research code",
+    title: "Build AI Agent",
+    category: "AI tooling",
     status: "GitHub project",
     summary:
-      "Repository connected to the analysis behind the paper on efficiency wages, prosocial motivation, and effort provision.",
-    methods: ["research replication", "behavioral economics", "data analysis"],
-    href: "https://github.com/armoutihansen/EWMA"
+      "A simple Gemini-powered coding agent that can inspect files, run Python scripts, and write code through tool-calling.",
+    methods: ["Python", "AI agent", "tool-calling", "Gemini API", "CLI"],
+    href: "https://github.com/armoutihansen/build-ai-agent"
   },
   {
     title: "Portfolio and Research Website",
