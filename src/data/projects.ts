@@ -19,7 +19,7 @@ export const projects = [
     methods: ["Python", "machine learning", "economic theory", "model evaluation"],
     image: "/images/projects/economic-theories-ml.png",
     imageAlt: "GitHub social preview for the Economic Theories and Machine Learning repository",
-    href: "https://github.com/armoutihansen/EETML"
+    href: "https://github.com/armoutihansen/econ-theories-ml"
   },
   {
     title: "CitiBike Demand, Risk, and Net Flow Analysis",
@@ -29,7 +29,7 @@ export const projects = [
       "Demand, risk, and net-flow analysis of CitiBike NYC from 2023 to 2025, using trip and collision data to examine usage patterns, station-level risk, and operational dynamics.",
     methods: ["data science", "data cleaning", "feature engineering", "machine learning"],
     image: "/images/projects/citibike.png",
-    imageAlt: "GitHub social preview for the CitiBike Demand, Risk, and Net Flow Analysis repository",
+    imageAlt: "GitHub social preview for the CitiBike Data Science repository",
     href: "/DSC/"
   },
   {
@@ -74,7 +74,7 @@ export const projects = [
     methods: ["Python", "Markdown", "HTML", "CSS", "unit testing"],
     image: "/images/projects/static-site-generator.png",
     imageAlt: "GitHub social preview for the Static Site Generator repository",
-    href: "https://github.com/armoutihansen/ssg"
+    href: "https://github.com/armoutihansen/static-site-generator"
   },
   {
     title: "Maze Solver",
@@ -85,7 +85,7 @@ export const projects = [
     methods: ["Python", "algorithms", "depth-first search", "pathfinding", "tkinter"],
     image: "/images/projects/maze-solver.png",
     imageAlt: "GitHub social preview for the Maze Solver repository",
-    href: "https://github.com/armoutihansen/maze_solver"
+    href: "https://github.com/armoutihansen/maze-solver"
   },
   {
     title: "Build AI Agent",
