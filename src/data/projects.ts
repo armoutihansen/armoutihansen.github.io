@@ -36,6 +36,15 @@ export const projects = [
     href: "https://github.com/armoutihansen/efficiency-wages"
   },
   {
+    title: "Frequency-Report Scoring Rules",
+    category: "Research code",
+    status: "Ongoing research",
+    summary:
+      "Research project on belief elicitation with frequency reports, inverse belief regions, and finite-sample belief and mean bounds.",
+    methods: ["Python", "belief elicitation", "experimental economics", "scoring rules", "simulation"],
+    href: "https://github.com/armoutihansen/frequency-beliefs"
+  },
+  {
     title: "Personal Knowledge System",
     category: "AI and software engineering notes",
     status: "Live project",
