@@ -9,26 +9,35 @@ interface Props {
     href: string;
     type: string;
     abstract: string;
+    image?: string;
+    imageAlt?: string;
   };
 }
 
 const { publication } = Astro.props;
 ---
 
-<article class="publication-item">
-  <div class="publication-topline">
-    <span>{publication.type}</span>
-    <span>{publication.year}</span>
+<article class:list={["publication-item", { "has-thumbnail": !!publication.image }]}>
+  {publication.image && (
+    <div class="publication-thumbnail">
+      <img src={publication.image} alt={publication.imageAlt ?? publication.title} loading="lazy" />
+    </div>
+  )}
+  <div class="publication-card-body">
+    <div class="publication-topline">
+      <span>{publication.type}</span>
+      <span>{publication.year}</span>
+    </div>
+    <h3>
+      {publication.href ? <a href={publication.href}>{publication.title}</a> : publication.title}
+    </h3>
+    <p class="authors">{publication.authors}</p>
+    <p class="venue">
+      <strong>{publication.venue}</strong>{publication.details && `, ${publication.details}`}
+    </p>
+    <details>
+      <summary>Abstract</summary>
+      <p>{publication.abstract}</p>
+    </details>
   </div>
-  <h3>
-    {publication.href ? <a href={publication.href}>{publication.title}</a> : publication.title}
-  </h3>
-  <p class="authors">{publication.authors}</p>
-  <p class="venue">
-    <strong>{publication.venue}</strong>{publication.details && `, ${publication.details}`}
-  </p>
-  <details>
-    <summary>Abstract</summary>
-    <p>{publication.abstract}</p>
-  </details>
 </article>
