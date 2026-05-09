@@ -64,5 +64,16 @@ export const publications = [
     type: "Research project",
     abstract:
       "This project uses machine learning benchmarks to evaluate how much predictable variation in experimental social preference data is captured by parameterized behavioral models, including extensions with heterogeneous preference types."
+  },
+  {
+    title: "The Informational Efficiency of Frequency-Report Scoring Rules",
+    authors: "Jesper Armouti-Hansen",
+    venue: "Work in progress",
+    year: "Current",
+    details: "Belief elicitation and scoring rules",
+    href: "https://github.com/armoutihansen/frequency-beliefs",
+    type: "Research project",
+    abstract:
+      "This project studies what can be inferred from observed count reports when scoring rules induce optimal-report correspondences and inverse belief regions. It focuses on frequency-report scoring rules, finite-sample belief and mean bounds, and computational checks for rule characterizations and design exercises."
   }
 ];
