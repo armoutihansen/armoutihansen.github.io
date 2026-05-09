@@ -16,10 +16,10 @@ const { project } = Astro.props;
 const external = project.href.startsWith("http");
 ---
 
-<article class="card project-card">
+<article class:list={["card", "project-card", { "has-thumbnail": !!project.image }]}>
   {project.image && (
     <div class="project-thumbnail">
-      <img src={project.image} alt={project.imageAlt ?? ""} loading="lazy" />
+      <img src={project.image} alt={project.imageAlt ?? project.title} loading="lazy" />
     </div>
   )}
   <div class="project-card-body">
