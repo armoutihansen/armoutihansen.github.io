@@ -6,6 +6,8 @@ interface Props {
     status: string;
     summary: string;
     methods: string[];
+    image?: string;
+    imageAlt?: string;
     href: string;
   };
 }
@@ -15,16 +17,23 @@ const external = project.href.startsWith("http");
 ---
 
 <article class="card project-card">
-  <div class="card-meta">
-    <span>{project.category}</span>
-    <span>{project.status}</span>
+  {project.image && (
+    <div class="project-thumbnail">
+      <img src={project.image} alt={project.imageAlt ?? ""} loading="lazy" />
+    </div>
+  )}
+  <div class="project-card-body">
+    <div class="card-meta">
+      <span>{project.category}</span>
+      <span>{project.status}</span>
+    </div>
+    <h3>{project.title}</h3>
+    <p>{project.summary}</p>
+    <ul class="tag-list" aria-label={`Methods used for ${project.title}`}>
+      {project.methods.map((method) => <li>{method}</li>)}
+    </ul>
+    <a class="text-link" href={project.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+      View project
+    </a>
   </div>
-  <h3>{project.title}</h3>
-  <p>{project.summary}</p>
-  <ul class="tag-list" aria-label={`Methods used for ${project.title}`}>
-    {project.methods.map((method) => <li>{method}</li>)}
-  </ul>
-  <a class="text-link" href={project.href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
-    View project
-  </a>
 </article>
