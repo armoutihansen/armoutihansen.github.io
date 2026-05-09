@@ -29,7 +29,7 @@ export const projects = [
       "Demand, risk, and net-flow analysis of CitiBike NYC from 2023 to 2025, using trip and collision data to examine usage patterns, station-level risk, and operational dynamics.",
     methods: ["data science", "data cleaning", "feature engineering", "machine learning"],
     image: "/images/projects/citibike.png",
-    imageAlt: "GitHub social preview for the citibike-data-science repository",
+    imageAlt: "GitHub social preview for the CitiBike Data Science repository",
     href: "/DSC/"
   },
   {
