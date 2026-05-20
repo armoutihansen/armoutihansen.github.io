@@ -1,20 +1,20 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
-import SectionHeading from "../components/SectionHeading.astro";
 import { projects } from "../data/projects";
 ---
 
 <BaseLayout title="Projects" description="Selected quantitative data science, econometrics, and research projects by Jesper Armouti-Hansen.">
-  <section class="page-hero">
+  <section class="hero">
     <p class="eyebrow">Projects</p>
     <h1>Applied quantitative work</h1>
-    <p class="lead">A curated view of projects connecting machine learning, econometrics, behavioral data, and static web technology. Public GitHub projects can be added here as the portfolio is refined.</p>
+    <p class="lead">
+      A curated view of projects connecting machine learning, econometrics, behavioral data, and static web technology.
+    </p>
   </section>
 
   <section class="section">
-    <SectionHeading title="Selected projects" />
-    <div class="card-grid">
+    <div class="bib-list">
       {projects.map((project) => <ProjectCard project={project} />)}
     </div>
   </section>
