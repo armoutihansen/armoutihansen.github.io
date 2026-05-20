@@ -3,101 +3,77 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import PublicationItem from "../components/PublicationItem.astro";
-import { profile, skills } from "../data/profile";
+import { profile } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 
+const featuredProjects = projects.slice(0, 4);
 const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 3);
+
+const teaching = [
+  "Seminar on Current Topics in Microeconomics, undergraduate lecturer, since 2025",
+  "Research Module on Applied Microeconomics and Management, graduate lecturer, 2022-2025",
+  "Empirical Evaluation of Management Practices, graduate lecturer and tutor, 2019-2022",
+  "Economics of Incentives in Organisations, graduate tutor, 2016 and 2020-2022",
+  "Behavioral Management Science, undergraduate lecturer and tutor, 2017-2020",
+  "Strategic Human Resource Management, graduate tutor, 2016-2019",
+  "Seminar on Human Resource Management, graduate lecturer, 2017-2018"
+];
 ---
 
 <BaseLayout>
   <section class="hero">
-    <div class="hero-copy">
-      <p class="eyebrow">{profile.title}</p>
-      <h1>{profile.name}</h1>
-      <p class="lead">{profile.summary}</p>
-      <div class="hero-about">
-        <p>
-          I am a quantitative scientist with a background in economics and a PhD from the University of Cologne. In my current role, I work with machine learning models in an operational context, focusing on how model outputs can be used reliably in practice.
-        </p>
-        <p>
-          My work includes understanding confidence levels, defining thresholds, and supporting decisions on when results can be used directly and when human review is required.
-        </p>
-        <p>
-          My academic research covers theoretical and empirical topics in microeconomics, with a focus on behavioral economics, personnel economics, organizational economics, formal modelling, and careful interpretation of results.
-        </p>
-      </div>
-      <div class="hero-actions">
-        <a class="button primary" href="/projects/">View projects</a>
-        <a class="button secondary" href="/publications/">Read publications</a>
-      </div>
-    </div>
-    <div class="hero-portrait-panel">
-      <img src="/images/avatar3.webp" alt="Illustrated portrait of Jesper Armouti-Hansen" />
-      <div class="hero-panel" aria-label="Profile focus areas">
-        <p class="panel-label">Focus</p>
-        <ul>
-          <li>Econometrics and statistical modelling</li>
-          <li>Machine learning model evaluation</li>
-          <li>Behavioral and organizational research</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <SectionHeading
-      eyebrow="Profile"
-      title="Quantitative work grounded in economic research"
-      intro="My work connects applied data science with formal research training: building models, evaluating evidence, and communicating uncertainty clearly enough to support decisions."
-    />
-    <div class="pillar-grid">
-      <article>
-        <h3>Quantitative modelling</h3>
-        <p>Statistical models, econometrics, model comparison, and hypothesis-driven analysis of structured data.</p>
-      </article>
-      <article>
-        <h3>Applied data science</h3>
-        <p>Machine learning workflows with attention to confidence, error analysis, and the practical conditions under which model outputs are useful.</p>
-      </article>
-      <article>
-        <h3>Microeconomic research</h3>
-        <p>Academic work on behavioral economics, incentives, social preferences, and organizational decision-making.</p>
-      </article>
-    </div>
+    <img class="hero-avatar" src="/images/avatar3.webp" alt={`Illustrated portrait of ${profile.name}`} loading="eager" />
+    <p class="eyebrow">{profile.title}</p>
+    <h1>{profile.name}</h1>
+    <p class="lead">{profile.summary}</p>
+    <p>
+      I am a quantitative scientist with a background in economics and a PhD from the University of Cologne. In my current role, I work with machine learning models in an operational context, focusing on how model outputs can be used reliably in practice — understanding confidence levels, defining thresholds, and supporting decisions on when results can be used directly and when human review is required.
+    </p>
+    <p>
+      My academic research covers theoretical and empirical topics in microeconomics, with a focus on behavioral economics, personnel economics, organizational economics, formal modelling, and careful interpretation of results.
+    </p>
   </section>
 
   <section class="section">
     <SectionHeading eyebrow="Selected work" title="Projects" />
-    <div class="card-grid">
-      {projects.slice(0, 4).map((project) => <ProjectCard project={project} />)}
+    <div class="bib-list">
+      {featuredProjects.map((project) => <ProjectCard project={project} />)}
     </div>
-    <a class="section-link" href="/projects/">All projects</a>
+    <p><a href="/projects/">All projects →</a></p>
   </section>
 
   <section class="section">
     <SectionHeading eyebrow="Research" title="Selected publications" />
-    <div class="publication-list compact">
+    <div class="bib-list">
       {featuredPublications.map((publication) => <PublicationItem publication={publication} />)}
     </div>
-    <a class="section-link" href="/publications/">All publications</a>
+    <p><a href="/publications/">All publications →</a></p>
   </section>
 
-  <section class="section skill-band">
-    <SectionHeading eyebrow="Toolkit" title="Methods and tools" />
-    <div class="skill-columns">
-      <div>
-        <h3>Quantitative</h3>
-        <ul class="tag-list">{skills.quantitative.map((skill) => <li>{skill}</li>)}</ul>
-      </div>
-      <div>
-        <h3>Programming</h3>
-        <ul class="tag-list">{skills.programming.map((skill) => <li>{skill}</li>)}</ul>
-      </div>
-      <div>
-        <h3>Research</h3>
-        <ul class="tag-list">{skills.research.map((skill) => <li>{skill}</li>)}</ul>
-      </div>
-    </div>
+  <section class="section">
+    <SectionHeading eyebrow="Research interests" title="Behavioral and organizational economics" />
+    <p>
+      My academic work studies incentives, motivation, social preferences, reference-dependent choice, and organizational design. Current projects evaluate the predictive completeness of social preference theories using machine learning benchmarks, and study frequency-report scoring rules for belief elicitation — asking what can be inferred from discrete reports under different scoring-rule designs.
+    </p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Teaching" title="Courses and supervision" />
+    <ul>
+      {teaching.map((item) => <li>{item}</li>)}
+    </ul>
+    <p>Supervised more than 60 bachelor and master theses.</p>
+  </section>
+
+  <section class="section">
+    <SectionHeading eyebrow="Contact" title="Get in touch" />
+    <p>
+      For professional, research, or project-related inquiries, the easiest way to reach me is by email.
+    </p>
+    <ul class="inline-list">
+      <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
+      {profile.links.map((link) => <li><a href={link.href} rel="me noreferrer">{link.label}</a></li>)}
+    </ul>
   </section>
 </BaseLayout>

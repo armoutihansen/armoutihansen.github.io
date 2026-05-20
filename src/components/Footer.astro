@@ -4,8 +4,11 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <p>{year} {profile.name}</p>
-  <div class="footer-links">
-    {profile.links.map((link) => <a href={link.href}>{link.label}</a>)}
-  </div>
+  <ul class="inline-list">
+    <li><a href={`mailto:${profile.email}`}>Email</a></li>
+    {profile.links.map((link) => (
+      <li><a href={link.href} rel="me noreferrer">{link.label}</a></li>
+    ))}
+  </ul>
+  <span>© {year} {profile.name}</span>
 </footer>

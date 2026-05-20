@@ -8,8 +8,6 @@ interface Props {
 const { eyebrow, title, intro } = Astro.props;
 ---
 
-<div class="section-heading">
-  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
-  <h2>{title}</h2>
-  {intro && <p>{intro}</p>}
-</div>
+{eyebrow && <p class="eyebrow">{eyebrow}</p>}
+<h2>{title}</h2>
+{intro && <p>{intro}</p>}

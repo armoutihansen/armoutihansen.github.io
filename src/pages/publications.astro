@@ -9,22 +9,24 @@ const otherWork = publications.filter((item) => item.type !== "Publication");
 ---
 
 <BaseLayout title="Publications" description="Journal publications, working papers, and current research by Jesper Armouti-Hansen.">
-  <section class="page-hero">
+  <section class="hero">
     <p class="eyebrow">Publications</p>
     <h1>Research publications and current work</h1>
-    <p class="lead">Published and ongoing work in behavioral economics, organizational economics, decision theory, and predictive modelling of economic behavior.</p>
+    <p class="lead">
+      Published and ongoing work in behavioral economics, organizational economics, decision theory, and predictive modelling of economic behavior.
+    </p>
   </section>
 
   <section class="section">
     <SectionHeading title="Journal publications" />
-    <div class="publication-list">
+    <div class="bib-list">
       {journalPublications.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>
 
   <section class="section">
     <SectionHeading title="Working papers and current research" />
-    <div class="publication-list">
+    <div class="bib-list">
       {otherWork.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>
