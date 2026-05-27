@@ -23,8 +23,10 @@ const teaching = [
 
 <BaseLayout>
   <section class="hero">
-    <img class="hero-avatar" src="/images/avatar3.webp" alt={`Illustrated portrait of ${profile.name}`} loading="eager" />
-    <p class="eyebrow">{profile.title}</p>
+    <div class="hero-identity">
+      <img class="hero-avatar" src="/images/avatar3.webp" alt={`Illustrated portrait of ${profile.name}`} loading="eager" />
+      <p class="eyebrow">{profile.title}</p>
+    </div>
     <h1>{profile.name}</h1>
     <p class="lead">{profile.summary}</p>
     <p>
