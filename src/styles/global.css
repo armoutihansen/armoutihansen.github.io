@@ -304,15 +304,11 @@ pre code {
   padding: 0 0 1rem;
 }
 
-.hero-identity {
-  display: inline-block;
-}
-
 .hero-avatar {
   width: clamp(96px, 11vw, 160px);
   height: clamp(96px, 11vw, 160px);
   display: block;
-  margin: 0 auto 1.2rem;
+  margin: 0 0 1.2rem;
   border-radius: 50%;
   background: var(--line);
   object-fit: cover;
