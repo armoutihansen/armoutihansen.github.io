@@ -1,13 +1,21 @@
 ---
 import { profile } from "../data/profile";
 const year = new Date().getFullYear();
+
+const footerLinks = [
+  { label: "Email", href: `mailto:${profile.email}`, rel: undefined },
+  ...profile.links.map((link) => ({
+    ...link,
+    label: link.label === "Google Scholar" ? "Scholar" : link.label,
+    rel: "me noreferrer"
+  }))
+];
 ---
 
 <footer class="site-footer">
   <ul class="inline-list">
-    <li><a href={`mailto:${profile.email}`}>Email</a></li>
-    {profile.links.map((link) => (
-      <li><a href={link.href} rel="me noreferrer">{link.label}</a></li>
+    {footerLinks.map((link) => (
+      <li><a href={link.href} rel={link.rel}>{link.label}</a></li>
     ))}
   </ul>
   <span>© {year} {profile.name}</span>

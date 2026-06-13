@@ -7,6 +7,7 @@ interface Props {
     year: string;
     details: string;
     href: string;
+    links?: { label: string; href: string }[];
     type: string;
     abstract: string;
   };
@@ -17,13 +18,16 @@ const { publication } = Astro.props;
 
 <article class="bib-item">
   <p class="meta-period">{publication.year} · {publication.type}</p>
-  <h3>
-    {publication.href
-      ? <a href={publication.href} rel="noreferrer">{publication.title}</a>
-      : publication.title}
-  </h3>
+  <h3>{publication.title}</h3>
   <p class="authors">{publication.authors}</p>
   <p class="venue">{publication.venue}{publication.details && `, ${publication.details}`}</p>
+  {(publication.links?.length || publication.href) && (
+    <p class="links">
+      {(publication.links ?? [{ label: "Link", href: publication.href }]).map((link) => (
+        <a href={link.href} rel="noreferrer">{link.label}</a>
+      ))}
+    </p>
+  )}
   {publication.abstract && (
     <details>
       <summary>Abstract</summary>

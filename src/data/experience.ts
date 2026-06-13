@@ -5,8 +5,8 @@ export const experience = [
     period: "Apr. 2026 - present",
     location: "Cologne, Germany",
     bullets: [
-      "Analyze model outputs and confidence levels to support decisions on when automated results can be used directly and when human review is required.",
-      "Collaborate with stakeholders to translate analytical findings into actionable improvements."
+      "Analyze machine-learning outputs, confidence levels, and error patterns to define when automated results can be used directly and when human review is required.",
+      "Translate model-evaluation findings into threshold choices, review workflows, and operational decision support for stakeholders."
     ]
   },
   {
@@ -15,9 +15,9 @@ export const experience = [
     period: "Jan. 2022 - Mar. 2026",
     location: "Bonn, Germany",
     bullets: [
-      "Applied econometric and statistical methods to analyze behavioral and economic data.",
-      "Built and assessed empirical models using structured datasets.",
-      "Interpreted results and communicated findings in a clear and transparent way."
+      "Applied econometric, statistical, and machine-learning methods to behavioral and economic datasets.",
+      "Built, benchmarked, and interpreted empirical models using structured experimental data.",
+      "Communicated model assumptions, uncertainty, and limitations in papers, presentations, and collaborative research."
     ]
   },
   {
@@ -26,8 +26,8 @@ export const experience = [
     period: "Dec. 2015 - Dec. 2021",
     location: "Cologne, Germany",
     bullets: [
-      "Conducted empirical research using econometric methods.",
-      "Conducted theoretical research using mathematical and statistical methods.",
+      "Conducted empirical research using econometric methods and reproducible analysis workflows.",
+      "Conducted theoretical research using mathematical and statistical modeling.",
       "Supported teaching in applied microeconomics and data analysis."
     ]
   },

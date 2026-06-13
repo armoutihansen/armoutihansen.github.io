@@ -12,7 +12,7 @@ const isCurrent = (href: string) => path === href.replace(/\/$/, "").toLowerCase
 ---
 
 <header class="site-header">
-  <a class="brand" href="/" aria-label={`${profile.name} home`}>{profile.name}</a>
+  <a class="brand" href="/" aria-label={`${profile.name} home`} data-short-label="JAH">{profile.name}</a>
   <nav aria-label="Main">
     {nav.map((item) => (
       <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>

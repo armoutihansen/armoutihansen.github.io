@@ -5,15 +5,30 @@ import ProjectCard from "../components/ProjectCard.astro";
 import { projects } from "../data/projects";
 
 const projectGroups = [
-  "Research code",
-  "Applied data science",
-  "AI and search tooling",
-  "Software packages and tools",
-  "Learning exercises"
-].map((title) => ({
-  title,
-  headingId: `project-group-${title.toLowerCase().replaceAll(" ", "-")}`,
-  projects: projects.filter((project) => project.group === title)
+  {
+    title: "Research code",
+    intro: "Replication packages, simulations, and analysis code tied directly to papers and working research."
+  },
+  {
+    title: "Applied data science",
+    intro: "Case-study work where modeling, cleaning, and interpretation are applied to operational data."
+  },
+  {
+    title: "AI and search tooling",
+    intro: "Tools that explore retrieval, ranking, generation, and agentic workflows."
+  },
+  {
+    title: "Software packages and tools",
+    intro: "Reusable technical projects and published knowledge infrastructure."
+  },
+  {
+    title: "Learning exercises",
+    intro: "Smaller practice projects kept visible as evidence of deliberate skill-building, not as primary portfolio work."
+  }
+].map((group) => ({
+  ...group,
+  headingId: `project-group-${group.title.toLowerCase().replaceAll(" ", "-")}`,
+  projects: projects.filter((project) => project.group === group.title)
 })).filter((group) => group.projects.length > 0);
 ---
 
@@ -29,9 +44,11 @@ const projectGroups = [
   <section class="section">
     {projectGroups.map((group) => (
       <section class="project-group" aria-labelledby={group.headingId}>
-        <SectionHeading id={group.headingId} title={group.title} />
-        <div class="bib-list">
-          {group.projects.map((project) => <ProjectCard project={project} />)}
+        <SectionHeading id={group.headingId} title={group.title} intro={group.intro} />
+        <div class:list={["bib-list", { "compact-list": group.title === "Learning exercises" }]}>
+          {group.projects.map((project) => (
+            <ProjectCard project={project} compact={group.title === "Learning exercises"} />
+          ))}
         </div>
       </section>
     ))}

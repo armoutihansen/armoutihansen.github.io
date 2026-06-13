@@ -346,6 +346,11 @@ pre code {
   border-top: 1px solid var(--line);
 }
 
+.project-group > p {
+  color: var(--muted);
+  margin-bottom: 1.75rem;
+}
+
 /* Bibliographic items — projects and publications */
 .bib-list {
   list-style: none;
@@ -354,6 +359,10 @@ pre code {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+}
+
+.bib-list.compact-list {
+  gap: 1.65rem;
 }
 
 .bib-item {
@@ -424,6 +433,10 @@ pre code {
   letter-spacing: 0.04em;
   color: var(--muted);
   margin: 0.35rem 0 0;
+}
+
+.bib-item.is-compact .description {
+  margin-bottom: 0.4rem;
 }
 
 .bib-item .links {
@@ -523,18 +536,49 @@ details > div {
   }
 
   .site-header {
-    flex-wrap: wrap;
-    gap: 0.75rem 1.25rem;
+    display: flex;
+    gap: clamp(0.55rem, 2.8vw, 0.95rem);
     padding-top: 1.5rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.045em;
+    white-space: nowrap;
   }
 
   .site-header .brand {
-    flex-basis: 100%;
+    flex: 0 0 auto;
+    font-size: 0;
+    letter-spacing: 0;
     margin-right: 0;
   }
 
+  .site-header .brand::before {
+    content: attr(data-short-label);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+
   .site-header nav {
-    margin-right: auto;
+    flex: 0 0 auto;
+    min-width: 0;
+    gap: clamp(0.55rem, 2.8vw, 0.95rem);
+  }
+
+  .theme-toggle {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  .site-footer {
+    font-size: 0.68rem;
+    letter-spacing: 0.045em;
+  }
+
+  .site-footer .inline-list {
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: clamp(0.55rem, 3vw, 0.9rem);
+    font-size: inherit;
+    letter-spacing: inherit;
   }
 
   .bib-item.has-thumb {
