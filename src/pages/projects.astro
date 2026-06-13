@@ -1,7 +1,20 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import { projects } from "../data/projects";
+
+const projectGroups = [
+  "Research code",
+  "Applied data science",
+  "AI and search tooling",
+  "Software packages and tools",
+  "Learning exercises"
+].map((title) => ({
+  title,
+  headingId: `project-group-${title.toLowerCase().replaceAll(" ", "-")}`,
+  projects: projects.filter((project) => project.group === title)
+})).filter((group) => group.projects.length > 0);
 ---
 
 <BaseLayout title="Projects" description="Selected quantitative data science, econometrics, and research projects by Jesper Armouti-Hansen.">
@@ -9,13 +22,18 @@ import { projects } from "../data/projects";
     <p class="eyebrow">Projects</p>
     <h1>Applied quantitative work</h1>
     <p class="lead">
-      A curated view of projects connecting machine learning, econometrics, behavioral data, and static web technology.
+      A curated view of research code, applied data science, AI tooling, and software projects.
     </p>
   </section>
 
   <section class="section">
-    <div class="bib-list">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
+    {projectGroups.map((group) => (
+      <section class="project-group" aria-labelledby={group.headingId}>
+        <SectionHeading id={group.headingId} title={group.title} />
+        <div class="bib-list">
+          {group.projects.map((project) => <ProjectCard project={project} />)}
+        </div>
+      </section>
+    ))}
   </section>
 </BaseLayout>
