@@ -4,7 +4,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen, Lea Cassar, Anna Dereky, and Florian Engl",
     venue: "Games and Economic Behavior",
     year: "2024",
-    details: "145, pp. 66-83",
+    details: "145, pp. 66–83",
     href: "https://www.sciencedirect.com/science/article/pii/S0899825624000307",
     links: [
       { label: "Paper", href: "https://www.sciencedirect.com/science/article/pii/S0899825624000307" },
@@ -33,7 +33,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen and Lea Cassar",
     venue: "Journal of the European Economic Association",
     year: "2020",
-    details: "18(5), pp. 2647-2676",
+    details: "18(5), pp. 2647–2676",
     href: "https://scholar.google.com/scholar?oi=bibs&cluster=9361077569797977679&btnI=1&hl=en",
     links: [
       { label: "Paper", href: "https://scholar.google.com/scholar?oi=bibs&cluster=9361077569797977679&btnI=1&hl=en" }
@@ -47,7 +47,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen and Christopher Kops",
     venue: "Theory and Decision",
     year: "2018",
-    details: "84(4), pp. 507-524",
+    details: "84(4), pp. 507–524",
     href: "https://scholar.google.com/scholar?oi=bibs&cluster=935449046387275988&btnI=1&hl=en",
     links: [
       { label: "Paper", href: "https://scholar.google.com/scholar?oi=bibs&cluster=935449046387275988&btnI=1&hl=en" }
@@ -60,7 +60,7 @@ export const publications = [
     title: "On the Optimal Mode of Selling Goods with Uncertain Consumption Quality",
     authors: "Jesper Armouti-Hansen and Matthias Kraekel",
     venue: "Working paper",
-    year: "Current",
+    year: "",
     details: "",
     href: "",
     type: "Working paper",
@@ -71,7 +71,7 @@ export const publications = [
     title: "Predictive Completeness of Social Preference Theories",
     authors: "Jesper Armouti-Hansen",
     venue: "Work in progress",
-    year: "Current",
+    year: "",
     details: "A machine learning benchmark approach",
     href: "",
     type: "Research project",
@@ -91,6 +91,6 @@ export const publications = [
     ],
     type: "Research project",
     abstract:
-      "This project studies belief elicitation with frequency reports: subjects submit count vectors and scoring rules induce optimal-report correspondences. The paper characterizes the identified set of latent beliefs consistent with each report, compares squared-distance, frequency-guessing, and Manhattan-distance rules, and documents when each rule yields sharper belief bounds."
+      "This project studies belief elicitation from frequency reports: subjects submit count vectors, and a scoring rule induces an identified set of latent beliefs consistent with each report. The paper characterizes that set for squared-distance, frequency-guessing, and Manhattan-distance rules and compares them by the sharpness of the bounds they yield. The headline result is contingent — no rule dominates. Squared-distance is sharpest when beliefs concentrate on a few categories, frequency-guessing when they are balanced, and Manhattan is the robust choice when concentration cannot be anticipated."
   }
 ];

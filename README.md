@@ -1,28 +1,25 @@
 # armoutihansen.xyz
 
-Personal website positioned around quantitative data science, applied economics, and academic research.
+Personal website positioning Jesper Armouti-Hansen for quantitative, pricing, and data analyst roles, backed by an economics PhD.
 
 The site is built with [Astro](https://astro.build/) and deployed as a static site through GitHub Pages to [armoutihansen.xyz](https://armoutihansen.xyz).
 
 ## Overview
 
-The current version replaces the previous Hugo-based academic profile with a custom Astro site. The design keeps the research and publication profile prominent while adding a stronger quantitative data science and project portfolio layer.
+The design direction is an "Editorial Brief": a refined, recruiter-facing analyst dossier on warm ivory paper with a single deep-teal accent. See `CONTEXT.md` and `docs/adr/0002-editorial-brief-redesign.md` for the design rationale and the language it uses.
 
-Main sections:
+Four public pages (route names in parentheses):
 
-- Home: profile summary, focus areas, selected projects, selected publications, and skills.
-- Projects: applied data science, research code, GitHub projects, and selected technical work.
-- Research: research areas and current agenda.
-- Publications: journal publications, working papers, and ongoing research.
-- CV: web CV plus downloadable PDF.
-- Teaching: academic teaching and supervision.
-- Contact: email and professional profiles.
+- `/` — positioning hero, capabilities, selected work, recent experience, research credibility, and contact.
+- `/projects/` (nav: **Work**) — selected work grouped by type, plus compact technical exercises.
+- `/publications/` (nav: **Research**) — journal publications, working papers, and replication packages.
+- `/cv/` — experience, strengths, skills, education, languages, and a downloadable PDF.
 
 ## Tech Stack
 
-- Astro
+- Astro (static output)
 - TypeScript data files for structured content
-- Plain CSS in `src/styles/global.css`
+- Plain CSS in `src/styles/global.css`, with self-hosted variable fonts: Fraunces (display serif), IBM Plex Sans (body), JetBrains Mono (labels)
 - GitHub Pages deployment via `.github/workflows/deploy.yml`
 
 No client-side framework is used. The only client-side JavaScript is the light/dark theme switcher.

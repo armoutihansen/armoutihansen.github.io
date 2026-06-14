@@ -1,146 +1,171 @@
+export const projectGroups = [
+  {
+    title: "Applied analysis",
+    intro:
+      "Data work aimed at a decision: pick the measure that matters, build the analysis, and state what it supports."
+  },
+  {
+    title: "Modeling & tools",
+    intro:
+      "Search and ranking, choice-modeling code, and small tool-calling systems."
+  },
+  {
+    title: "Research & replication",
+    intro:
+      "Research code: published replication packages and methods work in economics, tested and reproducible."
+  },
+  {
+    title: "Also on GitHub",
+    intro: "Smaller builds from learning new tools — a notes site, a static-site generator, and a few games and CLIs."
+  }
+] as const;
+
 export const projects = [
   {
-    title: "The Informativeness of Frequency-Report Scoring Rules",
-    category: "Research code",
-    group: "Research code",
-    status: "Manuscript and replication package",
-    summary:
-      "Manuscript, simulations, tests, and replication code for a project on belief elicitation with frequency reports, inverse belief regions, and finite-sample belief and mean bounds.",
-    methods: ["Python", "belief elicitation", "scoring rules", "simulation", "pytest"],
-    image: "/images/projects/frequency-beliefs.png",
-    imageAlt: "GitHub social preview for the Frequency-Report Scoring Rules repository",
-    href: "https://github.com/armoutihansen/frequency-beliefs"
-  },
-  {
-    title: "RAG Search Engine",
-    category: "AI search and retrieval",
-    group: "AI and search tooling",
-    status: "GitHub project",
-    summary:
-      "Hybrid movie-search system combining BM25, sentence-transformer embeddings, reciprocal rank fusion, CLIP image search, query enhancement, reranking, RAG generation, caching, and retrieval evaluation.",
-    methods: ["Python", "RAG", "BM25", "semantic search", "CLIP", "evaluation"],
-    image: "/images/projects/rag-search-engine.png",
-    imageAlt: "GitHub social preview for the RAG Search Engine repository",
-    href: "https://github.com/armoutihansen/rag-search-engine"
-  },
-  {
-    title: "CitiBike Demand, Risk, and Net Flow Analysis",
-    category: "Applied data science",
-    group: "Applied data science",
+    title: "CitiBike Demand, Risk, and Net Flow",
+    primaryGroup: "Applied analysis",
+    featured: true,
+    category: "Operational analysis",
     status: "Case study",
     summary:
-      "CitiBike NYC study combining trip and collision data to estimate demand, station-level net flow, and risk per trip for user warnings, insurance pricing, and operational safety decisions.",
-    methods: ["Python", "data science", "risk analysis", "feature engineering", "forecasting"],
-    image: "/images/projects/citibike.png",
-    imageAlt: "GitHub social preview for the CitiBike Data Science repository",
+      "Station- and trip-level analysis of demand, net flow, and collision-adjusted risk across New York's bike-share network.",
+    problem: "Where does the network strain — heavy use, poor rebalancing, or higher risk per trip?",
+    approach:
+      "Joined trip records with collision data and built station-level measures that separate raw volume from exposure-adjusted risk.",
+    result: "Three separate measures — demand, imbalance, and exposure-adjusted risk — that a single ranking would have conflated.",
+    tools: ["Python", "pandas", "feature engineering", "risk analysis", "forecasting"],
     href: "/DSC/"
   },
   {
-    title: "choicekit",
-    category: "Choice modeling package",
-    group: "Software packages and tools",
-    status: "Early-stage package",
+    title: "RAG Search Engine",
+    primaryGroup: "Modeling & tools",
+    featured: true,
+    category: "Retrieval system",
+    status: "GitHub project",
     summary:
-      "A Python package in development for choice modeling, separating reusable estimation machinery from one-off research scripts.",
-    methods: ["Python", "choice modeling", "package design", "statistical modeling"],
-    image: "/images/projects/choicekit.png",
-    imageAlt: "GitHub social preview for the choicekit repository",
-    href: "https://github.com/armoutihansen/choicekit"
+      "A hybrid movie-search engine combining lexical and semantic retrieval, reranking, image search, and RAG answers.",
+    problem: "Plain search fails when a query is vague, visual, or more description than title.",
+    approach:
+      "Combined BM25, embeddings, reciprocal rank fusion, CLIP, reranking, and caching, with explicit checks at each retrieval stage.",
+    result: "A pipeline with each retrieval stage measured separately, so ranking quality is attributable to a stage rather than the whole.",
+    tools: ["Python", "RAG", "BM25", "embeddings", "CLIP", "evaluation"],
+    href: "https://github.com/armoutihansen/rag-search-engine"
+  },
+  {
+    title: "The Informativeness of Frequency-Report Scoring Rules",
+    primaryGroup: "Research & replication",
+    featured: true,
+    category: "Inference & simulation",
+    status: "Manuscript + replication package",
+    summary: "Manuscript, simulations, and replication code for belief elicitation from frequency reports.",
+    problem: "A count report is observable; the belief behind it is not. How much does the report actually pin down?",
+    approach:
+      "Characterized the identified set of beliefs behind each report under three scoring rules, then checked the bounds with simulation.",
+    result: "No rule dominates: which scoring rule gives the sharpest bounds depends on how concentrated the beliefs are.",
+    tools: ["Python", "simulation", "pytest", "scoring rules"],
+    href: "https://github.com/armoutihansen/frequency-beliefs"
   },
   {
     title: "Economic Theories and Machine Learning",
-    category: "Research code",
-    group: "Research code",
+    primaryGroup: "Research & replication",
+    featured: false,
+    category: "Model comparison",
     status: "GitHub project",
-    summary:
-      "Analysis code connected to research on evaluating economic theories using machine learning benchmarks.",
-    methods: ["Python", "machine learning", "economic theory", "model evaluation"],
-    image: "/images/projects/economic-theories-ml.png",
-    imageAlt: "GitHub social preview for the Economic Theories and Machine Learning repository",
+    summary: "Code comparing economic theories against machine-learning benchmarks on behavioral data.",
+    problem: "When a theory predicts behavior, how much of the predictable variation does it actually capture?",
+    approach:
+      "Benchmarked theory-based specifications against machine-learning models and examined the remaining predictive gap.",
+    result: "Theory specifications scored on out-of-sample prediction and compared against the machine-learning benchmark.",
+    tools: ["Python", "machine learning", "model evaluation"],
     href: "https://github.com/armoutihansen/econ-theories-ml"
   },
   {
-    title: "Efficiency Wages with Motivated Agents",
-    category: "Research code",
-    group: "Research code",
+    title: "choicekit",
+    primaryGroup: "Modeling & tools",
+    featured: false,
+    category: "Python package",
+    status: "Early-stage",
+    summary: "A Python package for reusable choice-modeling workflows, in development.",
+    problem: "Choice-modeling code gets hard to trust when every project restarts from a loose script.",
+    approach: "Move estimation machinery into tested package code and leave project files for data and interpretation.",
+    result: "Early, but aimed at a clean boundary between modeling tools and one-off analysis.",
+    tools: ["Python", "choice modeling", "package design"],
+    href: "https://github.com/armoutihansen/choicekit"
+  },
+  {
+    title: "Minimal Coding Agent",
+    primaryGroup: "Modeling & tools",
+    featured: false,
+    category: "AI tooling",
     status: "GitHub project",
-    summary:
-      "Replication data and code for the paper Efficiency Wages with Motivated Agents and its online appendix.",
-    methods: ["Python", "Stata", "experimental economics", "replication", "Jupyter Notebook"],
-    image: "/images/projects/efficiency-wages.png",
-    imageAlt: "GitHub social preview for the Efficiency Wages repository",
+    summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
+    problem: "How much can a coding agent do with only a few explicit tools and no framework?",
+    approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
+    result: "A working agent that reads, runs, and edits code in a loop — and surfaces where it needs guardrails.",
+    tools: ["Python", "tool-calling", "Gemini API", "CLI"],
+    href: "https://github.com/armoutihansen/build-ai-agent"
+  },
+  {
+    title: "Efficiency Wages with Motivated Agents",
+    primaryGroup: "Research & replication",
+    featured: false,
+    category: "Replication package",
+    status: "Published · GEB 2024",
+    summary: "Replication data and code for a published paper on wages, motivation, and effort.",
+    problem: "Do wage incentives and prosocial motivation reinforce each other, or work through separate channels?",
+    approach: "Built reproducible analyses around experimental data and documented the paper's online appendix.",
+    result: "A peer-reviewed empirical project with a complete replication package.",
+    tools: ["Python", "Stata", "experimental data", "replication"],
     href: "https://github.com/armoutihansen/efficiency-wages"
   },
   {
     title: "Personal Knowledge System",
-    category: "AI and software engineering notes",
-    group: "Software packages and tools",
-    status: "Live project",
-    summary:
-      "A public knowledge base for machine learning, AI, and software engineering, built as a structured note system and published as a static site.",
-    methods: ["TypeScript", "Quartz", "Obsidian", "static publishing"],
-    image: "/images/projects/notes.png",
-    imageAlt: "GitHub social preview for the personal knowledge system repository",
+    primaryGroup: "Also on GitHub",
+    featured: false,
+    category: "Knowledge base",
+    status: "Live",
+    summary: "A public notes site for ML, AI, and software-engineering references, built on Obsidian and Quartz.",
+    tools: ["TypeScript", "Quartz", "Obsidian"],
     href: "https://notes.armoutihansen.xyz/"
   },
   {
     title: "Static Site Generator",
-    category: "Software engineering",
-    group: "Learning exercises",
+    primaryGroup: "Also on GitHub",
+    featured: false,
+    category: "Software",
     status: "GitHub project",
-    summary:
-      "A compact Python static site generator that converts Markdown content into templated HTML pages using only the standard library.",
-    methods: ["Python", "Markdown", "HTML", "CSS", "unit testing"],
-    image: "/images/projects/static-site-generator.png",
-    imageAlt: "GitHub social preview for the Static Site Generator repository",
+    summary: "A small Python static-site generator that turns Markdown into templated HTML.",
+    tools: ["Python", "Markdown", "unit testing"],
     href: "https://github.com/armoutihansen/static-site-generator"
   },
   {
     title: "BookBot",
-    category: "CLI text analysis",
-    group: "Learning exercises",
+    primaryGroup: "Also on GitHub",
+    featured: false,
+    category: "CLI tool",
     status: "GitHub project",
-    summary:
-      "Python command-line tool for analyzing books, counting words, and reporting sorted character frequencies from text files.",
-    methods: ["Python", "CLI", "text processing", "file parsing"],
-    image: "/images/projects/bookbot.png",
-    imageAlt: "GitHub social preview for the BookBot repository",
+    summary: "A command-line tool that analyzes books and reports word and character frequencies.",
+    tools: ["Python", "text processing"],
     href: "https://github.com/armoutihansen/bookbot"
   },
   {
     title: "Asteroids",
-    category: "Game programming",
-    group: "Learning exercises",
+    primaryGroup: "Also on GitHub",
+    featured: false,
+    category: "Game",
     status: "GitHub project",
-    summary:
-      "Small Asteroids implementation in Python with Pygame, including player movement, shooting, asteroid spawning, collision detection, and splitting.",
-    methods: ["Python", "Pygame", "game loop", "collision detection"],
-    image: "/images/projects/asteroids.png",
-    imageAlt: "GitHub social preview for the Asteroids repository",
+    summary: "An Asteroids clone in Python and Pygame — movement, shooting, collisions, and asteroid splitting.",
+    tools: ["Python", "Pygame"],
     href: "https://github.com/armoutihansen/asteroids"
   },
   {
     title: "Maze Solver",
+    primaryGroup: "Also on GitHub",
+    featured: false,
     category: "Algorithms",
-    group: "Learning exercises",
     status: "GitHub project",
-    summary:
-      "Python maze generator and visual solver using tkinter, recursive backtracking generation, and depth-first search pathfinding animation.",
-    methods: ["Python", "algorithms", "depth-first search", "pathfinding", "tkinter"],
-    image: "/images/projects/maze-solver.png",
-    imageAlt: "GitHub social preview for the Maze Solver repository",
+    summary: "A maze generator and visual solver using recursive backtracking and depth-first search.",
+    tools: ["Python", "algorithms", "tkinter"],
     href: "https://github.com/armoutihansen/maze-solver"
-  },
-  {
-    title: "Build AI Agent",
-    category: "AI tooling",
-    group: "AI and search tooling",
-    status: "GitHub project",
-    summary:
-      "A simple Gemini-powered coding agent that can inspect files, run Python scripts, and write code through tool-calling.",
-    methods: ["Python", "AI agent", "tool-calling", "Gemini API", "CLI"],
-    image: "/images/projects/build-ai-agent.png",
-    imageAlt: "GitHub social preview for the Build AI Agent repository",
-    href: "https://github.com/armoutihansen/build-ai-agent"
   }
 ];

@@ -1,10 +1,12 @@
 export const profile = {
   name: "Jesper Armouti-Hansen",
-  title: "Quantitative Scientist",
+  title: "Quantitative Analyst · Economics PhD",
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Economics PhD applying statistical modelling, econometrics, and machine learning evaluation to structured data.",
+    "Quantitative analyst with a background in economics and applied data science. Experience working with statistical models and machine learning in practical settings, with a focus on understanding model performance and supporting decisions based on data.",
+  tagline:
+    "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
   links: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/jesper-a-h/" },
     { label: "GitHub", href: "https://github.com/armoutihansen" },
@@ -16,36 +18,64 @@ export const profile = {
   ]
 };
 
+export const capabilities = [
+  {
+    label: "Model evaluation",
+    summary:
+      "Accuracy, calibration, and error-pattern checks that show where a model's output can be used directly and where a person should review it."
+  },
+  {
+    label: "Statistical & econometric modeling",
+    summary:
+      "Build and estimate statistical and econometric models on structured data, then measure how much of the variation they actually capture."
+  },
+  {
+    label: "Machine learning on structured data",
+    summary:
+      "Apply machine-learning methods to structured datasets and benchmark them against simpler baselines."
+  },
+  {
+    label: "Reproducible code",
+    summary:
+      "Version-controlled, tested Python, SQL, and R — with an economics background for reading whether a result reflects a mechanism or a coincidence."
+  }
+];
+
 export const skills = {
-  quantitative: [
-    "Statistical modelling",
-    "Econometrics",
-    "Experimental data analysis",
-    "Theoretical modelling",
+  analysis: [
     "Model evaluation",
-    "Machine learning evaluation",
     "Hypothesis testing",
     "Error analysis",
+    "Forecasting",
+    "Risk analysis",
+    "Experiment & A/B analysis"
   ],
-  programming: [
+  modeling: [
+    "Statistical modeling",
+    "Econometrics",
+    "Machine learning",
+    "Choice modeling",
+    "Simulation",
+    "Partial identification / uncertainty quantification"
+  ],
+  data: [
     "Python",
-    "pandas",
-    "NumPy",
+    "pandas / NumPy",
     "scikit-learn",
     "statsmodels",
     "SQL",
     "R",
     "Stata",
     "Git",
+    "Jupyter",
     "Linux",
-    "CLI tools"
+    "Excel"
   ],
-  research: [
+  domain: [
+    "Insurance",
     "Behavioral economics",
-    "Personnel economics",
-    "Organizational economics",
-    "Contract theory",
-    "Social preferences",
-    "Incentives and motivation",
+    "Experimental economics",
+    "Personnel & organizational economics",
+    "Contract theory & incentives"
   ]
 };

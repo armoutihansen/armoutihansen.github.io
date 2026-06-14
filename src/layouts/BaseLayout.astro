@@ -9,12 +9,9 @@ interface Props {
   description?: string;
 }
 
-const {
-  title = profile.name,
-  description = profile.summary
-} = Astro.props;
-
-const pageTitle = title === profile.name ? title : `${title} | ${profile.name}`;
+const { title = profile.name, description = profile.summary } = Astro.props;
+const pageTitle =
+  title === profile.name ? `${profile.name} — ${profile.title}` : `${title} · ${profile.name}`;
 ---
 
 <!doctype html>
@@ -24,6 +21,8 @@ const pageTitle = title === profile.name ? title : `${title} | ${profile.name}`;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f3efe4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15130e" media="(prefers-color-scheme: dark)" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -33,15 +32,17 @@ const pageTitle = title === profile.name ? title : `${title} | ${profile.name}`;
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>
-      const storedTheme = localStorage.getItem("theme");
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      document.documentElement.dataset.theme = storedTheme || (prefersDark ? "dark" : "light");
+      const stored = localStorage.getItem("theme");
+      document.documentElement.dataset.theme =
+        stored ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
     </script>
     <title>{pageTitle}</title>
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <Header />
-    <main>
+    <main id="main" class="wrap">
       <slot />
     </main>
     <Footer />
