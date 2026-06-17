@@ -4,7 +4,7 @@ export const profile = {
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Quantitative analyst with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data. What I'm best at is the part that decides whether they actually get used: knowing when their output is reliable enough to act on.",
+    "Quantitative analyst with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data, and assess when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
   links: [
