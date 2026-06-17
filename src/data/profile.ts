@@ -61,6 +61,7 @@ export const skills = {
     "Forecasting",
     "Experiment & A/B analysis",
     "Simulation",
+    "Fine-tuning",
     "Retrieval / RAG"
   ],
   tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "pixi", "JupyterLab", "Linux", "LaTeX"]
