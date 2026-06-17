@@ -4,7 +4,7 @@ export const profile = {
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Quantitative analyst with an economics PhD and a background in applied data science. I work with statistical and machine-learning models on structured data, and spend most of my time on a narrower question: when their output is reliable enough to act on.",
+    "Quantitative analyst with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data. What I'm best at is the part that decides whether they actually get used: knowing when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
   links: [
@@ -22,22 +22,22 @@ export const capabilities = [
   {
     label: "Model evaluation",
     summary:
-      "Accuracy, calibration, and error-pattern checks. The point is to mark where a model can be trusted on its own and where it needs a second look."
+      "Accuracy, calibration, and error-pattern checks that decide where a model can run on its own and where it needs review. It's what gets a model trusted in production."
   },
   {
     label: "Statistical & econometric modeling",
     summary:
-      "Building and estimating models on structured data, and being honest about how much of the variation they actually explain."
+      "Statistical and econometric models, built and estimated on structured data, with a clear read on how much of the variation they actually capture."
   },
   {
     label: "Machine learning on structured data",
     summary:
-      "Standard ML on tabular data, always measured against a simple baseline. If the added complexity doesn't beat it, it isn't worth keeping."
+      "Machine learning on tabular data (gradient boosting, regularized models, and the like), always benchmarked against a simple baseline so the added complexity has to earn it."
   },
   {
     label: "Reproducible code",
     summary:
-      "Version-controlled, tested code in Python, SQL, and R. An economics background helps with the harder part: telling a real effect from noise."
+      "Version-controlled, tested code in Python, SQL, and R. The economics training is the edge on the harder part: telling a real effect from noise."
   }
 ];
 

@@ -6,9 +6,9 @@ export const experience = [
     period: "Apr. 2026 – present",
     location: "Cologne, Germany",
     bullets: [
-      "Analyze model outputs and their confidence levels to decide when a result can be used as-is and when it needs human review.",
-      "Set the review thresholds that follow from that, which cut the volume going to manual review.",
-      "Work with the teams behind the models to turn those findings into changes they actually use."
+      "Analyze model outputs and their confidence levels to decide when a prediction can be used as-is and when it needs human review.",
+      "Set the review thresholds on that basis, cutting manual review by around 30%.",
+      "Work with the model-owning teams to put those findings into production."
     ]
   },
   {
@@ -19,8 +19,8 @@ export const experience = [
     location: "Bonn, Germany",
     bullets: [
       "Applied econometric and statistical methods to behavioral and economic data.",
-      "Built empirical models on it and checked how far they actually held up.",
-      "Wrote up the results and presented them, in papers and at talks."
+      "Built and validated empirical models, and quantified how much they actually explained.",
+      "Published the results in peer-reviewed papers and presented them at conferences."
     ]
   },
   {
@@ -30,7 +30,7 @@ export const experience = [
     period: "Dec. 2015 – Dec. 2021",
     location: "Cologne, Germany",
     bullets: [
-      "Worked on both the empirical and theoretical sides: econometrics on the data, mathematical and statistical methods on the theory.",
+      "Ran both empirical and theoretical research: econometrics on the data side, mathematical and statistical modeling on the theory side.",
       "Taught applied microeconomics and data analysis."
     ]
   },
