@@ -18,7 +18,7 @@ const featuredTitles = [
 ];
 const featuredProjects = featuredTitles
   .map((title) => projects.find((project) => project.title === title))
-  .filter(Boolean);
+  .filter((project): project is (typeof projects)[number] => project !== undefined);
 const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 2);
 const recentExperience = experience.slice(0, 2);
 const paperCount = publications.filter((item) => item.type === "Publication").length;

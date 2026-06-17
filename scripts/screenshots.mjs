@@ -5,7 +5,7 @@ import { mkdirSync } from "node:fs";
 import { chromium } from "playwright-core";
 
 const BASE = process.env.BASE || "http://localhost:4321";
-const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const OUT = "/tmp/shots";
 const PATHS = (process.env.PATHS || "/").split(",");
 

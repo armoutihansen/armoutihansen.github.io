@@ -1,16 +1,16 @@
 # armoutihansen.xyz
 
-Personal website positioning Jesper Armouti-Hansen for quantitative, pricing, and data analyst roles, backed by an economics PhD.
+Personal website for Jesper Armouti-Hansen — a quantitative analyst with an economics PhD.
 
 The site is built with [Astro](https://astro.build/) and deployed as a static site through GitHub Pages to [armoutihansen.xyz](https://armoutihansen.xyz).
 
 ## Overview
 
-The design direction is an "Editorial Brief": a refined, recruiter-facing analyst dossier on warm ivory paper with a single deep-teal accent. See `CONTEXT.md` and `docs/adr/0002-editorial-brief-redesign.md` for the design rationale and the language it uses.
+The design direction is **premium-dark** (ADR 0003): a quant-analyst portfolio anchored on one interactive hero — warm-charcoal paper with a single amber accent, light mode retained. See `CONTEXT.md` and `docs/adr/0003-premium-dark-interactive-hero.md` for the design rationale and the language it uses.
 
 Four public pages (route names in parentheses):
 
-- `/` — positioning hero, capabilities, selected work, recent experience, research credibility, and contact.
+- `/` — interactive hero (model-confidence + CitiBike risk panels), capabilities, selected work, experience, research, and contact.
 - `/projects/` (nav: **Work**) — selected work grouped by type, plus compact technical exercises.
 - `/publications/` (nav: **Research**) — journal publications, working papers, and replication packages.
 - `/cv/` — experience, strengths, skills, education, languages, and a downloadable PDF.
@@ -19,10 +19,10 @@ Four public pages (route names in parentheses):
 
 - Astro (static output)
 - TypeScript data files for structured content
-- Plain CSS in `src/styles/global.css`, with self-hosted variable fonts: Fraunces (display serif), IBM Plex Sans (body), JetBrains Mono (labels)
+- Plain CSS in `src/styles/global.css`, with self-hosted variable fonts: Hanken Grotesk (body + headings), JetBrains Mono (labels, tabular figures), Fraunces (name only)
 - GitHub Pages deployment via `.github/workflows/deploy.yml`
 
-No client-side framework is used. The only client-side JavaScript is the light/dark theme switcher.
+No client-side framework is used. Client-side JavaScript is limited to the theme switcher and the interactive hero (Canvas).
 
 ## Project Structure
 

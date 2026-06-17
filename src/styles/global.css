@@ -1,11 +1,11 @@
 /*
- * armoutihansen.xyz — "Editorial Brief"
- * See CONTEXT.md and docs/adr/0002-editorial-brief-redesign.md.
+ * armoutihansen.xyz — premium-dark redesign
+ * See CONTEXT.md and docs/adr/0003-premium-dark-interactive-hero.md.
  *
- * One coherent system: warm ivory paper, near-black ink, a single deep-teal
- * accent. Fraunces (display serif) for name + headings, IBM Plex Sans for
- * body, JetBrains Mono for metadata and labels. Mobile-first; enhancements
- * are layered with min-width queries only.
+ * Premium, dark-first: warm-ivory (light) / warm-charcoal (dark) paper, a
+ * single amber accent. Hanken Grotesk for body + headings, JetBrains Mono
+ * (tabular figures) for metadata and labels, Fraunces reserved for the name.
+ * Mobile-first; enhancements are layered with min-width queries only.
  *
  * Ledger model: every list item carries a top hairline and equal vertical
  * padding, so single-column and multi-column lists stay consistent and no row
@@ -21,7 +21,7 @@
 :root {
   color-scheme: light;
 
-  /* Palette — warm ivory paper, warm near-black ink, deep teal accent */
+  /* Palette (light) — warm ivory paper, warm near-black ink, amber accent */
   --paper: #f3efe4;
   --paper-sunk: #ece6d7;
   --card: #fbf8f1;

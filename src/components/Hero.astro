@@ -82,7 +82,7 @@ const rBase = rPadT + rPlotH;
               role="slider"
               tabindex="0"
               aria-label="Confidence band width"
-              aria-valuemin="50"
+              aria-valuemin="52"
               aria-valuemax="97"
               aria-valuenow={Math.round(DEFAULT_HI * 100)}
             >
@@ -143,8 +143,7 @@ const rBase = rPadT + rPlotH;
               x={rPadL + 4 * rbw + rbw / 2}
               y={rBase - (0.0049 / RMAX) * rPlotH - 6}
               text-anchor="middle"
-              class="rpanel__callout">≈4×</text
-            >
+              class="rpanel__callout">≈4×</text>
             <line x1={rPadL} y1={rBase + 0.5} x2={RW - rPadR} y2={rBase + 0.5} stroke="var(--line-strong)" stroke-width="1" />
           </svg>
           <p class="predict__hint rpanel__note">
