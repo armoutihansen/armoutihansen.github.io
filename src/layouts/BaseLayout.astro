@@ -21,8 +21,7 @@ const pageTitle =
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#f3efe4" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#15130e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#15130e" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -32,10 +31,18 @@ const pageTitle =
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>
+      const root = document.documentElement;
       const stored = localStorage.getItem("theme");
-      document.documentElement.dataset.theme =
-        stored ||
-        (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      const theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      root.dataset.theme = theme;
+      // Keep the browser-UI theme-color in sync with the active theme (incl. toggle overrides).
+      const THEME_COLORS = { light: "#f3efe4", dark: "#15130e" };
+      const syncThemeColor = () => {
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", THEME_COLORS[root.dataset.theme] || THEME_COLORS.dark);
+      };
+      syncThemeColor();
+      new MutationObserver(syncThemeColor).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
     </script>
     <title>{pageTitle}</title>
   </head>

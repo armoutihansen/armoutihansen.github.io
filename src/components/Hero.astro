@@ -684,11 +684,12 @@ const rBase = rPadT + rPlotH;
   const tabs = deck ? Array.from(deck.querySelectorAll<HTMLButtonElement>(".deck__tab")) : [];
 
   if (track && tabs.length) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const setActive = (i: number) => tabs.forEach((t, j) => t.setAttribute("aria-selected", String(j === i)));
     tabs.forEach((t) => {
       t.addEventListener("click", () => {
         const i = Number(t.dataset.go);
-        track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+        track.scrollTo({ left: i * track.clientWidth, behavior: prefersReducedMotion ? "auto" : "smooth" });
         setActive(i);
       });
     });

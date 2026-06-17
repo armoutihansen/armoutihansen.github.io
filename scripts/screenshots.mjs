@@ -1,13 +1,30 @@
-// Headless-Chrome screenshots of the site across breakpoints + both themes.
-// Drives the system Chrome via playwright-core (no bundled browser download).
+// Local QA helper: headless screenshots of the site across breakpoints + both
+// themes. Drives a Chrome/Chromium you already have installed (no bundled
+// browser download). Override the binary with CHROME_PATH and the output
+// directory with SHOTS_DIR.
 //   BASE=http://localhost:4321 node scripts/screenshots.mjs
-import { mkdirSync } from "node:fs";
+import { existsSync, mkdirSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { chromium } from "playwright-core";
 
 const BASE = process.env.BASE || "http://localhost:4321";
-const CHROME = process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-const OUT = "/tmp/shots";
+const OUT = process.env.SHOTS_DIR || join(tmpdir(), "site-shots");
 const PATHS = (process.env.PATHS || "/").split(",");
+
+const CHROME_CANDIDATES = [
+  process.env.CHROME_PATH,
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+  "/usr/bin/google-chrome",
+  "/usr/bin/chromium",
+  "/usr/bin/chromium-browser",
+].filter(Boolean);
+const CHROME = CHROME_CANDIDATES.find((p) => existsSync(p));
+if (!CHROME) {
+  throw new Error(
+    `No Chrome/Chromium binary found. Set CHROME_PATH to your browser executable. Tried:\n  ${CHROME_CANDIDATES.join("\n  ")}`,
+  );
+}
 
 const views = [
   { name: "desktop", width: 1440, height: 900 },
