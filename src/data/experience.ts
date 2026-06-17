@@ -6,9 +6,9 @@ export const experience = [
     period: "Apr. 2026 – present",
     location: "Cologne, Germany",
     bullets: [
-      "Analyze model outputs and confidence levels to decide when results can be used directly and when they need human review.",
-      "Set review thresholds on that basis, which cut manual review by about 30%.",
-      "Work with stakeholders to translate findings into improvements."
+      "Analyze model outputs and their confidence levels to decide when a result can be used as-is and when it needs human review.",
+      "Set the review thresholds that follow from that, which cut the volume going to manual review.",
+      "Work with the teams behind the models to turn those findings into changes they actually use."
     ]
   },
   {
@@ -19,8 +19,8 @@ export const experience = [
     location: "Bonn, Germany",
     bullets: [
       "Applied econometric and statistical methods to behavioral and economic data.",
-      "Built and assessed empirical models on structured datasets.",
-      "Interpreted and communicated results clearly in papers and talks."
+      "Built empirical models on it and checked how far they actually held up.",
+      "Wrote up the results and presented them, in papers and at talks."
     ]
   },
   {
@@ -30,8 +30,7 @@ export const experience = [
     period: "Dec. 2015 – Dec. 2021",
     location: "Cologne, Germany",
     bullets: [
-      "Conducted empirical research using econometric methods.",
-      "Conducted theoretical research using mathematical and statistical methods.",
+      "Worked on both the empirical and theoretical sides: econometrics on the data, mathematical and statistical methods on the theory.",
       "Taught applied microeconomics and data analysis."
     ]
   },
@@ -42,8 +41,7 @@ export const experience = [
     period: "Dec. 2014 – May 2015",
     location: "Neu Isenburg, Germany",
     bullets: [
-      "Built VBA tools for data management and process automation.",
-      "Supported data analysis and system maintenance."
+      "Built VBA tools for data management and process automation."
     ]
   }
 ];

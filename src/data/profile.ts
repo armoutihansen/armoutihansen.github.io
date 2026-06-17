@@ -4,7 +4,7 @@ export const profile = {
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Quantitative analyst with a background in economics and applied data science. Experience working with statistical models and machine learning in practical settings, with a focus on understanding model performance and supporting decisions based on data.",
+    "Quantitative analyst with an economics PhD and a background in applied data science. I work with statistical and machine-learning models on structured data, and spend most of my time on a narrower question: when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
   links: [
@@ -22,22 +22,22 @@ export const capabilities = [
   {
     label: "Model evaluation",
     summary:
-      "Accuracy, calibration, and error-pattern checks that show where a model's output can be used directly and where a person should review it."
+      "Accuracy, calibration, and error-pattern checks. The point is to mark where a model can be trusted on its own and where it needs a second look."
   },
   {
     label: "Statistical & econometric modeling",
     summary:
-      "Build and estimate statistical and econometric models on structured data, then measure how much of the variation they actually capture."
+      "Building and estimating models on structured data, and being honest about how much of the variation they actually explain."
   },
   {
     label: "Machine learning on structured data",
     summary:
-      "Apply machine-learning methods to structured datasets and benchmark them against simpler baselines."
+      "Standard ML on tabular data, always measured against a simple baseline. If the added complexity doesn't beat it, it isn't worth keeping."
   },
   {
     label: "Reproducible code",
     summary:
-      "Version-controlled, tested Python, SQL, and R — with an economics background for reading whether a result reflects a mechanism or a coincidence."
+      "Version-controlled, tested code in Python, SQL, and R. An economics background helps with the harder part: telling a real effect from noise."
   }
 ];
 

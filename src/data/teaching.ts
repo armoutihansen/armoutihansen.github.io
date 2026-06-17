@@ -1,6 +1,6 @@
 export const teaching = {
   summary:
-    "University lecturer and tutor across applied, behavioral, personnel, and organizational economics. Supervised 60+ bachelor's and master's theses.",
+    "University lecturer and tutor in applied, behavioral, personnel, and organizational economics. Supervised 60+ bachelor's and master's theses along the way.",
   courses: [
     {
       title: "Seminar on Current Topics in Microeconomics",
