@@ -51,8 +51,7 @@ export const skills = {
     "statsmodels",
     "PyTorch",
     "XGBoost / LightGBM",
-    "GeoPandas",
-    "Matplotlib"
+    "GeoPandas"
   ],
   methods: [
     "Statistical modeling",
@@ -61,17 +60,7 @@ export const skills = {
     "Model evaluation & calibration",
     "Forecasting",
     "Experiment & A/B analysis",
-    "Uncertainty quantification",
-    "Maximum-likelihood estimation",
-    "Discrete-choice modeling",
-    "Simulation",
     "Retrieval / RAG"
   ],
-  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "JupyterLab", "Linux", "LaTeX"],
-  domain: [
-    "Insurance",
-    "Behavioral & experimental economics",
-    "Personnel & organizational economics",
-    "Contract theory & incentives"
-  ]
+  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "JupyterLab", "Linux", "LaTeX"]
 };
