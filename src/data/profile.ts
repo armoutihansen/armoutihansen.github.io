@@ -60,7 +60,8 @@ export const skills = {
     "Model evaluation & calibration",
     "Forecasting",
     "Experiment & A/B analysis",
+    "Simulation",
     "Retrieval / RAG"
   ],
-  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "JupyterLab", "Linux", "LaTeX"]
+  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "pixi", "JupyterLab", "Linux", "LaTeX"]
 };
