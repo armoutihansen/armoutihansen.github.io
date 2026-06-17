@@ -988,6 +988,55 @@ details.abstract p {
   background: var(--accent);
 }
 
+/* ----- teaching ledger (CV): course title + role, years right-aligned ----- */
+.courses {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0;
+}
+
+.course {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: clamp(1rem, 3vw, 2rem);
+  align-items: baseline;
+  padding: 1.05rem 0;
+  border-top: var(--hairline);
+}
+
+.course__body {
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.course__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 550;
+  line-height: 1.35;
+}
+
+.course__role {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--muted);
+}
+
+.course__years {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 550;
+  letter-spacing: var(--track-meta);
+  font-variant-numeric: tabular-nums;
+  color: var(--faint);
+  text-align: right;
+  white-space: nowrap;
+}
+
 /* ----- skills inventory (CV): label + monospace chips ----- */
 .skillset__row {
   display: grid;

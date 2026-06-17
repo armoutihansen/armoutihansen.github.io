@@ -138,15 +138,17 @@ const skillGroups = [
 
   <section class="section">
     <SectionHeading title="Teaching & supervision" intro={teaching.summary} />
-    <div class="timeline">
-      <article class="entry">
-        <p class="entry__meta">2016–2025 · Cologne and Bonn</p>
-        <h3>University lecturer and tutor</h3>
-        <ul>
-          {teaching.courses.map((course) => <li>{course}</li>)}
-        </ul>
-      </article>
-    </div>
+    <ul class="courses">
+      {teaching.courses.map((course) => (
+        <li class="course">
+          <div class="course__body">
+            <h3 class="course__title">{course.title}</h3>
+            <p class="course__role">{course.role}</p>
+          </div>
+          <p class="course__years">{course.years}</p>
+        </li>
+      ))}
+    </ul>
   </section>
 </BaseLayout>
 
