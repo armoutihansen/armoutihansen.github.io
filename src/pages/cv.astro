@@ -136,7 +136,7 @@ const skillGroups = [
 
 <style>
   .cv-hero {
-    max-width: 58rem;
+    max-width: none;
   }
 
   .cv-hero__main {
@@ -162,8 +162,7 @@ const skillGroups = [
 
   @media (min-width: 40em) {
     .cv-hero__main {
-      grid-template-columns: auto auto;
-      justify-content: start;
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: clamp(1.6rem, 4vw, 2.6rem);
     }
