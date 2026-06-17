@@ -12,33 +12,65 @@ interface Props {
     result?: string;
     tools: string[];
     href: string;
+    embed?: string;
+    image?: string;
+    imageAlt?: string;
+    figureTitle?: string;
+    figureNote?: string;
+    legend?: { label: string; color: string }[];
   };
   index?: number;
+  figure?: boolean;
 }
 
-const { project, index } = Astro.props;
+const { project, index, figure = false } = Astro.props;
 const external = project.href.startsWith("http");
 const rel = external ? "noreferrer" : undefined;
 const num = index != null ? pad2(index) : undefined;
 const hasViz = Astro.slots.has("default");
+const showFigure = figure && Boolean(project.embed || project.image);
 ---
 
-<article class:list={["work", { "work--feature": hasViz }]}>
-  <p class="work__meta">
-    {num && <span class="work__index">{num}</span>}
-    <span class="work__kind">{project.status} · {project.category}</span>
-  </p>
-  <h3 class="work__title">
-    <a href={project.href} rel={rel}>{project.title}</a>
-  </h3>
-  <p class="work__summary">{project.summary}</p>
-  {project.problem && project.approach && project.result && (
-    <dl class="work__detail">
-      <div><dt>Problem</dt><dd>{project.problem}</dd></div>
-      <div><dt>Approach</dt><dd>{project.approach}</dd></div>
-      <div><dt>Result</dt><dd>{project.result}</dd></div>
-    </dl>
+<article class:list={["work", { "work--feature": hasViz, "work--figure": showFigure }]}>
+  <div class="work__body">
+    <p class="work__meta">
+      {num && <span class="work__index">{num}</span>}
+      <span class="work__kind">{project.status} · {project.category}</span>
+    </p>
+    <h3 class="work__title">
+      <a href={project.href} rel={rel}>{project.title}</a>
+    </h3>
+    <p class="work__summary">{project.summary}</p>
+    {project.problem && project.approach && project.result && (
+      <dl class="work__detail">
+        <div><dt>Problem</dt><dd>{project.problem}</dd></div>
+        <div><dt>Approach</dt><dd>{project.approach}</dd></div>
+        <div><dt>Result</dt><dd>{project.result}</dd></div>
+      </dl>
+    )}
+    <p class="work__tools">{project.tools.join(" · ")}</p>
+    {hasViz && <div class="work__viz"><slot /></div>}
+  </div>
+  {showFigure && (
+    <figure class="work__panel">
+      <figcaption class="work__panel-cap">
+        {project.figureTitle && <span class="work__panel-title">{project.figureTitle}</span>}
+        {project.legend && (
+          <span class="work__legend">
+            {project.legend.map((l) => (
+              <span><i style={`background:${l.color}`} />{l.label}</span>
+            ))}
+          </span>
+        )}
+      </figcaption>
+      <div class="work__panel-frame">
+        {project.embed ? (
+          <iframe src={project.embed} title={project.imageAlt ?? project.title} loading="lazy" />
+        ) : (
+          <img src={project.image} alt={project.imageAlt ?? project.title} loading="lazy" decoding="async" />
+        )}
+      </div>
+      {project.figureNote && <p class="work__panel-note">{project.figureNote}</p>}
+    </figure>
   )}
-  <p class="work__tools">{project.tools.join(" · ")}</p>
-  {hasViz && <div class="work__viz"><slot /></div>}
 </article>

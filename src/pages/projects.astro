@@ -65,7 +65,7 @@ const grouped = projectGroups
           </p>
         ) : (
           <div class="worklist">
-            {group.projects.map((project, i) => <WorkItem project={project} index={i + 1} />)}
+            {group.projects.map((project, i) => <WorkItem project={project} index={i + 1} figure />)}
           </div>
         )}
       </section>

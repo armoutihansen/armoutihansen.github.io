@@ -689,8 +689,116 @@ main {
 /* ----- work ----- */
 .work {
   display: grid;
-  gap: 0.55rem;
   padding: clamp(1.4rem, 1rem + 1.4vw, 2rem) 0;
+}
+
+.work__body {
+  display: grid;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+/* Featured project: a wide interactive panel to the right of the text,
+   vertically centered (panel chrome matches the front-page hero). */
+.work--figure {
+  grid-template-columns: minmax(0, 1fr) clamp(320px, 44vw, 540px);
+  column-gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.work__panel {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+  padding: clamp(0.9rem, 0.6rem + 1vw, 1.3rem);
+  background: var(--paper-sunk);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.work__panel-cap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.3rem 1rem;
+}
+
+.work__panel-title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: 600;
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.work__legend {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.work__legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.work__legend i {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+}
+
+.work__panel-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 460px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.work__panel-frame iframe,
+.work__panel-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+.work__panel-frame img {
+  object-fit: cover;
+}
+
+.work__panel-note {
+  margin: 0;
+  max-width: var(--measure);
+  color: var(--muted);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+}
+
+@media (max-width: 760px) {
+  .work--figure {
+    grid-template-columns: 1fr;
+    row-gap: 1.15rem;
+  }
+
+  .work__panel-frame {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 .work__meta {

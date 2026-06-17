@@ -34,7 +34,16 @@ export const projects = [
       "Joined trip records with collision data and built station-level measures that separate raw volume from exposure-adjusted risk.",
     result: "Three separate measures — demand, imbalance, and exposure-adjusted risk — that a single ranking would have conflated.",
     tools: ["Python", "pandas", "feature engineering", "risk analysis", "forecasting"],
-    href: "/DSC/"
+    href: "/DSC/",
+    embed: "https://armoutihansen.xyz/citibike-data-science/src/figures/station_risk_tiers.html",
+    figureTitle: "Station-level crash risk",
+    figureNote: "Each dot is a CitiBike station.",
+    legend: [
+      { label: "Lower", color: "#2f8f3e" },
+      { label: "Medium", color: "#e8932a" },
+      { label: "Higher", color: "#d23b3b" }
+    ],
+    imageAlt: "Interactive map of New York with CitiBike stations colored by per-trip crash risk"
   },
   {
     title: "RAG Search Engine",
