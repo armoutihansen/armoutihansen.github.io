@@ -1,22 +1,26 @@
 ---
 import { profile } from "../data/profile";
+
 const year = new Date().getFullYear();
 
-const footerLinks = [
+const links = [
   { label: "Email", href: `mailto:${profile.email}`, rel: undefined },
+  { label: "CV", href: "/CV_JAH.pdf", rel: undefined },
   ...profile.links.map((link) => ({
-    ...link,
     label: link.label === "Google Scholar" ? "Scholar" : link.label,
+    href: link.href,
     rel: "me noreferrer"
   }))
 ];
 ---
 
 <footer class="site-footer">
-  <ul class="inline-list">
-    {footerLinks.map((link) => (
-      <li><a href={link.href} rel={link.rel}>{link.label}</a></li>
-    ))}
-  </ul>
-  <span>© {year} {profile.name}</span>
+  <div class="site-footer__inner wrap">
+    <span class="site-footer__copy">© {year} {profile.name}</span>
+    <ul class="linkrow">
+      {links.map((link) => (
+        <li><a href={link.href} rel={link.rel}>{link.label}</a></li>
+      ))}
+    </ul>
+  </div>
 </footer>

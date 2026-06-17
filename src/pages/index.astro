@@ -1,87 +1,98 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
-import ProjectCard from "../components/ProjectCard.astro";
+import WorkItem from "../components/WorkItem.astro";
+import Hero from "../components/Hero.astro";
 import PublicationItem from "../components/PublicationItem.astro";
-import { profile } from "../data/profile";
+import ExperienceEntry from "../components/ExperienceEntry.astro";
+import { experience } from "../data/experience";
+import { capabilities, profile } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
+import { pad2 } from "../data/format";
 
-const featuredProjectTitles = [
-  "The Informativeness of Frequency-Report Scoring Rules",
+const featuredTitles = [
   "RAG Search Engine",
-  "CitiBike Demand, Risk, and Net Flow Analysis",
-  "Economic Theories and Machine Learning"
+  "CitiBike Demand, Risk, and Net Flow",
+  "Economic Theories and Machine Learning",
 ];
-const featuredProjects = featuredProjectTitles
+const featuredProjects = featuredTitles
   .map((title) => projects.find((project) => project.title === title))
-  .filter(Boolean);
-const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 3);
+  .filter((project): project is (typeof projects)[number] => project !== undefined);
+const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 2);
+const recentExperience = experience.slice(0, 2);
+const paperCount = publications.filter((item) => item.type === "Publication").length;
 
-const teaching = [
-  "Seminar on Current Topics in Microeconomics, undergraduate lecturer, since 2025",
-  "Research Module on Applied Microeconomics and Management, graduate lecturer, 2022-2025",
-  "Empirical Evaluation of Management Practices, graduate lecturer and tutor, 2019-2022",
-  "Economics of Incentives in Organisations, graduate tutor, 2016 and 2020-2022",
-  "Behavioral Management Science, undergraduate lecturer and tutor, 2017-2020",
-  "Strategic Human Resource Management, graduate tutor, 2016-2019",
-  "Seminar on Human Resource Management, graduate lecturer, 2017-2018"
+const credibility = [
+  { figure: String(paperCount), label: "peer-reviewed papers" },
+  { figure: "PhD", label: "economics, summa cum laude" },
+  { figure: "5", label: "journals refereed for" },
+  { figure: "60+", label: "theses supervised" }
 ];
 ---
 
 <BaseLayout>
-  <section class="hero">
-    <img class="hero-avatar" src="/images/avatar3.webp" alt={`Illustrated portrait of ${profile.name}`} loading="eager" />
-    <p class="eyebrow">{profile.title}</p>
-    <h1>{profile.name}</h1>
-    <p class="lead">{profile.summary}</p>
-    <p>
-      I am a quantitative scientist with a background in economics and a PhD from the University of Cologne. In my current role, I work with machine learning models in an operational context, focusing on how model outputs can be used reliably in practice — understanding confidence levels, defining thresholds, and supporting decisions on when results can be used directly and when human review is required.
-    </p>
-    <p>
-      My academic research covers theoretical and empirical topics in microeconomics, with a focus on behavioral economics, personnel economics, organizational economics, formal modelling, and careful interpretation of results.
-    </p>
-  </section>
+  <Hero />
 
   <section class="section">
-    <SectionHeading eyebrow="Selected work" title="Projects" />
-    <div class="bib-list">
-      {featuredProjects.map((project) => <ProjectCard project={project} />)}
+    <SectionHeading eyebrow="Profile" title="What I do" />
+    <div class="capabilities">
+      {capabilities.map((item, i) => (
+        <article class="capability">
+          <span class="capability__index">{pad2(i + 1)}</span>
+          <h3>{item.label}</h3>
+          <p>{item.summary}</p>
+        </article>
+      ))}
     </div>
-    <p><a href="/projects/">All projects →</a></p>
   </section>
 
   <section class="section">
-    <SectionHeading eyebrow="Research" title="Selected publications" />
-    <div class="bib-list">
-      {featuredPublications.map((publication) => <PublicationItem publication={publication} />)}
+    <SectionHeading
+      eyebrow="Selected work"
+      title="Analysis, models, and checks"
+      intro="A few projects, each with the question it addresses, the method, and the result."
+    />
+    <div class="worklist">
+      {featuredProjects.map((project, i) => <WorkItem project={project} index={i + 1} />)}
     </div>
-    <p><a href="/publications/">All publications →</a></p>
+    <p class="section__more"><a href="/projects/">All work</a></p>
   </section>
 
   <section class="section">
-    <SectionHeading eyebrow="Research interests" title="Behavioral and organizational economics" />
-    <p>
-      My academic work studies incentives, motivation, social preferences, reference-dependent choice, and organizational design. Current projects evaluate the predictive completeness of social preference theories using machine learning benchmarks, and study frequency-report scoring rules for belief elicitation by asking what latent beliefs can be inferred from discrete count reports under different scoring-rule designs.
-    </p>
+    <SectionHeading eyebrow="Experience" title="Where I've worked" />
+    <div class="timeline">
+      {recentExperience.map((item) => <ExperienceEntry item={item} />)}
+    </div>
+    <p class="section__more"><a href="/cv/">Full CV</a></p>
   </section>
 
   <section class="section">
-    <SectionHeading eyebrow="Teaching" title="Courses and supervision" />
-    <ul>
-      {teaching.map((item) => <li>{item}</li>)}
-    </ul>
-    <p>Supervised more than 60 bachelor and master theses.</p>
+    <SectionHeading
+      eyebrow="Background"
+      title="Research & teaching"
+      intro="A decade in academic economics — published research, refereeing for journals, and university teaching."
+    />
+    <div class="cred">
+      {credibility.map((item) => (
+        <div><strong>{item.figure}</strong><span>{item.label}</span></div>
+      ))}
+    </div>
+    <div class="publist">
+      {featuredPublications.map((publication) => <PublicationItem publication={publication} compact />)}
+    </div>
+    <p class="section__more"><a href="/publications/">Research background</a></p>
   </section>
 
   <section class="section">
     <SectionHeading eyebrow="Contact" title="Get in touch" />
-    <p>
-      For professional, research, or project-related inquiries, the easiest way to reach me is by email.
+    <p class="measure">
+      Email is the best way to reach me — I'm glad to talk through a quantitative or modeling problem.
     </p>
-    <ul class="inline-list">
+    <ul class="linkrow linkrow--block">
       <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-      {profile.links.map((link) => <li><a href={link.href} rel="me noreferrer">{link.label}</a></li>)}
+      <li><a href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a></li>
+      <li><a href="https://github.com/armoutihansen" rel="me noreferrer">GitHub</a></li>
     </ul>
   </section>
 </BaseLayout>

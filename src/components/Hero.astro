@@ -1,0 +1,702 @@
+---
+import model from "../data/hero-model.json";
+import { profile } from "../data/profile";
+
+type Pt = { p: number; y: number };
+const points = model.points as Pt[];
+const DEFAULT_HI = 0.75;
+
+function bandStats(hi: number) {
+  const lo = 1 - hi;
+  let auto = 0;
+  let autoCorrect = 0;
+  for (const { p, y } of points) {
+    if (p > lo && p < hi) continue;
+    auto++;
+    if ((p >= 0.5 ? 1 : 0) === y) autoCorrect++;
+  }
+  const n = points.length;
+  return {
+    autoPct: Math.round((100 * auto) / n),
+    reviewPct: Math.round((100 * (n - auto)) / n),
+    autoAcc: auto ? Math.round((100 * autoCorrect) / auto) : 0,
+  };
+}
+
+const d0 = bandStats(DEFAULT_HI);
+const dataJson = JSON.stringify(points);
+
+// Panel 2 — real finding from the CitiBike project (static/DSC): collision
+// severity per trip by time of day. Values read from the project's chart.
+const riskBars = [
+  { label: "Morning", v: 0.0012 },
+  { label: "Midday", v: 0.0011 },
+  { label: "Evening", v: 0.0011 },
+  { label: "Late eve", v: 0.0021 },
+  { label: "Night", v: 0.0049 },
+];
+const RMAX = 0.0052;
+const RW = 340;
+const RH = 196;
+const rPadL = 8;
+const rPadR = 8;
+const rPadT = 16;
+const rPadB = 28;
+const rPlotW = RW - rPadL - rPadR;
+const rPlotH = RH - rPadT - rPadB;
+const rbw = rPlotW / riskBars.length;
+const rBase = rPadT + rPlotH;
+---
+
+<section class="lede" aria-labelledby="lede-name">
+  <div class="lede__intro">
+    <p class="eyebrow reveal reveal-1">{profile.title}</p>
+    <h1 id="lede-name" class="hero__name reveal reveal-1">Jesper <br />Armouti-Hansen</h1>
+    <p class="hero__lead reveal reveal-2">{profile.summary}</p>
+    <p class="lede__facts reveal reveal-2">Cologne, Germany · Python · machine learning · econometrics</p>
+    <div class="actions reveal reveal-3">
+      <a class="btn btn--primary" href="/CV_JAH.pdf">Download CV</a>
+      <a class="btn" href={`mailto:${profile.email}`}>Email</a>
+      <a class="btn" href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a>
+    </div>
+  </div>
+
+  <div class="deck reveal reveal-4" data-deck>
+    <div class="deck__track" data-deck-track>
+      <!-- Slide 1 — model confidence -->
+      <div class="deck__slide" role="group" aria-roledescription="slide" aria-label="Model confidence to decision">
+        <figure class="predict">
+          <figcaption class="predict__cap">
+            <span class="predict__title">Model confidence → decision</span>
+            <span class="predict__meta">Logistic regression · {model.n_test} held-out</span>
+          </figcaption>
+          <div class="predict__stage">
+            <canvas
+              class="predict__canvas"
+              role="img"
+              aria-label="A logistic-regression classifier's predicted probabilities across held-out cases. A draggable confidence band over the uncertain middle routes those cases to human review; confident cases are handled automatically."
+            ></canvas>
+            <div
+              class="predict__handle"
+              data-handle
+              role="slider"
+              tabindex="0"
+              aria-label="Confidence band width"
+              aria-valuemin="52"
+              aria-valuemax="97"
+              aria-valuenow={Math.round(DEFAULT_HI * 100)}
+            >
+              <span class="predict__grip" aria-hidden="true"></span>
+            </div>
+          </div>
+          <div class="predict__foot">
+            <dl class="predict__readouts">
+              <div><dt>Auto-handled</dt><dd data-k="auto">{d0.autoPct}%</dd></div>
+              <div><dt>To review</dt><dd data-k="review">{d0.reviewPct}%</dd></div>
+              <div><dt>Auto-accuracy</dt><dd data-k="acc">{d0.autoAcc}%</dd></div>
+            </dl>
+            <p class="predict__hint">Drag the band — coverage vs. accuracy</p>
+          </div>
+        </figure>
+      </div>
+
+      <!-- Slide 2 — CitiBike risk per trip -->
+      <div class="deck__slide" role="group" aria-roledescription="slide" aria-label="CitiBike risk per trip by time of day">
+        <figure class="rpanel">
+          <figcaption class="predict__cap">
+            <span class="predict__title">Risk per trip → time of day</span>
+            <span class="predict__meta">CitiBike × NYPD collisions</span>
+          </figcaption>
+          <svg
+            class="rpanel__svg"
+            viewBox={`0 0 ${RW} ${RH}`}
+            preserveAspectRatio="xMidYMid meet"
+            role="img"
+            aria-label="Bar chart of collision severity per CitiBike trip by time of day. Risk is roughly four times higher at night than during the day, despite lower ridership."
+          >
+            {
+              riskBars.map((b, i) => {
+                const h = (b.v / RMAX) * rPlotH;
+                const w = rbw * 0.6;
+                const x = rPadL + i * rbw + (rbw - w) / 2;
+                const y = rBase - h;
+                const night = b.label === "Night";
+                return (
+                  <g class="rpanel__bar">
+                    <rect
+                      x={x}
+                      y={y}
+                      width={w}
+                      height={h}
+                      rx="1.5"
+                      fill={night ? "var(--accent-deep)" : "var(--accent)"}
+                      opacity={night ? "1" : "0.8"}
+                    />
+                    <text x={x + w / 2} y={rBase + 13} text-anchor="middle" class="rpanel__xlabel">
+                      {b.label}
+                    </text>
+                  </g>
+                );
+              })
+            }
+            <text
+              x={rPadL + 4 * rbw + rbw / 2}
+              y={rBase - (0.0049 / RMAX) * rPlotH - 6}
+              text-anchor="middle"
+              class="rpanel__callout">≈4×</text>
+            <line x1={rPadL} y1={rBase + 0.5} x2={RW - rPadR} y2={rBase + 0.5} stroke="var(--line-strong)" stroke-width="1" />
+          </svg>
+          <p class="predict__hint rpanel__note">
+            Collisions matched to stations (BallTree 300&nbsp;m), severity-weighted, EB-smoothed — risk per trip peaks
+            at night, ~4× daytime.
+          </p>
+        </figure>
+      </div>
+    </div>
+
+    <div class="deck__tabs" role="tablist" aria-label="Hero visualisations">
+      <button class="deck__tab" type="button" data-go="0" role="tab" aria-selected="true">Model confidence</button>
+      <button class="deck__tab" type="button" data-go="1" role="tab" aria-selected="false">Risk per trip</button>
+    </div>
+  </div>
+
+  <script type="application/json" data-hero-points is:inline set:html={dataJson}></script>
+</section>
+
+<style>
+  .lede {
+    display: grid;
+    gap: clamp(1.8rem, 1rem + 4vw, 3rem);
+    align-items: center;
+    padding-top: clamp(0.4rem, 0.2rem + 0.8vw, 1.2rem);
+  }
+
+  @media (min-width: 60em) {
+    .lede {
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: clamp(2rem, 4vw, 4rem);
+    }
+  }
+
+  .lede__facts {
+    margin: 1.1rem 0 0;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* ---- deck: two scrollable panels ---- */
+  .deck {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .deck__track {
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    border-radius: var(--radius);
+  }
+
+  .deck__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .deck__slide {
+    flex: 0 0 100%;
+    min-width: 100%;
+    scroll-snap-align: start;
+    display: flex;
+  }
+
+  .deck__slide > figure {
+    flex: 1;
+  }
+
+  .deck__tabs {
+    display: flex;
+    gap: 0.45rem;
+  }
+
+  .deck__tab {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.75rem;
+    cursor: pointer;
+    transition: color 0.16s ease, border-color 0.16s ease;
+  }
+
+  .deck__tab:hover {
+    color: var(--ink);
+  }
+
+  .deck__tab[aria-selected="true"] {
+    color: var(--accent-deep);
+    border-color: var(--accent);
+  }
+
+  /* ---- shared panel chrome ---- */
+  .predict,
+  .rpanel {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    height: 100%;
+    padding: clamp(0.9rem, 0.6rem + 1vw, 1.3rem);
+    background: var(--paper-sunk);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+
+  .predict__cap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.3rem 1rem;
+  }
+
+  .predict__title {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .predict__meta {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .predict__stage {
+    position: relative;
+    flex: 1;
+    min-height: 170px;
+  }
+
+  .predict__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    cursor: ew-resize;
+  }
+
+  .predict__handle {
+    position: absolute;
+    top: 0.4rem;
+    bottom: 1.7rem;
+    left: 0;
+    width: 26px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: ew-resize;
+    touch-action: none;
+  }
+
+  .predict__grip {
+    position: relative;
+    width: 2px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .predict__grip::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 12px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    background: var(--accent);
+    transition: box-shadow 0.16s ease;
+  }
+
+  .predict__handle:hover .predict__grip::after,
+  .predict__handle:focus-visible .predict__grip::after {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent), transparent 68%);
+  }
+
+  .predict__handle:focus-visible {
+    outline: none;
+  }
+
+  .predict__foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 0.6rem 1.2rem;
+  }
+
+  .predict__readouts {
+    display: flex;
+    gap: clamp(0.9rem, 3vw, 1.9rem);
+    margin: 0;
+  }
+
+  .predict__readouts > div {
+    display: grid;
+    gap: 0.15rem;
+  }
+
+  .predict__readouts dt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .predict__readouts dd {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.18rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .predict__readouts dd[data-k="acc"] {
+    color: var(--accent-deep);
+  }
+
+  .predict__hint {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  /* ---- risk panel ---- */
+  .rpanel__svg {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .rpanel__bar rect {
+    transition: opacity 0.15s ease;
+  }
+
+  .rpanel__bar:hover rect {
+    opacity: 1;
+  }
+
+  .rpanel__xlabel {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    fill: var(--faint);
+  }
+
+  .rpanel__callout {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    fill: var(--accent-deep);
+  }
+
+  .rpanel__note {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  // ---------- Panel 1: model-confidence interaction ----------
+  const fig = document.querySelector(".predict");
+  const dataEl = document.querySelector("[data-hero-points]");
+  const canvas = fig?.querySelector(".predict__canvas") as HTMLCanvasElement | null;
+  const ctx = canvas?.getContext("2d") ?? null;
+  const handle = fig?.querySelector("[data-handle]") as HTMLElement | null;
+
+  if (fig && dataEl && canvas && ctx && handle) {
+    type Pt = { p: number; y: number };
+    const points: Pt[] = JSON.parse(dataEl.textContent || "[]");
+    const out = {
+      auto: fig.querySelector('[data-k="auto"]'),
+      review: fig.querySelector('[data-k="review"]'),
+      acc: fig.querySelector('[data-k="acc"]'),
+    };
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const HI_MIN = 0.52;
+    const HI_MAX = 0.97;
+    const INSET = { l: 12, r: 12, t: 16, b: 26 };
+    let hi = 0.75;
+    let W = 0;
+    let H = 0;
+    let L: any = null;
+
+    function palette() {
+      const s = getComputedStyle(document.documentElement);
+      const g = (n: string, f: string) => s.getPropertyValue(n).trim() || f;
+      return {
+        pos: g("--accent", "#edb24e"),
+        neg: g("--viz-neg", "#7f8da6"),
+        band: g("--viz-band", "rgba(127,127,127,0.07)"),
+        axis: g("--line-strong", "#4a4434"),
+        text: g("--faint", "#8a8370"),
+      };
+    }
+    let COL = palette();
+
+    const px = (p: number) => L.x0 + p * L.plotW;
+
+    function computeLayout() {
+      const rect = canvas!.getBoundingClientRect();
+      W = rect.width;
+      H = rect.height;
+      if (W < 2 || H < 2) return;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas!.width = Math.round(W * dpr);
+      canvas!.height = Math.round(H * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const x0 = INSET.l;
+      const x1 = W - INSET.r;
+      const plotW = x1 - x0;
+      const baseY = H - INSET.b;
+      const topY = INSET.t;
+      const availH = baseY - topY;
+
+      const nbins = Math.max(22, Math.min(64, Math.floor(plotW / 9)));
+      const bins: Pt[][] = Array.from({ length: nbins }, () => []);
+      for (const pt of points) {
+        let b = Math.floor(pt.p * nbins);
+        if (b < 0) b = 0;
+        if (b >= nbins) b = nbins - 1;
+        bins[b].push(pt);
+      }
+      let maxCount = 1;
+      for (const b of bins) maxCount = Math.max(maxCount, b.length);
+      const gap = Math.min(8, availH / maxCount);
+      const r = Math.max(1.5, Math.min(3.3, gap * 0.44));
+
+      const placed: { x: number; y: number; p: number; cls: number }[] = [];
+      for (let b = 0; b < nbins; b++) {
+        const cx = x0 + ((b + 0.5) / nbins) * plotW;
+        const col = bins[b];
+        for (let k = 0; k < col.length; k++) {
+          placed.push({ x: cx, y: baseY - (k + 0.5) * gap, p: col[k].p, cls: col[k].y });
+        }
+      }
+      L = { x0, x1, plotW, baseY, topY, r, placed };
+    }
+
+    function draw(progress: number) {
+      if (!L) return;
+      const lo = 1 - hi;
+      ctx!.clearRect(0, 0, W, H);
+
+      const bx0 = px(lo);
+      const bx1 = px(hi);
+      ctx!.fillStyle = COL.band;
+      ctx!.fillRect(bx0, L.topY - 6, bx1 - bx0, L.baseY - L.topY + 6);
+      ctx!.strokeStyle = COL.pos;
+      ctx!.globalAlpha = 0.55;
+      ctx!.lineWidth = 1;
+      ctx!.beginPath();
+      ctx!.moveTo(Math.round(bx0) + 0.5, L.topY - 6);
+      ctx!.lineTo(Math.round(bx0) + 0.5, L.baseY);
+      ctx!.moveTo(Math.round(bx1) + 0.5, L.topY - 6);
+      ctx!.lineTo(Math.round(bx1) + 0.5, L.baseY);
+      ctx!.stroke();
+      ctx!.globalAlpha = 1;
+
+      ctx!.strokeStyle = COL.axis;
+      ctx!.beginPath();
+      ctx!.moveTo(L.x0, L.baseY + 0.5);
+      ctx!.lineTo(L.x1, L.baseY + 0.5);
+      ctx!.stroke();
+      ctx!.fillStyle = COL.text;
+      ctx!.font = '600 10px "JetBrains Mono Variable", ui-monospace, monospace';
+      ctx!.textBaseline = "top";
+      const ticks: [string, number, CanvasTextAlign][] = [
+        ["0", 0, "left"],
+        ["0.5", 0.5, "center"],
+        ["1", 1, "right"],
+      ];
+      for (const [lab, p, align] of ticks) {
+        const xx = px(p);
+        ctx!.fillRect(xx - 0.5, L.baseY, 1, 3);
+        ctx!.textAlign = align;
+        ctx!.fillText(lab, xx, L.baseY + 5);
+      }
+
+      const reveal = L.x0 + progress * (L.plotW + 2);
+      for (const d of L.placed) {
+        if (d.x > reveal) continue;
+        const inReview = d.p > lo && d.p < hi;
+        ctx!.globalAlpha = inReview ? 0.2 : 0.92;
+        ctx!.fillStyle = d.cls ? COL.pos : COL.neg;
+        ctx!.beginPath();
+        ctx!.arc(d.x, d.y, L.r, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+      ctx!.globalAlpha = 1;
+    }
+
+    function stats() {
+      const lo = 1 - hi;
+      let auto = 0;
+      let correct = 0;
+      for (const { p, y } of points) {
+        if (p > lo && p < hi) continue;
+        auto++;
+        if ((p >= 0.5 ? 1 : 0) === y) correct++;
+      }
+      const n = points.length;
+      return {
+        auto: Math.round((100 * auto) / n),
+        review: Math.round((100 * (n - auto)) / n),
+        acc: auto ? Math.round((100 * correct) / auto) : 0,
+      };
+    }
+
+    function syncUI() {
+      const s = stats();
+      if (out.auto) out.auto.textContent = s.auto + "%";
+      if (out.review) out.review.textContent = s.review + "%";
+      if (out.acc) out.acc.textContent = s.acc + "%";
+      if (L) handle!.style.left = px(hi) + "px";
+      handle!.setAttribute("aria-valuenow", String(Math.round(hi * 100)));
+      handle!.setAttribute("aria-valuetext", s.review + "% of cases sent to review");
+    }
+
+    function setHiFromClientX(clientX: number) {
+      const rect = canvas!.getBoundingClientRect();
+      let p = (clientX - rect.left - L.x0) / L.plotW;
+      if (p < 0.5) p = 1 - p;
+      hi = Math.max(HI_MIN, Math.min(HI_MAX, p));
+      draw(1);
+      syncUI();
+    }
+
+    let dragging = false;
+    const startDrag = (e: PointerEvent, el: HTMLElement) => {
+      dragging = true;
+      el.setPointerCapture(e.pointerId);
+      setHiFromClientX(e.clientX);
+      e.preventDefault();
+    };
+    const moveDrag = (e: PointerEvent) => {
+      if (dragging) setHiFromClientX(e.clientX);
+    };
+    const endDrag = () => {
+      dragging = false;
+    };
+
+    canvas.addEventListener("pointerdown", (e) => startDrag(e, canvas));
+    canvas.addEventListener("pointermove", moveDrag);
+    canvas.addEventListener("pointerup", endDrag);
+    canvas.addEventListener("pointercancel", endDrag);
+    handle.addEventListener("pointerdown", (e) => startDrag(e, handle));
+    handle.addEventListener("pointermove", moveDrag);
+    handle.addEventListener("pointerup", endDrag);
+    handle.addEventListener("keydown", (e) => {
+      const step = e.shiftKey ? 0.05 : 0.01;
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") hi = Math.max(HI_MIN, hi - step);
+      else if (e.key === "ArrowRight" || e.key === "ArrowUp") hi = Math.min(HI_MAX, hi + step);
+      else return;
+      e.preventDefault();
+      draw(1);
+      syncUI();
+    });
+
+    let first = true;
+    let raf = 0;
+    const ro = new ResizeObserver(() => {
+      if (first) {
+        first = false;
+        return;
+      }
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        COL = palette();
+        computeLayout();
+        draw(1);
+        syncUI();
+      });
+    });
+    ro.observe(canvas);
+
+    const mo = new MutationObserver(() => {
+      COL = palette();
+      draw(1);
+    });
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+    computeLayout();
+    syncUI();
+    if (reduce) {
+      draw(1);
+    } else {
+      const dur = 850;
+      let start: number | null = null;
+      const stepFn = (ts: number) => {
+        if (start === null) start = ts;
+        const t = Math.min(1, (ts - start) / dur);
+        draw(1 - Math.pow(1 - t, 3));
+        if (t < 1) requestAnimationFrame(stepFn);
+      };
+      requestAnimationFrame(stepFn);
+    }
+  }
+
+  // ---------- Deck: scroll/tab navigation between the two panels ----------
+  const deck = document.querySelector("[data-deck]");
+  const track = deck?.querySelector("[data-deck-track]") as HTMLElement | null;
+  const tabs = deck ? Array.from(deck.querySelectorAll<HTMLButtonElement>(".deck__tab")) : [];
+
+  if (track && tabs.length) {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const setActive = (i: number) => tabs.forEach((t, j) => t.setAttribute("aria-selected", String(j === i)));
+    tabs.forEach((t) => {
+      t.addEventListener("click", () => {
+        const i = Number(t.dataset.go);
+        track.scrollTo({ left: i * track.clientWidth, behavior: prefersReducedMotion ? "auto" : "smooth" });
+        setActive(i);
+      });
+    });
+    let st: number | undefined;
+    track.addEventListener("scroll", () => {
+      window.clearTimeout(st);
+      st = window.setTimeout(() => setActive(Math.round(track.scrollLeft / track.clientWidth)), 60);
+    });
+  }
+</script>

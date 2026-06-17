@@ -1,0 +1,94 @@
+---
+import gh from "../data/github.json";
+
+const lastActive = new Date(gh.lastPush).toLocaleString("en-US", { month: "short", year: "numeric" });
+const segColors = ["var(--accent)", "var(--ink-soft)", "var(--muted)", "var(--faint)", "var(--line-strong)"];
+const aria = "Languages by repository — " + gh.languages.map((l) => `${l.name} ${l.pct}%`).join(", ");
+---
+
+<div class="ghstrip">
+  <div class="ghstrip__top">
+    <span class="ghstrip__label">Open source</span>
+    <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
+  </div>
+  <div class="ghstrip__bar" role="img" aria-label={aria}>
+    {
+      gh.languages.map((l, i) => (
+        <span class="ghstrip__seg" style={`width:${l.pct}%;background:${segColors[i] ?? "var(--line)"}`} />
+      ))
+    }
+  </div>
+  <p class="ghstrip__legend">
+    <span class="ghstrip__repos">{gh.ownedRepos} repositories</span>
+    {gh.languages.map((l) => <span>{l.name} {l.pct}%</span>)}
+    <span>active {lastActive}</span>
+  </p>
+</div>
+
+<style>
+  .ghstrip {
+    margin-top: clamp(1.6rem, 1rem + 1.5vw, 2.4rem);
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .ghstrip__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.3rem 1rem;
+  }
+
+  .ghstrip__label,
+  .ghstrip__link {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .ghstrip__label {
+    color: var(--accent-deep);
+  }
+
+  .ghstrip__link {
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .ghstrip__link:hover {
+    color: var(--accent-deep);
+  }
+
+  .ghstrip__bar {
+    display: flex;
+    gap: 1px;
+    height: 7px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--line);
+  }
+
+  .ghstrip__seg {
+    height: 100%;
+  }
+
+  .ghstrip__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem 1.1rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+
+  .ghstrip__repos {
+    color: var(--ink-soft);
+  }
+</style>

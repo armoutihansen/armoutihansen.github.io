@@ -8,25 +8,36 @@ const journalPublications = publications.filter((item) => item.type === "Publica
 const otherWork = publications.filter((item) => item.type !== "Publication");
 ---
 
-<BaseLayout title="Publications" description="Journal publications, working papers, and current research by Jesper Armouti-Hansen.">
-  <section class="hero">
-    <p class="eyebrow">Publications</p>
-    <h1>Research publications and current work</h1>
+<BaseLayout
+  title="Research"
+  description="Research background, publications, working papers, and replication packages by Jesper Armouti-Hansen."
+>
+  <header class="page-hero">
+    <p class="eyebrow">Publications &amp; working papers</p>
+    <h1>Research background</h1>
     <p class="lead">
-      Published and ongoing work in behavioral economics, organizational economics, decision theory, and predictive modelling of economic behavior.
+      Four peer-reviewed papers in behavioral, organizational, and decision economics, plus
+      working papers and replication code. The methods are econometric and the assumptions are
+      stated; the replication packages are public.
     </p>
-  </section>
+  </header>
 
   <section class="section">
-    <SectionHeading title="Journal publications" />
-    <div class="bib-list">
+    <SectionHeading
+      title="Journal publications"
+      intro="Peer-reviewed work in behavioral, organizational, and decision economics."
+    />
+    <div class="publist">
       {journalPublications.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>
 
   <section class="section">
-    <SectionHeading title="Working papers and current research" />
-    <div class="bib-list">
+    <SectionHeading
+      title="Working papers & projects"
+      intro="Current work and replication material: stated assumptions, public code, and interpretation."
+    />
+    <div class="publist">
       {otherWork.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>

@@ -1,0 +1,30 @@
+{
+  "user": "armoutihansen",
+  "url": "https://github.com/armoutihansen",
+  "publicRepos": 28,
+  "ownedRepos": 16,
+  "lastPush": "2026-06-14T19:01:30Z",
+  "languages": [
+    {
+      "name": "Python",
+      "pct": 50
+    },
+    {
+      "name": "HTML",
+      "pct": 14
+    },
+    {
+      "name": "TeX",
+      "pct": 14
+    },
+    {
+      "name": "Jupyter Notebook",
+      "pct": 14
+    },
+    {
+      "name": "TypeScript",
+      "pct": 7
+    }
+  ],
+  "source": "GitHub REST API (public, unauthenticated)"
+}

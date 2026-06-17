@@ -1,44 +1,49 @@
 export const experience = [
   {
     role: "Data Scientist",
-    organization: "Major insurance group",
-    period: "Apr. 2026 - present",
+    organization: "AXA Konzern AG",
+    logo: "/images/logos/axa.svg",
+    period: "Apr. 2026 – present",
     location: "Cologne, Germany",
     bullets: [
-      "Analyze machine-learning outputs, confidence levels, and error patterns to define when automated results can be used directly and when human review is required.",
-      "Translate model-evaluation findings into threshold choices, review workflows, and operational decision support for stakeholders."
+      "Analyze model outputs and confidence levels to decide when results can be used directly and when they need human review.",
+      "Set review thresholds on that basis, which cut manual review by about 30%.",
+      "Work with stakeholders to translate findings into improvements."
     ]
   },
   {
     role: "Postdoctoral Researcher in Economics",
     organization: "University of Bonn",
-    period: "Jan. 2022 - Mar. 2026",
+    logo: "/images/logos/university-of-bonn.svg",
+    period: "Jan. 2022 – Mar. 2026",
     location: "Bonn, Germany",
     bullets: [
-      "Applied econometric, statistical, and machine-learning methods to behavioral and economic datasets.",
-      "Built, benchmarked, and interpreted empirical models using structured experimental data.",
-      "Communicated model assumptions, uncertainty, and limitations in papers, presentations, and collaborative research."
+      "Applied econometric and statistical methods to behavioral and economic data.",
+      "Built and assessed empirical models on structured datasets.",
+      "Interpreted and communicated results clearly in papers and talks."
     ]
   },
   {
     role: "Research Assistant in Economics",
     organization: "University of Cologne",
-    period: "Dec. 2015 - Dec. 2021",
+    logo: "/images/logos/university-of-cologne-wordmark.jpg",
+    period: "Dec. 2015 – Dec. 2021",
     location: "Cologne, Germany",
     bullets: [
-      "Conducted empirical research using econometric methods and reproducible analysis workflows.",
-      "Conducted theoretical research using mathematical and statistical modeling.",
-      "Supported teaching in applied microeconomics and data analysis."
+      "Conducted empirical research using econometric methods.",
+      "Conducted theoretical research using mathematical and statistical methods.",
+      "Taught applied microeconomics and data analysis."
     ]
   },
   {
     role: "Intern",
     organization: "AirPlus International",
-    period: "Dec. 2014 - May 2015",
-    location: "Neu-Isenburg, Germany",
+    logo: "/images/logos/airplus.svg",
+    period: "Dec. 2014 – May 2015",
+    location: "Neu Isenburg, Germany",
     bullets: [
-      "Developed VBA-based tools for data management and process automation.",
-      "Assisted in data analysis and system maintenance activities."
+      "Built VBA tools for data management and process automation.",
+      "Supported data analysis and system maintenance."
     ]
   }
 ];

@@ -1,12 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import ExperienceEntry from "../components/ExperienceEntry.astro";
 import { experience } from "../data/experience";
-import { profile, skills } from "../data/profile";
+import { capabilities, profile, skills } from "../data/profile";
+import { teaching } from "../data/teaching";
 
 const education = [
   {
-    degree: "PhD in Economics, Dr. rer. pol.",
+    degree: "PhD in Economics (Dr. rer. pol.)",
     institution: "University of Cologne",
     period: "2015 – 2021",
     detail: "Summa cum laude. Focus on microeconomics, statistics, and econometrics."
@@ -15,7 +17,7 @@ const education = [
     degree: "MSc International Economics and Public Policy",
     institution: "University of Mainz",
     period: "2012 – 2014",
-    detail: "Focus on microeconomics, statistics, and econometrics."
+    detail: "GPA 1.6. Focus on microeconomics, statistics, and econometrics."
   },
   {
     degree: "BA Financial Management and Services",
@@ -32,46 +34,62 @@ const education = [
 ];
 
 const languages = [
-  "Danish (native)",
-  "English (full professional proficiency)",
-  "German (professional proficiency)"
+  "English — full professional",
+  "German — professional",
+  "Danish — native"
+];
+
+const skillGroups = [
+  { label: "Analysis", items: skills.analysis },
+  { label: "Modeling", items: skills.modeling },
+  { label: "Data & tools", items: skills.data },
+  { label: "Domains", items: skills.domain },
+  { label: "Languages", items: languages }
 ];
 ---
 
-<BaseLayout title="CV" description="CV and professional profile for Jesper Armouti-Hansen, quantitative data scientist and economics PhD.">
-  <section class="hero">
-    <p class="eyebrow">CV</p>
-    <h1>Curriculum vitae</h1>
-    <p class="lead">{profile.summary}</p>
-    <ul class="inline-list">
-      <li><a href="/CV_JAH.pdf">Download PDF →</a></li>
-      <li><a href={`mailto:${profile.email}`}>{profile.email}</a></li>
-    </ul>
-  </section>
+<BaseLayout title="CV" description="CV for Jesper Armouti-Hansen — quantitative analyst with an economics PhD, working in statistical modeling, machine learning, and model evaluation.">
+  <header class="page-hero cv-hero">
+    <div class="cv-hero__main">
+      <img
+        class="cv-portrait"
+        src="/images/avatar3.webp"
+        alt="Pixel-art portrait of Jesper Armouti-Hansen"
+        width="400"
+        height="400"
+        loading="eager"
+        decoding="async"
+      />
+      <div class="cv-hero__text">
+        <p class="eyebrow">Curriculum vitae</p>
+        <h1>Jesper Armouti-Hansen</h1>
+        <p class="lead">{profile.summary}</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn btn--primary" href="/CV_JAH.pdf">Download PDF</a>
+      <a class="btn" href={`mailto:${profile.email}`}>Email</a>
+      <a class="btn" href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a>
+    </div>
+  </header>
 
   <section class="section">
     <SectionHeading title="Experience" />
-    <div class="bib-list">
-      {experience.map((item) => (
-        <article class="bib-item">
-          <p class="meta-period">{item.period} · {item.location}</p>
-          <h3>{item.role}, {item.organization}</h3>
-          <ul>
-            {item.bullets.map((bullet) => <li>{bullet}</li>)}
-          </ul>
-        </article>
-      ))}
+    <div class="timeline">
+      {experience.map((item) => <ExperienceEntry item={item} />)}
     </div>
   </section>
 
   <section class="section">
-    <SectionHeading title="Education" />
-    <div class="bib-list">
-      {education.map((item) => (
-        <article class="bib-item">
-          <p class="meta-period">{item.period}</p>
-          <h3>{item.degree}</h3>
-          <p class="description">{item.institution}{item.detail && `. ${item.detail}`}</p>
+    <SectionHeading
+      title="Strengths"
+      intro="Statistical modeling, model evaluation, and forecasting, backed by an economics PhD."
+    />
+    <div class="capabilities">
+      {capabilities.map((item) => (
+        <article class="capability">
+          <h3>{item.label}</h3>
+          <p>{item.summary}</p>
         </article>
       ))}
     </div>
@@ -79,13 +97,81 @@ const languages = [
 
   <section class="section">
     <SectionHeading title="Skills" />
-    <p class="mono-label">Quantitative</p>
-    <p>{skills.quantitative.join(" · ")}</p>
-    <p class="mono-label">Programming</p>
-    <p>{skills.programming.join(" · ")}</p>
-    <p class="mono-label">Research areas</p>
-    <p>{skills.research.join(" · ")}</p>
-    <p class="mono-label">Languages</p>
-    <p>{languages.join(" · ")}</p>
+    <dl class="deflist">
+      {skillGroups.map((group) => (
+        <div>
+          <dt>{group.label}</dt>
+          <dd>{group.items.join(" · ")}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Education" />
+    <div class="timeline">
+      {education.map((item) => (
+        <article class="entry">
+          <p class="entry__meta">{item.period}</p>
+          <h3>{item.degree}</h3>
+          <p class="entry__where">{item.institution}{item.detail && `. ${item.detail}`}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section">
+    <SectionHeading title="Teaching & supervision" intro={teaching.summary} />
+    <div class="timeline">
+      <article class="entry">
+        <p class="entry__meta">2016–2025 · Cologne and Bonn</p>
+        <h3>University lecturer and tutor</h3>
+        <ul>
+          {teaching.courses.map((course) => <li>{course}</li>)}
+        </ul>
+      </article>
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .cv-hero {
+    max-width: 58rem;
+  }
+
+  .cv-hero__main {
+    display: grid;
+    gap: clamp(1.3rem, 4vw, 2rem);
+    align-items: start;
+  }
+
+  .cv-hero__text {
+    max-width: 38rem;
+  }
+
+  .cv-portrait {
+    width: clamp(150px, 24vw, 220px);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    image-rendering: pixelated;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: var(--paper-sunk);
+    box-shadow: var(--shadow);
+  }
+
+  @media (min-width: 40em) {
+    .cv-hero__main {
+      grid-template-columns: auto auto;
+      justify-content: start;
+      align-items: center;
+      gap: clamp(1.6rem, 4vw, 2.6rem);
+    }
+    .cv-hero__text {
+      order: 1;
+    }
+    .cv-portrait {
+      order: 2;
+    }
+  }
+</style>

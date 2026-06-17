@@ -1,56 +1,73 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import SectionHeading from "../components/SectionHeading.astro";
-import ProjectCard from "../components/ProjectCard.astro";
-import { projects } from "../data/projects";
+import WorkItem from "../components/WorkItem.astro";
+import GitHubStrip from "../components/GitHubStrip.astro";
+import { projectGroups, projects } from "../data/projects";
 
-const projectGroups = [
-  {
-    title: "Research code",
-    intro: "Replication packages, simulations, and analysis code tied directly to papers and working research."
-  },
-  {
-    title: "Applied data science",
-    intro: "Case-study work where modeling, cleaning, and interpretation are applied to operational data."
-  },
-  {
-    title: "AI and search tooling",
-    intro: "Tools that explore retrieval, ranking, generation, and agentic workflows."
-  },
-  {
-    title: "Software packages and tools",
-    intro: "Reusable technical projects and published knowledge infrastructure."
-  },
-  {
-    title: "Learning exercises",
-    intro: "Smaller practice projects kept visible as evidence of deliberate skill-building, not as primary portfolio work."
-  }
-].map((group) => ({
-  ...group,
-  headingId: `project-group-${group.title.toLowerCase().replaceAll(" ", "-")}`,
-  projects: projects.filter((project) => project.group === group.title)
-})).filter((group) => group.projects.length > 0);
+const groupTitles = new Set(projectGroups.map((group) => group.title));
+const duplicateTitles = projects
+  .map((project) => project.title)
+  .filter((title, index, all) => all.indexOf(title) !== index);
+const unknownGroups = projects
+  .map((project) => project.primaryGroup)
+  .filter((group) => !groupTitles.has(group as (typeof projectGroups)[number]["title"]));
+
+if (duplicateTitles.length > 0) {
+  throw new Error(`Duplicate project titles: ${[...new Set(duplicateTitles)].join(", ")}`);
+}
+if (unknownGroups.length > 0) {
+  throw new Error(`Unknown project groups: ${[...new Set(unknownGroups)].join(", ")}`);
+}
+
+const LINK_GROUP = "Also on GitHub";
+
+const grouped = projectGroups
+  .map((group) => ({
+    title: group.title,
+    intro: group.intro,
+    headingId: `work-${group.title.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}`,
+    isLinkGroup: group.title === LINK_GROUP,
+    projects: projects.filter((project) => project.primaryGroup === group.title)
+  }))
+  .filter((group) => group.projects.length > 0);
 ---
 
-<BaseLayout title="Projects" description="Selected quantitative data science, econometrics, and research projects by Jesper Armouti-Hansen.">
-  <section class="hero">
-    <p class="eyebrow">Projects</p>
-    <h1>Applied quantitative work</h1>
+<BaseLayout
+  title="Work"
+  description="Selected quantitative analysis, modeling, and research-code work by Jesper Armouti-Hansen."
+>
+  <header class="page-hero">
+    <p class="eyebrow">Selected work</p>
+    <h1>Analysis, modeling, and research code</h1>
     <p class="lead">
-      A curated view of research code, applied data science, AI tooling, and software projects.
+      Each project appears once, with the question it addresses, the method, and the result.
     </p>
-  </section>
+  </header>
 
-  <section class="section">
-    {projectGroups.map((group) => (
-      <section class="project-group" aria-labelledby={group.headingId}>
-        <SectionHeading id={group.headingId} title={group.title} intro={group.intro} />
-        <div class:list={["bib-list", { "compact-list": group.title === "Learning exercises" }]}>
-          {group.projects.map((project) => (
-            <ProjectCard project={project} compact={group.title === "Learning exercises"} />
-          ))}
+  <GitHubStrip />
+
+  <div class="section">
+    {grouped.map((group) => (
+      <section class="group" aria-labelledby={group.headingId}>
+        <div class="group__head">
+          <h2 id={group.headingId}>{group.title}</h2>
+          <p>{group.intro}</p>
         </div>
+        {group.isLinkGroup ? (
+          <p class="morelist">
+            {group.projects.map((project, i) => (
+              <Fragment>
+                <a href={project.href} rel="noreferrer">{project.title}</a>
+                {i < group.projects.length - 1 && <span aria-hidden="true"> · </span>}
+              </Fragment>
+            ))}
+          </p>
+        ) : (
+          <div class="worklist">
+            {group.projects.map((project, i) => <WorkItem project={project} index={i + 1} />)}
+          </div>
+        )}
       </section>
     ))}
-  </section>
+  </div>
 </BaseLayout>

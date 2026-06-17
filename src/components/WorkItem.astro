@@ -1,0 +1,44 @@
+---
+import { pad2 } from "../data/format";
+
+interface Props {
+  project: {
+    title: string;
+    category: string;
+    status: string;
+    summary: string;
+    problem?: string;
+    approach?: string;
+    result?: string;
+    tools: string[];
+    href: string;
+  };
+  index?: number;
+}
+
+const { project, index } = Astro.props;
+const external = project.href.startsWith("http");
+const rel = external ? "noreferrer" : undefined;
+const num = index != null ? pad2(index) : undefined;
+const hasViz = Astro.slots.has("default");
+---
+
+<article class:list={["work", { "work--feature": hasViz }]}>
+  <p class="work__meta">
+    {num && <span class="work__index">{num}</span>}
+    <span class="work__kind">{project.status} · {project.category}</span>
+  </p>
+  <h3 class="work__title">
+    <a href={project.href} rel={rel}>{project.title}</a>
+  </h3>
+  <p class="work__summary">{project.summary}</p>
+  {project.problem && project.approach && project.result && (
+    <dl class="work__detail">
+      <div><dt>Problem</dt><dd>{project.problem}</dd></div>
+      <div><dt>Approach</dt><dd>{project.approach}</dd></div>
+      <div><dt>Result</dt><dd>{project.result}</dd></div>
+    </dl>
+  )}
+  <p class="work__tools">{project.tools.join(" · ")}</p>
+  {hasViz && <div class="work__viz"><slot /></div>}
+</article>
