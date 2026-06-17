@@ -2,6 +2,7 @@ export const experience = [
   {
     role: "Data Scientist",
     organization: "AXA Konzern AG",
+    logo: "/images/logos/axa.svg",
     period: "Apr. 2026 – present",
     location: "Cologne, Germany",
     bullets: [
@@ -13,6 +14,7 @@ export const experience = [
   {
     role: "Postdoctoral Researcher in Economics",
     organization: "University of Bonn",
+    logo: "/images/logos/university-of-bonn.svg",
     period: "Jan. 2022 – Mar. 2026",
     location: "Bonn, Germany",
     bullets: [
@@ -24,6 +26,7 @@ export const experience = [
   {
     role: "Research Assistant in Economics",
     organization: "University of Cologne",
+    logo: "/images/logos/university-of-cologne-wordmark.jpg",
     period: "Dec. 2015 – Dec. 2021",
     location: "Cologne, Germany",
     bullets: [
@@ -35,6 +38,7 @@ export const experience = [
   {
     role: "Intern",
     organization: "AirPlus International",
+    logo: "/images/logos/airplus.svg",
     period: "Dec. 2014 – May 2015",
     location: "Neu Isenburg, Germany",
     bullets: [

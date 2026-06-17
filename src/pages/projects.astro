@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WorkItem from "../components/WorkItem.astro";
+import GitHubStrip from "../components/GitHubStrip.astro";
 import { projectGroups, projects } from "../data/projects";
 
 const groupTitles = new Set(projectGroups.map((group) => group.title));
@@ -42,6 +43,8 @@ const grouped = projectGroups
       Each project appears once, with the question it addresses, the method, and the result.
     </p>
   </header>
+
+  <GitHubStrip />
 
   <div class="section">
     {grouped.map((group) => (

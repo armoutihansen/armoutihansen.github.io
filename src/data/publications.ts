@@ -4,6 +4,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen, Lea Cassar, Anna Dereky, and Florian Engl",
     venue: "Games and Economic Behavior",
     year: "2024",
+    cover: "/images/journals/games-economic-behavior.gif",
     details: "145, pp. 66–83",
     href: "https://www.sciencedirect.com/science/article/pii/S0899825624000307",
     links: [
@@ -19,6 +20,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen and Christopher Kops",
     venue: "Journal of Mathematical Economics",
     year: "2024",
+    cover: "/images/journals/j-mathematical-economics.gif",
     details: "112, 102988",
     href: "https://www.sciencedirect.com/science/article/pii/S0304406824000508",
     links: [
@@ -33,6 +35,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen and Lea Cassar",
     venue: "Journal of the European Economic Association",
     year: "2020",
+    cover: "/images/journals/jeea.jpg",
     details: "18(5), pp. 2647–2676",
     href: "https://scholar.google.com/scholar?oi=bibs&cluster=9361077569797977679&btnI=1&hl=en",
     links: [
@@ -47,6 +50,7 @@ export const publications = [
     authors: "Jesper Armouti-Hansen and Christopher Kops",
     venue: "Theory and Decision",
     year: "2018",
+    cover: "/images/journals/theory-and-decision.webp",
     details: "84(4), pp. 507–524",
     href: "https://scholar.google.com/scholar?oi=bibs&cluster=935449046387275988&btnI=1&hl=en",
     links: [

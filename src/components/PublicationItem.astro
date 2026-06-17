@@ -10,6 +10,7 @@ interface Props {
     links?: { label: string; href: string }[];
     type: string;
     abstract: string;
+    cover?: string;
   };
   compact?: boolean;
 }
@@ -19,31 +20,43 @@ const { publication, compact = false } = Astro.props;
 const NAME = "Jesper Armouti-Hansen";
 const authorParts = publication.authors.split(NAME);
 const links = publication.links ?? (publication.href ? [{ label: "Link", href: publication.href }] : []);
+const showCover = Boolean(publication.cover);
 ---
 
-<article class="pub">
-  <p class="pub__meta">{[publication.year, publication.venue].filter(Boolean).join(" · ")}</p>
-  <h3 class="pub__title">{publication.title}</h3>
-  <p class="pub__authors">
-    {authorParts.map((part, i) => (
-      <Fragment>
-        {part}
-        {i < authorParts.length - 1 && <strong>{NAME}</strong>}
-      </Fragment>
-    ))}
-  </p>
-  {publication.details && <p class="pub__details">{publication.details}</p>}
-  {links.length > 0 && (
-    <p class="pub__links">
-      {links.map((link) => (
-        <a href={link.href} rel="noreferrer">{link.label}</a>
+<article class:list={["pub", { "pub--has-cover": showCover }]}>
+  <div class="pub__body">
+    <p class="pub__meta">{[publication.year, publication.venue].filter(Boolean).join(" · ")}</p>
+    <h3 class="pub__title">{publication.title}</h3>
+    <p class="pub__authors">
+      {authorParts.map((part, i) => (
+        <Fragment>
+          {part}
+          {i < authorParts.length - 1 && <strong>{NAME}</strong>}
+        </Fragment>
       ))}
     </p>
-  )}
-  {publication.abstract && !compact && (
-    <details class="abstract">
-      <summary>Abstract</summary>
-      <p>{publication.abstract}</p>
-    </details>
+    {publication.details && <p class="pub__details">{publication.details}</p>}
+    {links.length > 0 && (
+      <p class="pub__links">
+        {links.map((link) => (
+          <a href={link.href} rel="noreferrer">{link.label}</a>
+        ))}
+      </p>
+    )}
+    {publication.abstract && !compact && (
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>{publication.abstract}</p>
+      </details>
+    )}
+  </div>
+  {showCover && (
+    <img
+      class="pub__cover"
+      src={publication.cover}
+      alt={`${publication.venue} journal cover`}
+      loading="lazy"
+      decoding="async"
+    />
   )}
 </article>

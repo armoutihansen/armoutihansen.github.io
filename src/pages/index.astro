@@ -2,14 +2,23 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import WorkItem from "../components/WorkItem.astro";
+import Hero from "../components/Hero.astro";
 import PublicationItem from "../components/PublicationItem.astro";
+import ExperienceEntry from "../components/ExperienceEntry.astro";
 import { experience } from "../data/experience";
 import { capabilities, profile } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { pad2 } from "../data/format";
 
-const featuredProjects = projects.filter((project) => project.featured);
+const featuredTitles = [
+  "RAG Search Engine",
+  "CitiBike Demand, Risk, and Net Flow",
+  "Economic Theories and Machine Learning",
+];
+const featuredProjects = featuredTitles
+  .map((title) => projects.find((project) => project.title === title))
+  .filter(Boolean);
 const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 2);
 const recentExperience = experience.slice(0, 2);
 const paperCount = publications.filter((item) => item.type === "Publication").length;
@@ -23,30 +32,7 @@ const credibility = [
 ---
 
 <BaseLayout>
-  <section class="hero">
-    <div class="hero__intro">
-      <p class="eyebrow hero__eyebrow reveal reveal-1">{profile.title}</p>
-      <h1 class="hero__name reveal reveal-1">Jesper <br />Armouti-Hansen</h1>
-      <p class="hero__lead reveal reveal-2">{profile.summary}</p>
-      <p class="hero__note reveal reveal-3">{profile.tagline}</p>
-      <div class="actions reveal reveal-3">
-        <a class="btn btn--primary" href="/CV_JAH.pdf">Download CV</a>
-        <a class="btn" href={`mailto:${profile.email}`}>Email</a>
-        <a class="btn" href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a>
-      </div>
-    </div>
-    <aside class="hero__aside reveal reveal-4" aria-label="Profile at a glance">
-      <div class="portrait">
-        <img src="/images/profile.webp" alt={`Portrait of ${profile.name}`} loading="eager" />
-      </div>
-      <dl class="facts">
-        <div><dt>Location</dt><dd>{profile.location}</dd></div>
-        <div><dt>Focus</dt><dd>Model evaluation &amp; statistical modeling</dd></div>
-        <div><dt>Stack</dt><dd>Python · SQL · R</dd></div>
-        <div><dt>Languages</dt><dd>English · German · Danish</dd></div>
-      </dl>
-    </aside>
-  </section>
+  <Hero />
 
   <section class="section">
     <SectionHeading eyebrow="Profile" title="What I do" />
@@ -76,15 +62,7 @@ const credibility = [
   <section class="section">
     <SectionHeading eyebrow="Experience" title="Where I've worked" />
     <div class="timeline">
-      {recentExperience.map((item) => (
-        <article class="entry">
-          <p class="entry__meta">{item.period} · {item.location}</p>
-          <h3>{item.role}, {item.organization}</h3>
-          <ul>
-            {item.bullets.map((bullet) => <li>{bullet}</li>)}
-          </ul>
-        </article>
-      ))}
+      {recentExperience.map((item) => <ExperienceEntry item={item} />)}
     </div>
     <p class="section__more"><a href="/cv/">Full CV</a></p>
   </section>

@@ -47,56 +47,58 @@ _Avoid_: verbose abstractions, triplet-list padding, vague nouns ("decision supp
 
 ## Visual Direction
 
-**Aesthetic axis — "Editorial Brief"**:
-A refined editorial/research brief. Warm ivory paper, near-black ink, one restrained
-deep-teal accent. Calm, precise, hand-crafted; pleasing on desktop and mobile. It should
-look deliberately designed, never like a default template.
+**Aesthetic axis — "Premium dark, one interactive quant hero"** (see ADR 0003):
+A premium, modern, dark-first showcase. Warm-charcoal paper, off-white ink, one restrained
+amber accent. The page must read as _rigorous, modern, builds things_ to a quantitative-
+analyst hiring lead — never as a front-end-designer showreel. It looks deliberately
+designed, never like a default template. Light mode is retained but secondary.
 
 **Typography**:
 Three roles, used consistently.
-- **Fraunces Variable** (display serif): name and headings. Characterful, high-contrast,
-  optical-sized. The site's signature.
-- **IBM Plex Sans Variable** (body): paragraphs and reading copy. Crisp, slightly
-  technical, highly legible.
-- **JetBrains Mono Variable** (labels): eyebrows, metadata, periods, tags, button text,
-  link rows.
+- **Hanken Grotesk Variable** (body + headings): paragraphs, h1–h3, reading copy. Modern,
+  technical, legible — deliberately not Inter.
+- **JetBrains Mono Variable** (the "quant tell"): eyebrows, metadata, periods, tags, button
+  text, link rows, hero readouts — and **every number is set in tabular figures**.
+- **Fraunces Variable** (the one serif moment): the name only. Nothing else uses it.
 
 **Ornamentation policy**:
 Structure through type, whitespace, and hairline rules. Lists follow a shared "ledger"
 model — every item carries a top hairline and equal vertical padding, so single- and
 multi-column lists stay consistent and no row strands whitespace above a divider.
-Even-count blocks (capabilities) use balanced two columns; the skills block is a
-label/values table. A single deep-teal accent marks labels and active states; primary
-actions use tasteful outline + solid buttons; the portrait is a clean bordered photo
-with a whisper of shadow.
+Even-count blocks (capabilities) use a two-column grid with aligned row dividers; the skills block is a
+label/values table. A single amber accent marks labels and active states; primary
+actions use tasteful outline + solid buttons. The home opens on the interactive hero deck
+(below), not a portrait.
 _Avoid_: heavy card chrome (boxed, shadowed surfaces everywhere), pill/tag clouds,
 multiple accent colours, decorative offset/misaligned frames, generic
 hero+three-pillars layouts, and repetitive thumbnails.
 
 **Palette**:
-Warm ivory base, warm near-black ink, muted/quiet text tiers, hairline + strong rule
-colours, and one deep-teal accent used sparingly for focus, labels, and primary actions.
-Dark mode keeps the same hierarchy in warm charcoal + ivory + a lighter teal — same
-language, inverted, not a separate design.
+Dark-first: warm-charcoal base, off-white ink, muted/quiet text tiers, hairline + strong
+rule colours, and one **amber** accent used sparingly for focus, labels, primary actions,
+and the hero's signal elements. Light mode (warm ivory + near-black ink + a deeper amber)
+keeps the same hierarchy, inverted — same language, secondary, not a separate design.
 
 **Page topology** (four public pages, route names unchanged):
 - `/`: positioning hero, capabilities, selected work, recent experience, research
   credibility, contact.
-- `/projects/` (nav: Work): grouped selected work from single-group project data.
+- `/projects/` (nav: Work): an open-source footprint strip (precomputed from the GitHub
+  API → `src/data/github.json`), then grouped selected work from single-group project data.
 - `/publications/` (nav: Research): publications, working papers, replication packages.
 - `/cv/`: experience, strengths, skills, education, languages, PDF download.
 
 **Hero pattern**:
-Eyebrow `Quantitative Analyst · Economics PhD`, large serif name, a lead that mirrors
-his CV summary (minus the job-search line), a short career-arc line, and primary actions.
-A real professional photo (clean hairline border, slight shadow), plus a neutral facts
-list (location, focus, stack, languages — no "open to" row). The home research strip
-shows credibility stats (peer-reviewed papers, PhD, journals refereed for), not tools.
-Not a research biography.
+Eyebrow `Quantitative Analyst · Economics PhD`, large serif name (Fraunces), a lead that
+mirrors his CV summary (minus the job-search line), a mono fact line, and primary actions —
+paired with the **interactive hero deck**: a two-panel, tab/scroll switcher carrying
+(1) _model confidence → decision_ (a real logistic-regression classifier with a draggable
+confidence band, coverage vs. accuracy) and (2) _risk per trip → time of day_ (the real
+CitiBike finding). Both are genuine analyses of his, drawn from committed static data — no
+runtime model, no portrait. The home research strip shows credibility stats, not tools.
 
 **Item shape (Work)**:
 Each project appears once, under one primary group, as an editorial entry: index, kind
-(status · category), serif title, one-line summary, a Problem / Approach / Result
+(status · category), grotesque title, one-line summary, a Problem / Approach / Result
 definition list, and a mono tools line. No GitHub social-preview thumbnails — they were
 repetitive and read as AI-portfolio filler. Smaller learning builds are demoted to a
 compact "Also on GitHub" link list rather than full cards, so they never dilute the
@@ -122,6 +124,10 @@ predictably, and tap targets stay comfortable.
   own repos (`~/repos/frequency-beliefs`, `~/repos/efficiency-wages`). No claim should
   exceed those sources.
 - Single-group project data prevents duplicate project rendering across the work page.
+- The hero's two analyses and the Work page's open-source strip run on **committed,
+  precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`;
+  `scripts/gen_github_data.mjs` → `github.json`) — no model or API call at build or request
+  time. Refresh by re-running the scripts. See ADR 0003.
 
 ## Flagged Ambiguities
 
