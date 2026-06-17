@@ -125,7 +125,12 @@ export const projects = [
     approach: "Built reproducible analyses around experimental data and documented the paper's online appendix.",
     result: "A peer-reviewed empirical project with a complete replication package.",
     tools: ["Python", "Stata", "experimental data", "replication"],
-    href: "https://github.com/armoutihansen/efficiency-wages"
+    href: "https://github.com/armoutihansen/efficiency-wages",
+    embed: "/figures/efficiency-wages-effort.html",
+    figureTitle: "Chosen effort by wage",
+    figureNote: "Mean chosen effort by offered wage, with 95% confidence bands.",
+    imageAlt:
+      "Interactive chart of mean chosen effort by offered wage, Prosocial versus GE treatments"
   },
   {
     title: "Personal Knowledge System",
