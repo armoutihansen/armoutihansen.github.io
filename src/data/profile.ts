@@ -42,39 +42,35 @@ export const capabilities = [
 ];
 
 export const skills = {
-  analysis: [
-    "Model evaluation",
-    "Hypothesis testing",
-    "Error analysis",
-    "Forecasting",
-    "Risk analysis",
-    "Experiment & A/B analysis"
+  languages: ["Python", "R", "SQL", "Stata", "TypeScript"],
+  pythonStack: [
+    "NumPy",
+    "pandas",
+    "SciPy",
+    "scikit-learn",
+    "statsmodels",
+    "PyTorch",
+    "XGBoost / LightGBM",
+    "GeoPandas",
+    "Matplotlib"
   ],
-  modeling: [
+  methods: [
     "Statistical modeling",
     "Econometrics",
     "Machine learning",
-    "Choice modeling",
+    "Model evaluation & calibration",
+    "Forecasting",
+    "Experiment & A/B analysis",
+    "Uncertainty quantification",
+    "Maximum-likelihood estimation",
+    "Discrete-choice modeling",
     "Simulation",
-    "Partial identification / uncertainty quantification"
+    "Retrieval / RAG"
   ],
-  data: [
-    "Python",
-    "pandas / NumPy",
-    "scikit-learn",
-    "statsmodels",
-    "SQL",
-    "R",
-    "Stata",
-    "Git",
-    "Jupyter",
-    "Linux",
-    "Excel"
-  ],
+  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "JupyterLab", "Linux", "LaTeX"],
   domain: [
     "Insurance",
-    "Behavioral economics",
-    "Experimental economics",
+    "Behavioral & experimental economics",
     "Personnel & organizational economics",
     "Contract theory & incentives"
   ]

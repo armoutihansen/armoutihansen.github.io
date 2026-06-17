@@ -643,7 +643,7 @@ main {
    every item has a top hairline + equal vertical padding. */
 
 .capabilities,
-.deflist,
+.skillset,
 .worklist,
 .publist,
 .timeline {
@@ -652,7 +652,7 @@ main {
 }
 
 .capability,
-.deflist > div,
+.skillset__row,
 .work,
 .pub,
 .entry {
@@ -988,26 +988,49 @@ details.abstract p {
   background: var(--accent);
 }
 
-/* ----- skills / fact definition rows ----- */
-.deflist > div {
+/* ----- skills inventory (CV): label + monospace chips ----- */
+.skillset__row {
   display: grid;
-  gap: 0.3rem;
-  padding: 1.05rem 0;
+  gap: 0.7rem;
+  padding: 1.15rem 0;
 }
 
-.deflist dt {
+.skillset__label {
   font-family: var(--font-mono);
   font-size: var(--fs-meta);
   font-weight: 600;
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   color: var(--accent-deep);
+  align-self: start;
 }
 
-.deflist dd {
+.skillset__items {
   margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1;
+  padding: 0.42rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) * 0.5);
   color: var(--ink-soft);
-  line-height: 1.5;
+  background: var(--paper-sunk);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 /* ============================================ Credibility strip ======== */
@@ -1163,11 +1186,11 @@ details.abstract p {
     column-gap: clamp(2rem, 5vw, 4rem);
   }
 
-  /* Skills: full-width label + values rows (robust to any item count). */
-  .deflist > div {
-    grid-template-columns: 9rem 1fr;
-    gap: 0 1.5rem;
-    align-items: baseline;
+  /* Skills: fixed label column + wrapping chip field. */
+  .skillset__row {
+    grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 2rem);
+    align-items: start;
   }
 
 }

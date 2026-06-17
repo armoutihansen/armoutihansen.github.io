@@ -41,18 +41,19 @@ const education = [
   }
 ];
 
-const languages = [
+const spokenLanguages = [
   "English — full professional",
   "German — professional",
   "Danish — native"
 ];
 
 const skillGroups = [
-  { label: "Analysis", items: skills.analysis },
-  { label: "Modeling", items: skills.modeling },
-  { label: "Data & tools", items: skills.data },
+  { label: "Programming languages", items: skills.languages },
+  { label: "Python stack", items: skills.pythonStack },
+  { label: "Methods", items: skills.methods },
+  { label: "Tools & workflow", items: skills.tools },
   { label: "Domains", items: skills.domain },
-  { label: "Languages", items: languages }
+  { label: "Spoken languages", items: spokenLanguages }
 ];
 ---
 
@@ -104,12 +105,17 @@ const skillGroups = [
   </section>
 
   <section class="section">
-    <SectionHeading title="Skills" />
-    <dl class="deflist">
+    <SectionHeading
+      title="Skills"
+      intro="The concrete stack — languages, libraries, methods, and tools, separate from the strengths above."
+    />
+    <dl class="skillset">
       {skillGroups.map((group) => (
-        <div>
-          <dt>{group.label}</dt>
-          <dd>{group.items.join(" · ")}</dd>
+        <div class="skillset__row">
+          <dt class="skillset__label">{group.label}</dt>
+          <dd class="skillset__items">
+            {group.items.map((item) => <span class="chip">{item}</span>)}
+          </dd>
         </div>
       ))}
     </dl>
