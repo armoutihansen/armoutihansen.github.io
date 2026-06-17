@@ -1,35 +1,63 @@
 ---
 import gh from "../data/github.json";
 
-const lastActive = new Date(gh.lastPush).toLocaleString("en-US", { month: "short", year: "numeric" });
-const segColors = ["var(--accent)", "var(--ink-soft)", "var(--muted)", "var(--faint)", "var(--line-strong)"];
-const aria = "Languages by repository — " + gh.languages.map((l) => `${l.name} ${l.pct}%`).join(", ");
+const c = gh.contributions;
+
+// Text in the last 12 months; the figure shows the last ~6 months so it stays
+// readable while the block sits left-aligned with the page headline.
+const WINDOW = 26;
+const weeks = c.weeks.slice(-WINDOW);
+const offset = c.weeks.length - weeks.length;
+let months = c.months
+  .filter((m) => m.col >= offset)
+  .map((m) => ({ label: m.label, col: m.col - offset }));
+if (months.length > 1 && months[1].col - months[0].col < 3) months = months.slice(1);
+const nWeeks = weeks.length;
+const scale = [0, 1, 2, 3, 4];
+const aria = `${c.total} contributions in the last year; calendar shows the last six months`;
 ---
 
-<div class="ghstrip">
+<div class="ghstrip" style={`--nweeks: ${nWeeks}`}>
   <div class="ghstrip__top">
     <span class="ghstrip__label">Open source</span>
     <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
   </div>
-  <div class="ghstrip__bar" role="img" aria-label={aria}>
-    {
-      gh.languages.map((l, i) => (
-        <span class="ghstrip__seg" style={`width:${l.pct}%;background:${segColors[i] ?? "var(--line)"}`} />
-      ))
-    }
+
+  <div class="ghcal">
+    <div class="ghcal__months" style={`grid-template-columns: repeat(${nWeeks}, var(--cell))`} aria-hidden="true">
+      {months.map((m) => (
+        <span class="ghcal__month" style={`grid-column: ${m.col + 1}`}>{m.label}</span>
+      ))}
+    </div>
+    <div class="ghcal__grid" role="img" aria-label={aria}>
+      {weeks.map((week) =>
+        week.map((level) => (
+          <span class:list={["ghcal__cell", level === null ? "is-empty" : `lvl-${level}`]} />
+        )),
+      )}
+    </div>
   </div>
-  <p class="ghstrip__legend">
-    <span class="ghstrip__repos">{gh.ownedRepos} repositories</span>
-    {gh.languages.map((l) => <span>{l.name} {l.pct}%</span>)}
-    <span>active {lastActive}</span>
+
+  <p class="ghstrip__stat">
+    <span><strong>{c.total}</strong> contributions in the last year</span>
+    <span class="ghcal__key">
+      <span>Less</span>
+      {scale.map((l) => <span class:list={["ghcal__cell", "ghcal__keycell", `lvl-${l}`]} />)}
+      <span>More</span>
+    </span>
   </p>
 </div>
 
 <style>
   .ghstrip {
+    --cell: clamp(9px, 1.1vw, 13px);
+    --cellgap: 3px;
+    /* width of the figure; the text rows attach to and align with it */
+    width: calc(var(--nweeks) * var(--cell) + (var(--nweeks) - 1) * var(--cellgap));
+    max-width: 100%;
     margin-top: clamp(1.6rem, 1rem + 1.5vw, 2.4rem);
     display: grid;
-    gap: 0.55rem;
+    gap: 0.5rem;
   }
 
   .ghstrip__top {
@@ -62,33 +90,101 @@ const aria = "Languages by repository — " + gh.languages.map((l) => `${l.name}
     color: var(--accent-deep);
   }
 
-  .ghstrip__bar {
-    display: flex;
-    gap: 1px;
-    height: 7px;
-    border-radius: 4px;
-    overflow: hidden;
+  /* ----- contribution calendar ----- */
+  .ghcal {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .ghcal__months {
+    display: grid;
+    column-gap: var(--cellgap);
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    color: var(--faint);
+    line-height: 1;
+  }
+
+  .ghcal__month {
+    grid-row: 1;
+    justify-self: start;
+    white-space: nowrap;
+  }
+
+  .ghcal__grid {
+    display: grid;
+    grid-template-rows: repeat(7, var(--cell));
+    grid-auto-flow: column;
+    grid-auto-columns: var(--cell);
+    gap: var(--cellgap);
+  }
+
+  .ghcal__cell {
+    border-radius: 2px;
     background: var(--line);
   }
 
-  .ghstrip__seg {
-    height: 100%;
+  .ghcal__cell.is-empty {
+    background: transparent;
   }
 
-  .ghstrip__legend {
+  .lvl-0 {
+    background: var(--line);
+  }
+  .lvl-1 {
+    background: color-mix(in srgb, var(--accent) 28%, var(--paper));
+  }
+  .lvl-2 {
+    background: color-mix(in srgb, var(--accent) 52%, var(--paper));
+  }
+  .lvl-3 {
+    background: color-mix(in srgb, var(--accent) 76%, var(--paper));
+  }
+  .lvl-4 {
+    background: var(--accent);
+  }
+
+  .ghstrip__stat {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.3rem 1.1rem;
+    align-items: center;
+    gap: 0.3rem 1rem;
     margin: 0;
+    font-size: var(--fs-small);
+    color: var(--muted);
+  }
+
+  .ghstrip__stat strong {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    color: var(--ink);
+    margin-right: 0.1rem;
+  }
+
+  .ghcal__key {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--cellgap);
+    margin-left: auto;
+    font-family: var(--font-mono);
     font-size: var(--fs-meta);
     letter-spacing: var(--track-meta);
     text-transform: uppercase;
     color: var(--faint);
   }
 
-  .ghstrip__repos {
-    color: var(--ink-soft);
+  .ghcal__keycell {
+    width: var(--cell);
+    height: var(--cell);
+    border-radius: 2px;
+  }
+
+  .ghcal__key > span:first-child {
+    margin-right: 0.15rem;
+  }
+  .ghcal__key > span:last-child {
+    margin-left: 0.15rem;
   }
 </style>
