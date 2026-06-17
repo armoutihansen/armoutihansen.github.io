@@ -18,6 +18,7 @@ interface Props {
     figureTitle?: string;
     figureNote?: string;
     legend?: { label: string; color: string }[];
+    tall?: boolean;
   };
   index?: number;
   figure?: boolean;
@@ -63,7 +64,7 @@ const showFigure = figure && Boolean(project.embed || project.image);
           </span>
         )}
       </figcaption>
-      <div class="work__panel-frame">
+      <div class:list={["work__panel-frame", { "work__panel-frame--tall": project.tall }]}>
         {project.embed ? (
           <iframe src={project.embed} title={project.imageAlt ?? project.title} loading="lazy" />
         ) : (

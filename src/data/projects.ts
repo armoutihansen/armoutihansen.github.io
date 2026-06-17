@@ -58,7 +58,12 @@ export const projects = [
       "Combined BM25, embeddings, reciprocal rank fusion, CLIP, reranking, and caching, with explicit checks at each retrieval stage.",
     result: "A pipeline with each retrieval stage measured separately, so ranking quality is attributable to a stage rather than the whole.",
     tools: ["Python", "RAG", "BM25", "embeddings", "CLIP", "evaluation"],
-    href: "https://github.com/armoutihansen/rag-search-engine"
+    href: "https://github.com/armoutihansen/rag-search-engine",
+    embed: "/figures/rag-architecture.html",
+    figureTitle: "Search pipeline",
+    figureNote: "Hybrid retrieval, fused and reranked, then answered with citations.",
+    imageAlt:
+      "Diagram of the hybrid search pipeline: query and image inputs through BM25, embeddings and CLIP retrieval, RRF fusion, reranking, and a RAG answer"
   },
   {
     title: "The Informativeness of Frequency-Report Scoring Rules",
@@ -72,7 +77,13 @@ export const projects = [
       "Characterized the identified set of beliefs behind each report under three scoring rules, then checked the bounds with simulation.",
     result: "No rule dominates: which scoring rule gives the sharpest bounds depends on how concentrated the beliefs are.",
     tools: ["Python", "simulation", "pytest", "scoring rules"],
-    href: "https://github.com/armoutihansen/frequency-beliefs"
+    href: "https://github.com/armoutihansen/frequency-beliefs",
+    embed: "/figures/frequency-rules-winshare.html",
+    figureTitle: "Sharpest-bound win share",
+    figureNote:
+      "Share of cases where each scoring rule gives the sharpest belief bounds, by belief concentration α.",
+    imageAlt:
+      "Interactive chart of the win share of three scoring rules versus belief concentration alpha"
   },
   {
     title: "Economic Theories and Machine Learning",
@@ -112,7 +123,13 @@ export const projects = [
     approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
     result: "A working agent that reads, runs, and edits code in a loop — and surfaces where it needs guardrails.",
     tools: ["Python", "tool-calling", "Gemini API", "CLI"],
-    href: "https://github.com/armoutihansen/build-ai-agent"
+    href: "https://github.com/armoutihansen/build-ai-agent",
+    embed: "/figures/coding-agent-trace.html",
+    tall: true,
+    figureTitle: "Agent run",
+    figureNote: "An example run — the agent finds a failing test and fixes it.",
+    imageAlt:
+      "Terminal trace of an example coding-agent run: list files, run tests, read the source, patch the bug, and re-run the tests"
   },
   {
     title: "Efficiency Wages with Motivated Agents",

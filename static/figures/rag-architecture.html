@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RAG Search Engine — architecture</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap');
+  :root { --ink:#8a8370; --amber:#c8881f; --line:rgba(138,131,112,0.45); }
+  html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
+        height:100vh;gap:12px;padding:8px 12px;box-sizing:border-box}
+  svg{width:100%;height:auto;max-height:80%}
+  .node rect{fill:rgba(138,131,112,0.06);stroke:var(--line);stroke-width:1.4;
+             transition:fill .15s ease,stroke .15s ease}
+  .node text{fill:var(--ink);font-size:12px;font-weight:500;letter-spacing:0.05em;
+             text-transform:uppercase;pointer-events:none;transition:fill .15s ease}
+  .edge{stroke:var(--line);stroke-width:1.6;fill:none;transition:stroke .15s ease,stroke-width .15s ease}
+  .node{cursor:default}
+  .node.active rect{stroke:var(--amber);stroke-width:2;fill:rgba(200,136,31,0.12)}
+  .node.active text{fill:var(--amber)}
+  .edge.lit{stroke:var(--amber);stroke-width:2.4}
+  .cap{margin:0;color:var(--ink);font-size:12.5px;font-weight:500;text-align:center;
+       min-height:1.3em;letter-spacing:0.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg viewBox="0 0 980 350" role="img" aria-label="RAG search engine pipeline: query and image inputs through retrieval, fusion, reranking, and retrieval-augmented generation">
+    <defs>
+      <marker id="arrow" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+        <path d="M0,0 L6,3 L0,6 z" fill="context-stroke" />
+      </marker>
+    </defs>
+
+    <!-- edges (drawn first, under nodes) -->
+    <path class="edge" id="e_q_enh"    d="M125,130 L178,130" marker-end="url(#arrow)" />
+    <path class="edge" id="e_enh_bm"   d="M290,130 L353,70"  marker-end="url(#arrow)" />
+    <path class="edge" id="e_enh_emb"  d="M290,130 L353,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_img_clip" d="M125,280 L353,280" marker-end="url(#arrow)" />
+    <path class="edge" id="e_bm_rrf"   d="M465,70  L533,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_emb_rrf"  d="M465,175 L533,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_clip_rrf" d="M465,280 L533,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_rrf_rer"  d="M645,175 L693,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_rer_rag"  d="M805,175 L843,175" marker-end="url(#arrow)" />
+
+    <!-- nodes -->
+    <g class="node" data-id="query"><rect x="15"  y="109" width="110" height="42" rx="8"/><text x="70"  y="130" text-anchor="middle" dominant-baseline="central">Query</text></g>
+    <g class="node" data-id="image"><rect x="15"  y="259" width="110" height="42" rx="8"/><text x="70"  y="280" text-anchor="middle" dominant-baseline="central">Image</text></g>
+    <g class="node" data-id="enhance"><rect x="180" y="109" width="110" height="42" rx="8"/><text x="235" y="130" text-anchor="middle" dominant-baseline="central">Enhance</text></g>
+    <g class="node" data-id="bm25"><rect x="355" y="49"  width="110" height="42" rx="8"/><text x="410" y="70"  text-anchor="middle" dominant-baseline="central">BM25</text></g>
+    <g class="node" data-id="embed"><rect x="355" y="154" width="110" height="42" rx="8"/><text x="410" y="175" text-anchor="middle" dominant-baseline="central">Embeddings</text></g>
+    <g class="node" data-id="clip"><rect x="355" y="259" width="110" height="42" rx="8"/><text x="410" y="280" text-anchor="middle" dominant-baseline="central">CLIP</text></g>
+    <g class="node" data-id="rrf"><rect x="535" y="154" width="110" height="42" rx="8"/><text x="590" y="175" text-anchor="middle" dominant-baseline="central">RRF fusion</text></g>
+    <g class="node" data-id="rerank"><rect x="695" y="154" width="110" height="42" rx="8"/><text x="750" y="175" text-anchor="middle" dominant-baseline="central">Rerank</text></g>
+    <g class="node" data-id="rag"><rect x="845" y="154" width="120" height="42" rx="8"/><text x="905" y="175" text-anchor="middle" dominant-baseline="central">RAG answer</text></g>
+  </svg>
+  <p class="cap" id="cap">Hover a stage to see what it does.</p>
+</div>
+
+<script>
+  const caps = {
+    query:   "The user's text query.",
+    image:   "Or an image as the query — multimodal search.",
+    enhance: "LLM query enhancement: spell-correct, rewrite, expand.",
+    bm25:    "Lexical retrieval — probabilistic BM25 keyword ranking.",
+    embed:   "Semantic retrieval — sentence-transformer vector search.",
+    clip:    "Image search via CLIP vision embeddings.",
+    rrf:     "Reciprocal-rank fusion blends the ranked lists.",
+    rerank:  "Cross-encoder rescoring of the fused candidates.",
+    rag:     "Grounded answer with citations from the top results."
+  };
+  const edges = {
+    query:   ["e_q_enh"],
+    image:   ["e_img_clip"],
+    enhance: ["e_q_enh","e_enh_bm","e_enh_emb"],
+    bm25:    ["e_enh_bm","e_bm_rrf"],
+    embed:   ["e_enh_emb","e_emb_rrf"],
+    clip:    ["e_img_clip","e_clip_rrf"],
+    rrf:     ["e_bm_rrf","e_emb_rrf","e_clip_rrf","e_rrf_rer"],
+    rerank:  ["e_rrf_rer","e_rer_rag"],
+    rag:     ["e_rer_rag"]
+  };
+  const DEFAULT = "Hover a stage to see what it does.";
+  const cap = document.getElementById("cap");
+  document.querySelectorAll(".node").forEach((n) => {
+    const id = n.dataset.id;
+    const on = () => {
+      n.classList.add("active");
+      (edges[id] || []).forEach((e) => document.getElementById(e)?.classList.add("lit"));
+      cap.textContent = caps[id] || DEFAULT;
+    };
+    const off = () => {
+      n.classList.remove("active");
+      (edges[id] || []).forEach((e) => document.getElementById(e)?.classList.remove("lit"));
+      cap.textContent = DEFAULT;
+    };
+    n.addEventListener("mouseenter", on);
+    n.addEventListener("mouseleave", off);
+  });
+</script>
+</body>
+</html>

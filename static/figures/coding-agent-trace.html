@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minimal Coding Agent — example run</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root { --ink:#8a8370; --amber:#c8881f; --dim:rgba(138,131,112,0.62); --line:rgba(138,131,112,0.4); }
+  html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{display:flex;flex-direction:column;justify-content:center;height:100vh;
+        box-sizing:border-box;padding:16px 20px;gap:12px}
+  .bar{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)}
+  .bar .tag{border:1px solid var(--line);border-radius:5px;padding:1px 7px}
+  .term{font-size:12.5px;line-height:1.95;color:var(--ink)}
+  .ln{opacity:0;transform:translateY(3px);transition:opacity .22s ease,transform .22s ease}
+  .ln.show{opacity:1;transform:none}
+  .pr,.ar,.fn,.dn{color:var(--amber)}
+  .fn{font-weight:600}
+  .ag{color:var(--ink)}
+  .rs{color:var(--dim);margin-left:1.1em}
+  .cursor{display:inline-block;width:0.6em;height:1.05em;vertical-align:-0.18em;
+          background:var(--amber);opacity:0;animation:blink 1s step-end infinite}
+  .cursor.on{opacity:1}
+  @keyframes blink{50%{opacity:0}}
+  .ctl{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);
+       background:none;border:0;cursor:pointer;padding:0;font-family:inherit}
+  .ctl:hover{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar"><span>agent · ~/calculator</span><span class="tag">example run</span></div>
+  <div class="term" id="term">
+    <div class="ln"><span class="pr">$</span> agent <span class="ag">"Run tests.py and fix any errors"</span></div>
+    <div class="ln"><span class="ar">→</span> <span class="fn">get_files_info</span>(<span class="ag">"."</span>)<span class="rs">· 2 files</span></div>
+    <div class="ln"><span class="ar">→</span> <span class="fn">run_python_file</span>(<span class="ag">"tests.py"</span>)<span class="rs">· 1 failed</span></div>
+    <div class="ln"><span class="ar">→</span> <span class="fn">get_file_content</span>(<span class="ag">"calculator.py"</span>)<span class="rs">· 24 lines</span></div>
+    <div class="ln"><span class="ar">→</span> <span class="fn">write_file</span>(<span class="ag">"calculator.py"</span>)<span class="rs">· patched divide()</span></div>
+    <div class="ln"><span class="ar">→</span> <span class="fn">run_python_file</span>(<span class="ag">"tests.py"</span>)<span class="rs">· 4 passed</span></div>
+    <div class="ln"><span class="dn">✓</span> done — 5 tool calls, fixed tests.py<span class="cursor" id="cur"></span></div>
+  </div>
+  <div class="bar"><span></span><button class="ctl" id="replay">↻ replay</button></div>
+</div>
+
+<script>
+  const lines = [...document.querySelectorAll(".ln")];
+  const cur = document.getElementById("cur");
+  let timers = [];
+  function play() {
+    timers.forEach(clearTimeout); timers = [];
+    lines.forEach((l) => l.classList.remove("show"));
+    cur.classList.add("on");
+    lines.forEach((l, i) => {
+      timers.push(setTimeout(() => {
+        l.classList.add("show");
+        if (i === lines.length - 1) setTimeout(() => cur.classList.remove("on"), 1400);
+      }, 380 * (i + 1)));
+    });
+  }
+  document.getElementById("replay").addEventListener("click", play);
+  play();
+</script>
+</body>
+</html>
