@@ -6,8 +6,11 @@
 <title>RAG Search Engine — architecture</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap');
-  :root { --ink:#8a8370; --amber:#c8881f; --line:rgba(138,131,112,0.45); }
-  html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monospace,monospace}
+  :root { --ink:#8a8370; --amber:#c8881f; --line:rgba(138,131,112,0.45); --emb-bg:#f3efe4; }
+  @media (prefers-color-scheme:dark){ :root{ --emb-bg:#15130e; } }
+  :root[data-theme="light"]{ --emb-bg:#f3efe4; }
+  :root[data-theme="dark"]{ --emb-bg:#15130e; }
+  html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
   .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
         height:100vh;gap:12px;padding:8px 12px;box-sizing:border-box}
   svg{width:100%;height:auto;max-height:80%}
@@ -98,6 +101,11 @@
     n.addEventListener("mouseenter", on);
     n.addEventListener("mouseleave", off);
   });
+
+  // Sync background to the host page's light/dark theme.
+  function setTheme(t){ if(t==="dark"||t==="light") document.documentElement.dataset.theme=t; }
+  addEventListener("message",function(e){ if(e&&e.data&&e.data.type==="emb-theme") setTheme(e.data.theme); });
+  try{ parent.postMessage({type:"emb-ready"},"*"); }catch(_){}
 </script>
 </body>
 </html>

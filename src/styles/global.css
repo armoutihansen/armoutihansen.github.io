@@ -768,10 +768,6 @@ main {
   background: var(--paper);
 }
 
-.work__panel-frame--tall {
-  aspect-ratio: 5 / 4;
-}
-
 .work__panel-frame iframe,
 .work__panel-frame img {
   position: absolute;

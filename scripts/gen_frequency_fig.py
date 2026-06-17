@@ -68,8 +68,19 @@ fig.update_yaxes(title_text="Win share", range=[0, 1], **axis)
 
 html = fig.to_html(include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displayModeBar": False})
-html = html.replace("<head>",
-    "<head><style>html,body{margin:0;background:transparent}"
-    ".plot-container,.svg-container{background:transparent!important}</style>")
+# Match the card background to the host page's light/dark theme (the parent
+# posts the active theme; iframes can't inherit it). Plot stays transparent.
+THEME = (
+    "<style>:root{--emb-bg:#f3efe4}"
+    "@media (prefers-color-scheme:dark){:root{--emb-bg:#15130e}}"
+    ':root[data-theme="light"]{--emb-bg:#f3efe4}:root[data-theme="dark"]{--emb-bg:#15130e}'
+    "html,body{margin:0;background:var(--emb-bg)}"
+    ".plot-container,.svg-container{background:transparent!important}</style>"
+    "<script>(function(){function s(t){if(t==='dark'||t==='light')"
+    "document.documentElement.dataset.theme=t;}addEventListener('message',function(e){"
+    "if(e&&e.data&&e.data.type==='emb-theme')s(e.data.theme);});"
+    "try{parent.postMessage({type:'emb-ready'},'*');}catch(_){}})();<\\/script>"
+)
+html = html.replace("<head>", "<head>" + THEME)
 open(OUT, "w").write(html)
 print("wrote", OUT, len(html), "bytes")

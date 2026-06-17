@@ -125,7 +125,6 @@ export const projects = [
     tools: ["Python", "tool-calling", "Gemini API", "CLI"],
     href: "https://github.com/armoutihansen/build-ai-agent",
     embed: "/figures/coding-agent-trace.html",
-    tall: true,
     figureTitle: "Agent run",
     figureNote: "An example run — the agent finds a failing test and fixes it.",
     imageAlt:

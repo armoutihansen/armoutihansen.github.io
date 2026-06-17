@@ -6,14 +6,17 @@
 <title>Minimal Coding Agent — example run</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
-  :root { --ink:#8a8370; --amber:#c8881f; --dim:rgba(138,131,112,0.62); --line:rgba(138,131,112,0.4); }
-  html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monospace,monospace}
+  :root { --ink:#8a8370; --amber:#c8881f; --dim:rgba(138,131,112,0.62); --line:rgba(138,131,112,0.4); --emb-bg:#f3efe4; }
+  @media (prefers-color-scheme:dark){ :root{ --emb-bg:#15130e; } }
+  :root[data-theme="light"]{ --emb-bg:#f3efe4; }
+  :root[data-theme="dark"]{ --emb-bg:#15130e; }
+  html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
   .wrap{display:flex;flex-direction:column;justify-content:center;height:100vh;
-        box-sizing:border-box;padding:16px 20px;gap:12px}
+        box-sizing:border-box;padding:12px 18px;gap:8px}
   .bar{display:flex;justify-content:space-between;align-items:baseline;
        font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)}
   .bar .tag{border:1px solid var(--line);border-radius:5px;padding:1px 7px}
-  .term{font-size:12.5px;line-height:1.95;color:var(--ink)}
+  .term{font-size:12px;line-height:1.62;color:var(--ink)}
   .ln{opacity:0;transform:translateY(3px);transition:opacity .22s ease,transform .22s ease}
   .ln.show{opacity:1;transform:none}
   .pr,.ar,.fn,.dn{color:var(--amber)}
@@ -61,6 +64,11 @@
   }
   document.getElementById("replay").addEventListener("click", play);
   play();
+
+  // Sync background to the host page's light/dark theme.
+  function setTheme(t){ if(t==="dark"||t==="light") document.documentElement.dataset.theme=t; }
+  addEventListener("message",function(e){ if(e&&e.data&&e.data.type==="emb-theme") setTheme(e.data.theme); });
+  try{ parent.postMessage({type:"emb-ready"},"*"); }catch(_){}
 </script>
 </body>
 </html>
