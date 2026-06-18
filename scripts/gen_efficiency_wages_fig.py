@@ -9,6 +9,47 @@
 import numpy as np, pandas as pd
 import plotly.graph_objects as go
 
+
+def theme_block(roles):
+    """<style>+<script> injected into the Plotly HTML <head>: background follows
+    the host theme, and the plot recolors (warm, amber-on-neutral) per theme."""
+    return (
+        "<style>:root{--emb-bg:#ece6d7}"
+        "@media (prefers-color-scheme:dark){:root{--emb-bg:#1c1912}}"
+        ':root[data-theme="light"]{--emb-bg:#ece6d7}:root[data-theme="dark"]{--emb-bg:#1c1912}'
+        "html,body{margin:0;background:var(--emb-bg)}"
+        ".plot-container,.svg-container{background:transparent!important}</style>"
+        "<script>(function(){"
+        "function setT(t){if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}"
+        "addEventListener('message',function(e){if(e&&e.data&&e.data.type==='emb-theme')setT(e.data.theme);});"
+        "try{parent.postMessage({type:'emb-ready'},'*');}catch(_){}"
+        "var PAL={light:{ink:'#5f594c',grid:'rgba(120,113,92,0.22)',axis:'rgba(120,113,92,0.55)',"
+        "c0:'#9a6310',c1:'#6f664c',c2:'#a8572b'},"
+        "dark:{ink:'#b1a98f',grid:'rgba(138,131,112,0.2)',axis:'rgba(138,131,112,0.5)',"
+        "c0:'#edb24e',c1:'#9a9070',c2:'#d98a52'}};"
+        "var ROLES=" + roles + ";"
+        "function rgba(h,a){var n=parseInt(h.slice(1),16);"
+        "return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}"
+        "function curT(){return document.documentElement.dataset.theme||"
+        "(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}"
+        "function apply(){var gd=document.querySelector('.plotly-graph-div');"
+        "if(!gd||!window.Plotly){return setTimeout(apply,60);}var p=PAL[curT()]||PAL.dark;"
+        "Plotly.relayout(gd,{'font.color':p.ink,'legend.font.color':p.ink,"
+        "'xaxis.gridcolor':p.grid,'xaxis.linecolor':p.axis,'xaxis.tickcolor':p.axis,"
+        "'xaxis.tickfont.color':p.ink,'xaxis.title.font.color':p.ink,"
+        "'yaxis.gridcolor':p.grid,'yaxis.linecolor':p.axis,'yaxis.tickcolor':p.axis,"
+        "'yaxis.tickfont.color':p.ink,'yaxis.title.font.color':p.ink});"
+        "if(gd.layout&&gd.layout.updatemenus&&gd.layout.updatemenus.length){"
+        "Plotly.relayout(gd,{'updatemenus[0].font.color':p.ink,'updatemenus[0].bordercolor':p.axis});}"
+        "ROLES.forEach(function(r){var c=p[r[2]];"
+        "if(r[1]==='line'){Plotly.restyle(gd,{'line.color':[c],'marker.color':[c]},[r[0]]);}"
+        "else{Plotly.restyle(gd,{'fillcolor':[rgba(c,0.14)]},[r[0]]);}});}"
+        "apply();new MutationObserver(apply).observe(document.documentElement,"
+        "{attributes:true,attributeFilter:['data-theme']});"
+        "})();</script>"
+    )
+
+
 CSV = "/Users/jesper/repos/efficiency-wages/data/derived/agent_wage_long.csv"
 OUT = "/Users/jesper/repos/armoutihansen.github.io/static/figures/efficiency-wages-effort.html"
 
@@ -24,9 +65,11 @@ def stats(vals, n=2000):
     boot = vals[rng.integers(0, len(vals), size=(n, len(vals)))].mean(axis=1)
     return float(vals.mean()), float(np.percentile(boot, 2.5)), float(np.percentile(boot, 97.5))
 
-INK = "#8a8370"; GRID = "rgba(138,131,112,0.18)"
-colors = {"Prosocial": "#c8881f", "GE": "#5f7d9a"}
-bands  = {"Prosocial": "rgba(200,136,31,0.15)", "GE": "rgba(95,125,154,0.17)"}
+# Light-theme base palette (warm, amber-on-neutral like the front-page panels);
+# the injected theme script swaps to the dark palette when the page is dark.
+INK = "#5f594c"; GRID = "rgba(120,113,92,0.22)"
+colors = {"Prosocial": "#9a6310", "GE": "#6f664c"}
+bands  = {"Prosocial": "rgba(154,99,16,0.14)", "GE": "rgba(111,102,76,0.14)"}
 
 fig = go.Figure()
 for t in ["Prosocial", "GE"]:
@@ -66,19 +109,10 @@ fig.update_yaxes(title_text="Mean chosen effort", **axis)
 
 html = fig.to_html(include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displayModeBar": False})
-# Match the card background to the host page's light/dark theme (the parent
-# posts the active theme; iframes can't inherit it). Plot stays transparent.
-THEME = (
-    "<style>:root{--emb-bg:#f3efe4}"
-    "@media (prefers-color-scheme:dark){:root{--emb-bg:#15130e}}"
-    ':root[data-theme="light"]{--emb-bg:#f3efe4}:root[data-theme="dark"]{--emb-bg:#15130e}'
-    "html,body{margin:0;background:var(--emb-bg)}"
-    ".plot-container,.svg-container{background:transparent!important}</style>"
-    "<script>(function(){function s(t){if(t==='dark'||t==='light')"
-    "document.documentElement.dataset.theme=t;}addEventListener('message',function(e){"
-    "if(e&&e.data&&e.data.type==='emb-theme')s(e.data.theme);});"
-    "try{parent.postMessage({type:'emb-ready'},'*');}catch(_){}})();<\\/script>"
-)
-html = html.replace("<head>", "<head>" + THEME)
+# Match the card background AND recolor the plot to the host page's light/dark
+# theme (iframes can't inherit it; the parent posts the active theme). Plot bg
+# stays transparent so --emb-bg shows through. ROLES maps trace index -> palette.
+ROLES = "[[0,'band','c0'],[1,'line','c0'],[2,'band','c1'],[3,'line','c1']]"
+html = html.replace("<head>", "<head>" + theme_block(ROLES))
 open(OUT, "w").write(html)
 print("wrote", OUT, len(html), "bytes")

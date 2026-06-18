@@ -6,10 +6,10 @@
 <title>RAG Search Engine — architecture</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap');
-  :root { --ink:#8a8370; --amber:#c8881f; --line:rgba(138,131,112,0.45); --emb-bg:#f3efe4; }
-  @media (prefers-color-scheme:dark){ :root{ --emb-bg:#15130e; } }
-  :root[data-theme="light"]{ --emb-bg:#f3efe4; }
-  :root[data-theme="dark"]{ --emb-bg:#15130e; }
+  :root { --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
+  @media (prefers-color-scheme:dark){ :root{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; } }
+  :root[data-theme="light"]{ --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
+  :root[data-theme="dark"]{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; }
   html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
   .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
         height:100vh;gap:12px;padding:8px 12px;box-sizing:border-box}
@@ -20,7 +20,7 @@
              text-transform:uppercase;pointer-events:none;transition:fill .15s ease}
   .edge{stroke:var(--line);stroke-width:1.6;fill:none;transition:stroke .15s ease,stroke-width .15s ease}
   .node{cursor:default}
-  .node.active rect{stroke:var(--amber);stroke-width:2;fill:rgba(200,136,31,0.12)}
+  .node.active rect{stroke:var(--amber);stroke-width:2;fill:color-mix(in srgb,var(--amber) 14%,transparent)}
   .node.active text{fill:var(--amber)}
   .edge.lit{stroke:var(--amber);stroke-width:2.4}
   .cap{margin:0;color:var(--ink);font-size:12.5px;font-weight:500;text-align:center;
