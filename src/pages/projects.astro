@@ -2,34 +2,9 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WorkItem from "../components/WorkItem.astro";
 import GitHubStrip from "../components/GitHubStrip.astro";
-import { projectGroups, projects } from "../data/projects";
+import { selectedWork } from "../data/projects";
 
-const groupTitles = new Set(projectGroups.map((group) => group.title));
-const duplicateTitles = projects
-  .map((project) => project.title)
-  .filter((title, index, all) => all.indexOf(title) !== index);
-const unknownGroups = projects
-  .map((project) => project.primaryGroup)
-  .filter((group) => !groupTitles.has(group as (typeof projectGroups)[number]["title"]));
-
-if (duplicateTitles.length > 0) {
-  throw new Error(`Duplicate project titles: ${[...new Set(duplicateTitles)].join(", ")}`);
-}
-if (unknownGroups.length > 0) {
-  throw new Error(`Unknown project groups: ${[...new Set(unknownGroups)].join(", ")}`);
-}
-
-const LINK_GROUP = "Also on GitHub";
-
-const grouped = projectGroups
-  .map((group) => ({
-    title: group.title,
-    intro: group.intro,
-    headingId: `work-${group.title.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}`,
-    isLinkGroup: group.title === LINK_GROUP,
-    projects: projects.filter((project) => project.primaryGroup === group.title)
-  }))
-  .filter((group) => group.projects.length > 0);
+const grouped = selectedWork();
 ---
 
 <BaseLayout

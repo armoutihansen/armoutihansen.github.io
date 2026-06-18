@@ -1380,6 +1380,14 @@ details.abstract p {
     align-items: start;
   }
 
+  /* Home "Selected work": four compact teasers in the same two-column,
+     column-first, aligned-divider grid as the capabilities block above. */
+  .worklist--grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-auto-flow: column;
+    column-gap: clamp(2rem, 5vw, 4rem);
+  }
 }
 
 @media (min-width: 56em) {

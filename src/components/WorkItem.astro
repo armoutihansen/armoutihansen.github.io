@@ -22,9 +22,10 @@ interface Props {
   };
   index?: number;
   figure?: boolean;
+  compact?: boolean;
 }
 
-const { project, index, figure = false } = Astro.props;
+const { project, index, figure = false, compact = false } = Astro.props;
 const external = project.href.startsWith("http");
 const rel = external ? "noreferrer" : undefined;
 const num = index != null ? pad2(index) : undefined;
@@ -42,7 +43,7 @@ const showFigure = figure && Boolean(project.embed || project.image);
       <a href={project.href} rel={rel}>{project.title}</a>
     </h3>
     <p class="work__summary">{project.summary}</p>
-    {project.problem && project.approach && project.result && (
+    {!compact && project.problem && project.approach && project.result && (
       <dl class="work__detail">
         <div><dt>Problem</dt><dd>{project.problem}</dd></div>
         <div><dt>Approach</dt><dd>{project.approach}</dd></div>

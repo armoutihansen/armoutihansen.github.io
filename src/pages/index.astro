@@ -7,18 +7,11 @@ import PublicationItem from "../components/PublicationItem.astro";
 import ExperienceEntry from "../components/ExperienceEntry.astro";
 import { experience } from "../data/experience";
 import { capabilities, profile } from "../data/profile";
-import { projects } from "../data/projects";
+import { featuredProjects } from "../data/projects";
 import { publications } from "../data/publications";
 import { pad2 } from "../data/format";
 
-const featuredTitles = [
-  "RAG Search Engine",
-  "CitiBike Demand, Risk, and Net Flow",
-  "Economic Theories and Machine Learning",
-];
-const featuredProjects = featuredTitles
-  .map((title) => projects.find((project) => project.title === title))
-  .filter((project): project is (typeof projects)[number] => project !== undefined);
+const featured = featuredProjects();
 const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 2);
 const recentExperience = experience.slice(0, 2);
 const paperCount = publications.filter((item) => item.type === "Publication").length;
@@ -53,8 +46,8 @@ const credibility = [
       title="Analysis, models, and checks"
       intro="A few projects, each with the question it addresses, the method, and the result."
     />
-    <div class="worklist">
-      {featuredProjects.map((project, i) => <WorkItem project={project} index={i + 1} />)}
+    <div class="worklist worklist--grid">
+      {featured.map((project, i) => <WorkItem project={project} index={i + 1} compact />)}
     </div>
     <p class="section__more"><a href="/projects/">All work</a></p>
   </section>

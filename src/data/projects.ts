@@ -20,11 +20,33 @@ export const projectGroups = [
   }
 ] as const;
 
-export const projects = [
+export type ProjectGroup = (typeof projectGroups)[number];
+export type ProjectGroupTitle = ProjectGroup["title"];
+
+export interface Project {
+  title: string;
+  primaryGroup: ProjectGroupTitle;
+  category: string;
+  status: string;
+  summary: string;
+  problem?: string;
+  approach?: string;
+  result?: string;
+  tools: string[];
+  href: string;
+  embed?: string;
+  image?: string;
+  imageAlt?: string;
+  figureTitle?: string;
+  figureNote?: string;
+  legend?: { label: string; color: string }[];
+  controls?: { key: string; label: string }[];
+}
+
+export const projects: Project[] = [
   {
     title: "CitiBike Demand, Risk, and Net Flow",
     primaryGroup: "Applied analysis",
-    featured: true,
     category: "Operational analysis",
     status: "Case study",
     summary:
@@ -48,7 +70,6 @@ export const projects = [
   {
     title: "RAG Search Engine",
     primaryGroup: "Modeling & tools",
-    featured: true,
     category: "Retrieval system",
     status: "GitHub project",
     summary:
@@ -68,7 +89,6 @@ export const projects = [
   {
     title: "The Informativeness of Frequency-Report Scoring Rules",
     primaryGroup: "Research & replication",
-    featured: true,
     category: "Inference & simulation",
     status: "Manuscript + replication package",
     summary: "Manuscript, simulations, and replication code for belief elicitation from frequency reports.",
@@ -92,7 +112,6 @@ export const projects = [
   {
     title: "Economic Theories and Machine Learning",
     primaryGroup: "Research & replication",
-    featured: false,
     category: "Model comparison",
     status: "GitHub project",
     summary: "Code comparing economic theories against machine-learning benchmarks on behavioral data.",
@@ -106,7 +125,6 @@ export const projects = [
   {
     title: "choicekit",
     primaryGroup: "Modeling & tools",
-    featured: false,
     category: "Python package",
     status: "Early-stage",
     summary: "A Python package for reusable choice-modeling workflows, in development.",
@@ -119,7 +137,6 @@ export const projects = [
   {
     title: "Minimal Coding Agent",
     primaryGroup: "Modeling & tools",
-    featured: false,
     category: "AI tooling",
     status: "GitHub project",
     summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
@@ -137,7 +154,6 @@ export const projects = [
   {
     title: "Efficiency Wages with Motivated Agents",
     primaryGroup: "Research & replication",
-    featured: false,
     category: "Replication package",
     status: "Published · GEB 2024",
     summary: "Replication data and code for a published paper on wages, motivation, and effort.",
@@ -155,7 +171,6 @@ export const projects = [
   {
     title: "Personal Knowledge System",
     primaryGroup: "Also on GitHub",
-    featured: false,
     category: "Knowledge base",
     status: "Live",
     summary: "A public notes site for ML, AI, and software-engineering references, built on Obsidian and Quartz.",
@@ -165,7 +180,6 @@ export const projects = [
   {
     title: "Static Site Generator",
     primaryGroup: "Also on GitHub",
-    featured: false,
     category: "Software",
     status: "GitHub project",
     summary: "A small Python static-site generator that turns Markdown into templated HTML.",
@@ -175,7 +189,6 @@ export const projects = [
   {
     title: "BookBot",
     primaryGroup: "Also on GitHub",
-    featured: false,
     category: "CLI tool",
     status: "GitHub project",
     summary: "A command-line tool that analyzes books and reports word and character frequencies.",
@@ -185,7 +198,6 @@ export const projects = [
   {
     title: "Asteroids",
     primaryGroup: "Also on GitHub",
-    featured: false,
     category: "Game",
     status: "GitHub project",
     summary: "An Asteroids clone in Python and Pygame — movement, shooting, collisions, and asteroid splitting.",
@@ -195,7 +207,6 @@ export const projects = [
   {
     title: "Maze Solver",
     primaryGroup: "Also on GitHub",
-    featured: false,
     category: "Algorithms",
     status: "GitHub project",
     summary: "A maze generator and visual solver using recursive backtracking and depth-first search.",
@@ -203,3 +214,71 @@ export const projects = [
     href: "https://github.com/armoutihansen/maze-solver"
   }
 ];
+
+const LINK_GROUP: ProjectGroupTitle = "Also on GitHub";
+
+// The home's Selected work grid: four featured projects, in order. With a
+// column-first 2x2 grid the left column reads 01->02, the right 03->04.
+const featuredTitles = [
+  "RAG Search Engine",
+  "CitiBike Demand, Risk, and Net Flow",
+  "Economic Theories and Machine Learning",
+  "The Informativeness of Frequency-Report Scoring Rules"
+] as const;
+
+// Domain invariants for single-group project data (see CONTEXT.md), enforced at
+// import so every consumer and the build are protected — not just the page that
+// happens to render the projects.
+function assertInvariants(): void {
+  const titles = projects.map((p) => p.title);
+  const duplicates = titles.filter((t, i) => titles.indexOf(t) !== i);
+  if (duplicates.length > 0) {
+    throw new Error(`Duplicate project titles: ${[...new Set(duplicates)].join(", ")}`);
+  }
+  const known = new Set<string>(projectGroups.map((g) => g.title));
+  const unknown = projects.map((p) => p.primaryGroup).filter((g) => !known.has(g));
+  if (unknown.length > 0) {
+    throw new Error(`Unknown project groups: ${[...new Set(unknown)].join(", ")}`);
+  }
+  const titleSet = new Set(titles);
+  const missingFeatured = featuredTitles.filter((t) => !titleSet.has(t));
+  if (missingFeatured.length > 0) {
+    throw new Error(`Featured titles not found in projects: ${missingFeatured.join(", ")}`);
+  }
+}
+assertInvariants();
+
+function headingId(title: string): string {
+  return `work-${title.toLowerCase().replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "")}`;
+}
+
+export interface DisplayGroup {
+  title: string;
+  intro: string;
+  headingId: string;
+  isLinkGroup: boolean;
+  projects: Project[];
+}
+
+// Grouped-for-display view: every non-empty group, each project under its one
+// primary group, with the slug and link-group flag the Work page renders.
+export function selectedWork(): DisplayGroup[] {
+  return projectGroups
+    .map((group) => ({
+      title: group.title,
+      intro: group.intro,
+      headingId: headingId(group.title),
+      isLinkGroup: group.title === LINK_GROUP,
+      projects: projects.filter((p) => p.primaryGroup === group.title)
+    }))
+    .filter((group) => group.projects.length > 0);
+}
+
+// The home's ordered featured set.
+export function featuredProjects(): Project[] {
+  return featuredTitles.map((title) => {
+    const project = projects.find((p) => p.title === title);
+    if (!project) throw new Error(`Featured project not found: ${title}`);
+    return project;
+  });
+}

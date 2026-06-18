@@ -116,7 +116,11 @@ Each project appears once, under one primary group, as an editorial entry: index
 definition list, and a mono tools line. No GitHub social-preview thumbnails — they were
 repetitive and read as AI-portfolio filler. Smaller learning builds are demoted to a
 compact "Also on GitHub" link list rather than full cards, so they never dilute the
-serious work.
+serious work. On the home, the four featured projects use a **compact** variant of this
+entry — index, kind, title, summary, tools, no Problem/Approach/Result — laid out as a
+two-column (2×2) grid in the capabilities rhythm (column-first fill, aligned row
+dividers); the full Problem/Approach/Result form is reserved for `/projects/`, the
+inspect layer.
 
 **Item shape (Research)**:
 Compact bibliographic entries: mono `year · venue`, serif title, authors with Jesper's
@@ -138,6 +142,11 @@ predictably, and tap targets stay comfortable.
   own repos (`~/repos/frequency-beliefs`, `~/repos/efficiency-wages`). No claim should
   exceed those sources.
 - Single-group project data prevents duplicate project rendering across the work page.
+  The **Selected work** module (`src/data/projects.ts`) owns the project list, the group
+  taxonomy, the ordered featured set, and the invariants (unique titles, known groups,
+  featured titles exist) — enforced at import via `assertInvariants()`, so any consumer
+  and the build are protected. Pages read `selectedWork()` and `featuredProjects()`
+  rather than re-deriving grouping or hardcoding which projects are featured.
 - The hero's two analyses and the Work page's open-source strip run on **committed,
   precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`;
   `scripts/gen_github_data.mjs` → `github.json`) — no model or API call at build or request
