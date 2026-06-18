@@ -45,6 +45,20 @@ Copy is short, specific, and confident. No throat-clearing, no buzzword stacks, 
 _Avoid_: verbose abstractions, triplet-list padding, vague nouns ("decision support",
 "operational interpretation") used as a substitute for a concrete claim.
 
+**Figure embed channel**:
+The contract between the Work page and the interactive illustration iframes it hosts.
+One canonical definition per side: the embed half in `static/figures/_embed.js`
+(referenced verbatim by every figure — `<script src="/figures/_embed.js">`), the host
+half in `src/scripts/figure-embed-host.ts` (bundled into `/projects/`). Wire protocol:
+a figure posts `emb-ready` on load; the page broadcasts `emb-theme` (light/dark, synced
+to the host) and `emb-metric` (a caption toggle, re-dispatched to the figure as the DOM
+event `emb:metric`). Figures react to `data-theme` and `emb:metric` with their own
+palette/data code; the channel carries no figure-specific logic. The two Plotly figures
+are emitted by `scripts/gen_*_fig.py`, which reference the same shared script.
+_Avoid_: re-inlining the handshake into individual figures, the generators, or the page
+(the drift this consolidated); putting figure-specific data or palette logic in the
+channel.
+
 ## Visual Direction
 
 **Aesthetic axis — "Premium dark, one interactive quant hero"** (see ADR 0003):

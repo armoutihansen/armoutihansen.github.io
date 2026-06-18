@@ -102,10 +102,8 @@
     n.addEventListener("mouseleave", off);
   });
 
-  // Sync background to the host page's light/dark theme.
-  function setTheme(t){ if(t==="dark"||t==="light") document.documentElement.dataset.theme=t; }
-  addEventListener("message",function(e){ if(e&&e.data&&e.data.type==="emb-theme") setTheme(e.data.theme); });
-  try{ parent.postMessage({type:"emb-ready"},"*"); }catch(_){}
 </script>
+<!-- Figure embed channel: theme sync + ready handshake (see /figures/_embed.js). -->
+<script src="/figures/_embed.js"></script>
 </body>
 </html>

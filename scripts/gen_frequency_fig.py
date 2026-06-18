@@ -20,10 +20,10 @@ def theme_block(roles):
         ':root[data-theme="light"]{--emb-bg:#ece6d7}:root[data-theme="dark"]{--emb-bg:#1c1912}'
         "html,body{margin:0;background:var(--emb-bg)}"
         ".plot-container,.svg-container{background:transparent!important}</style>"
+        # Shared embed-side contract (theme sync + emb-ready handshake); the one
+        # canonical definition lives in static/figures/_embed.js.
+        '<script src="/figures/_embed.js"></script>'
         "<script>(function(){"
-        "function setT(t){if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}"
-        "addEventListener('message',function(e){if(e&&e.data&&e.data.type==='emb-theme')setT(e.data.theme);});"
-        "try{parent.postMessage({type:'emb-ready'},'*');}catch(_){}"
         "var PAL={light:{ink:'#5f594c',grid:'rgba(120,113,92,0.22)',axis:'rgba(120,113,92,0.55)',"
         "c0:'#9a6310',c1:'#6f664c',c2:'#a8572b'},"
         "dark:{ink:'#b1a98f',grid:'rgba(138,131,112,0.2)',axis:'rgba(138,131,112,0.5)',"
@@ -108,15 +108,15 @@ ROLES = "[[0,'line','c0'],[1,'line','c2'],[2,'line','c1']]"
 html = html.replace("<head>", "<head>" + theme_block(ROLES))
 
 # The metric toggle lives in the host page's figure caption (aligned with the
-# headline, like the CitiBike legend) and drives the chart via postMessage, the
-# same channel used for theme. Listen for {type:'emb-metric', key} and restyle.
+# headline, like the CitiBike legend). The figure embed channel re-dispatches the
+# parent's emb-metric message as the DOM event 'emb:metric'; restyle on it.
 YDATA = json.dumps({key: [yvals(key, r) for r in rules] for key, _ in metrics})
 listener = (
     "<script>(function(){var Y=" + YDATA + ";"
-    "addEventListener('message',function(e){"
-    "if(!e||!e.data||e.data.type!=='emb-metric'||!Y[e.data.key])return;"
+    "document.addEventListener('emb:metric',function(e){"
+    "var k=e.detail&&e.detail.key;if(!k||!Y[k])return;"
     "var gd=document.querySelector('.plotly-graph-div');"
-    "if(gd&&window.Plotly)Plotly.restyle(gd,{y:Y[e.data.key]});});"
+    "if(gd&&window.Plotly)Plotly.restyle(gd,{y:Y[k]});});"
     "})();</script>"
 )
 html = html.replace("</body>", listener + "</body>")

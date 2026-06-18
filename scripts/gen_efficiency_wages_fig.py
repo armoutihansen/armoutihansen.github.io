@@ -19,10 +19,10 @@ def theme_block(roles):
         ':root[data-theme="light"]{--emb-bg:#ece6d7}:root[data-theme="dark"]{--emb-bg:#1c1912}'
         "html,body{margin:0;background:var(--emb-bg)}"
         ".plot-container,.svg-container{background:transparent!important}</style>"
+        # Shared embed-side contract (theme sync + emb-ready handshake); the one
+        # canonical definition lives in static/figures/_embed.js.
+        '<script src="/figures/_embed.js"></script>'
         "<script>(function(){"
-        "function setT(t){if(t==='dark'||t==='light')document.documentElement.dataset.theme=t;}"
-        "addEventListener('message',function(e){if(e&&e.data&&e.data.type==='emb-theme')setT(e.data.theme);});"
-        "try{parent.postMessage({type:'emb-ready'},'*');}catch(_){}"
         "var PAL={light:{ink:'#5f594c',grid:'rgba(120,113,92,0.22)',axis:'rgba(120,113,92,0.55)',"
         "c0:'#9a6310',c1:'#6f664c',c2:'#a8572b'},"
         "dark:{ink:'#b1a98f',grid:'rgba(138,131,112,0.2)',axis:'rgba(138,131,112,0.5)',"

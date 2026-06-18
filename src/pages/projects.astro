@@ -73,42 +73,12 @@ const grouped = projectGroups
   </div>
 </BaseLayout>
 
-<script is:inline>
-  // Tell each embedded illustration the active light/dark theme so it can
-  // match its background to the card (iframes don't inherit the page theme).
-  (function () {
-    const theme = () => document.documentElement.dataset.theme || "dark";
-    const frames = () => document.querySelectorAll(".work__panel-frame iframe");
-    const send = (f) => { try { f.contentWindow.postMessage({ type: "emb-theme", theme: theme() }, "*"); } catch (e) {} };
-    const broadcast = () => frames().forEach(send);
-    addEventListener("message", (e) => {
-      if (e && e.data && e.data.type === "emb-ready" && e.source) {
-        try { e.source.postMessage({ type: "emb-theme", theme: theme() }, "*"); } catch (err) {}
-      }
-    });
-    if (document.readyState !== "loading") broadcast();
-    else addEventListener("DOMContentLoaded", broadcast);
-    new MutationObserver(broadcast).observe(document.documentElement, {
-      attributes: true, attributeFilter: ["data-theme"],
-    });
-
-    // Figure-caption toggles drive their sibling illustration via postMessage.
-    const wireToggles = () => {
-      document.querySelectorAll(".work__toggle").forEach((group) => {
-        const panel = group.closest(".work__panel");
-        const frame = panel && panel.querySelector(".work__panel-frame iframe");
-        const buttons = group.querySelectorAll(".work__toggle-btn");
-        buttons.forEach((btn) => {
-          btn.addEventListener("click", () => {
-            buttons.forEach((b) => b.setAttribute("aria-selected", b === btn ? "true" : "false"));
-            try { frame.contentWindow.postMessage({ type: "emb-metric", key: btn.dataset.key }, "*"); } catch (e) {}
-          });
-        });
-      });
-    };
-    if (document.readyState !== "loading") wireToggles();
-    else addEventListener("DOMContentLoaded", wireToggles);
-  })();
+<script>
+  // Host side of the figure embed channel (theme broadcast, emb-ready
+  // handshake, caption-toggle wiring). See src/scripts/figure-embed-host.ts and
+  // CONTEXT.md -> "Figure embed channel". Bundled by Astro (not is:inline).
+  import { initFigureEmbedHost } from "../scripts/figure-embed-host";
+  initFigureEmbedHost();
 </script>
 
 <style>
