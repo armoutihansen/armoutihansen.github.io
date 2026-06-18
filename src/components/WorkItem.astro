@@ -18,6 +18,7 @@ interface Props {
     figureTitle?: string;
     figureNote?: string;
     legend?: { label: string; color: string }[];
+    controls?: { key: string; label: string }[];
   };
   index?: number;
   figure?: boolean;
@@ -59,6 +60,19 @@ const showFigure = figure && Boolean(project.embed || project.image);
           <span class="work__legend">
             {project.legend.map((l) => (
               <span><i style={`background:${l.color}`} />{l.label}</span>
+            ))}
+          </span>
+        )}
+        {project.controls && (
+          <span class="work__toggle" role="tablist" aria-label={project.figureTitle}>
+            {project.controls.map((c, i) => (
+              <button
+                type="button"
+                class="work__toggle-btn"
+                role="tab"
+                data-key={c.key}
+                aria-selected={i === 0 ? "true" : "false"}
+              >{c.label}</button>
             ))}
           </span>
         )}

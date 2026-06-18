@@ -91,6 +91,23 @@ const grouped = projectGroups
     new MutationObserver(broadcast).observe(document.documentElement, {
       attributes: true, attributeFilter: ["data-theme"],
     });
+
+    // Figure-caption toggles drive their sibling illustration via postMessage.
+    const wireToggles = () => {
+      document.querySelectorAll(".work__toggle").forEach((group) => {
+        const panel = group.closest(".work__panel");
+        const frame = panel && panel.querySelector(".work__panel-frame iframe");
+        const buttons = group.querySelectorAll(".work__toggle-btn");
+        buttons.forEach((btn) => {
+          btn.addEventListener("click", () => {
+            buttons.forEach((b) => b.setAttribute("aria-selected", b === btn ? "true" : "false"));
+            try { frame.contentWindow.postMessage({ type: "emb-metric", key: btn.dataset.key }, "*"); } catch (e) {}
+          });
+        });
+      });
+    };
+    if (document.readyState !== "loading") wireToggles();
+    else addEventListener("DOMContentLoaded", wireToggles);
   })();
 </script>
 

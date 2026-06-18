@@ -80,6 +80,10 @@ export const projects = [
     href: "https://github.com/armoutihansen/frequency-beliefs",
     embed: "/figures/frequency-rules-winshare.html",
     figureTitle: "Sharpest-bound win share",
+    controls: [
+      { key: "coord_avg", label: "Average-coordinate" },
+      { key: "mean_linear", label: "Linear-mean" }
+    ],
     figureNote:
       "Share of cases where each scoring rule gives the sharpest belief bounds, by belief concentration α.",
     imageAlt:
