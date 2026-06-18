@@ -112,26 +112,13 @@ const grouped = projectGroups
 </script>
 
 <style>
-  /* Two-column hero: headline left, GitHub contribution block right-aligned
-     and vertically centered against the header. */
+  /* Stacked hero: headline on top, full-width GitHub contribution calendar
+     below it. */
   .projects-hero {
     max-width: none;
   }
 
   .projects-hero__intro {
     max-width: 54rem;
-  }
-
-  @media (min-width: 820px) {
-    .projects-hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      column-gap: clamp(2rem, 5vw, 4.5rem);
-      align-items: center;
-    }
-
-    .projects-hero :global(.ghstrip) {
-      margin-top: 0;
-    }
   }
 </style>

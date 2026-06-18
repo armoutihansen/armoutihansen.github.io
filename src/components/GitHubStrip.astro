@@ -3,18 +3,13 @@ import gh from "../data/github.json";
 
 const c = gh.contributions;
 
-// Text in the last 12 months; the figure shows the last ~6 months so it stays
-// readable while the block sits left-aligned with the page headline.
-const WINDOW = 26;
-const weeks = c.weeks.slice(-WINDOW);
-const offset = c.weeks.length - weeks.length;
-let months = c.months
-  .filter((m) => m.col >= offset)
-  .map((m) => ({ label: m.label, col: m.col - offset }));
+// Full last-12-months calendar, spanning the page width below the intro.
+const weeks = c.weeks;
+let months = c.months.map((m) => ({ label: m.label, col: m.col }));
 if (months.length > 1 && months[1].col - months[0].col < 3) months = months.slice(1);
 const nWeeks = weeks.length;
 const scale = [0, 1, 2, 3, 4];
-const aria = `${c.total} contributions in the last year; calendar shows the last six months`;
+const aria = `${c.total} contributions in the last year`;
 ---
 
 <div class="ghstrip" style={`--nweeks: ${nWeeks}`}>
@@ -24,7 +19,7 @@ const aria = `${c.total} contributions in the last year; calendar shows the last
   </div>
 
   <div class="ghcal">
-    <div class="ghcal__months" style={`grid-template-columns: repeat(${nWeeks}, var(--cell))`} aria-hidden="true">
+    <div class="ghcal__months" style={`grid-template-columns: repeat(${nWeeks}, minmax(0, 1fr))`} aria-hidden="true">
       {months.map((m) => (
         <span class="ghcal__month" style={`grid-column: ${m.col + 1}`}>{m.label}</span>
       ))}
@@ -50,11 +45,11 @@ const aria = `${c.total} contributions in the last year; calendar shows the last
 
 <style>
   .ghstrip {
+    /* --cell sizes only the legend key swatches now; the calendar cells flex
+       to fill the full page width via the grid below. */
     --cell: clamp(9px, 1.1vw, 13px);
     --cellgap: 3px;
-    /* width of the figure; the text rows attach to and align with it */
-    width: calc(var(--nweeks) * var(--cell) + (var(--nweeks) - 1) * var(--cellgap));
-    max-width: 100%;
+    width: 100%;
     margin-top: clamp(1.6rem, 1rem + 1.5vw, 2.4rem);
     display: grid;
     gap: 0.5rem;
@@ -114,13 +109,14 @@ const aria = `${c.total} contributions in the last year; calendar shows the last
 
   .ghcal__grid {
     display: grid;
-    grid-template-rows: repeat(7, var(--cell));
+    grid-template-columns: repeat(var(--nweeks), minmax(0, 1fr));
+    grid-template-rows: repeat(7, auto);
     grid-auto-flow: column;
-    grid-auto-columns: var(--cell);
     gap: var(--cellgap);
   }
 
   .ghcal__cell {
+    aspect-ratio: 1;
     border-radius: 2px;
     background: var(--line);
   }
