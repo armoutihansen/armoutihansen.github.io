@@ -706,128 +706,12 @@ main {
   align-items: center;
 }
 
-.work__panel {
-  margin: 0;
-  display: grid;
-  gap: 0.7rem;
-  padding: clamp(0.9rem, 0.6rem + 1vw, 1.3rem);
-  background: var(--paper-sunk);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-.work__panel-cap {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 0.3rem 1rem;
-}
-
-.work__panel-title {
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  font-weight: 600;
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: var(--ink);
-}
-
-.work__legend {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.3rem 0.9rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-meta);
-  letter-spacing: var(--track-meta);
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.work__legend > span {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.work__legend i {
-  width: 0.6rem;
-  height: 0.6rem;
-  border-radius: 50%;
-}
-
-.work__toggle {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-}
-
-.work__toggle-btn {
-  flex: 0 0 auto;
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0.25rem 0.45rem;
-  cursor: pointer;
-  transition: color 0.16s ease, border-color 0.16s ease;
-}
-
-.work__toggle-btn:hover {
-  color: var(--ink);
-}
-
-.work__toggle-btn[aria-selected="true"] {
-  color: var(--accent-deep);
-  border-color: var(--accent);
-}
-
-.work__panel-frame {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  max-height: 460px;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
-  background: var(--paper-sunk);
-}
-
-.work__panel-frame iframe,
-.work__panel-frame img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-}
-
-.work__panel-frame img {
-  object-fit: cover;
-}
-
-.work__panel-note {
-  margin: 0;
-  max-width: var(--measure);
-  color: var(--muted);
-  font-size: var(--fs-small);
-  line-height: 1.5;
-}
+/* Panel chrome (.work__panel*) is co-located in WorkFigure.astro; see ADR 0004. */
 
 @media (max-width: 760px) {
   .work--figure {
     grid-template-columns: 1fr;
     row-gap: 1.15rem;
-  }
-
-  .work__panel-frame {
-    aspect-ratio: 4 / 3;
   }
 }
 
