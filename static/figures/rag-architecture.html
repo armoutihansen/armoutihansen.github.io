@@ -12,52 +12,82 @@
   html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
   .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
         height:100vh;gap:12px;padding:8px 12px;box-sizing:border-box}
-  svg{width:100%;height:auto;max-height:80%}
+  svg{width:100%;height:auto;max-height:82%}
+
+  /* Grouping band behind the three parallel retrieval lanes — a dashed hairline
+     and a barely-there fill so it reads as "these run in parallel and converge",
+     not as another node. */
+  .band{fill:color-mix(in srgb,var(--ink) 4%,transparent);
+        stroke:var(--line);stroke-width:1.2;stroke-dasharray:3 5;stroke-opacity:.7}
+  .band-label{fill:color-mix(in srgb,var(--ink) 55%,transparent);font-size:11px;
+              font-weight:600;letter-spacing:0.16em;text-transform:uppercase}
+  .sublabel{fill:color-mix(in srgb,var(--ink) 52%,transparent);font-size:10px;
+            font-weight:500;letter-spacing:0.08em}
+
   .node rect{fill:rgba(138,131,112,0.06);stroke:var(--line);stroke-width:1.4;
              transition:fill .15s ease,stroke .15s ease}
   .node text{fill:var(--ink);font-size:12px;font-weight:500;letter-spacing:0.05em;
              text-transform:uppercase;pointer-events:none;transition:fill .15s ease}
-  .edge{stroke:var(--line);stroke-width:1.6;fill:none;transition:stroke .15s ease,stroke-width .15s ease}
-  .node{cursor:default}
-  .node.active rect{stroke:var(--amber);stroke-width:2;fill:color-mix(in srgb,var(--amber) 14%,transparent)}
+  .node{cursor:pointer}
+
+  /* The output node carries a faint amber by default so the eye lands on the
+     end of the pipeline; hover/tap deepens it like any other stage. */
+  .node.out rect{fill:color-mix(in srgb,var(--amber) 9%,transparent);
+                 stroke:color-mix(in srgb,var(--amber) 50%,var(--line))}
+
+  .edge{stroke:var(--line);stroke-width:1.6;fill:none;
+        transition:stroke .15s ease,stroke-width .15s ease}
+
+  /* active/lit defined last so they win over .out on the output node. */
+  .node.active rect{stroke:var(--amber);stroke-width:2;fill:color-mix(in srgb,var(--amber) 16%,transparent)}
   .node.active text{fill:var(--amber)}
   .edge.lit{stroke:var(--amber);stroke-width:2.4}
+
   .cap{margin:0;color:var(--ink);font-size:12.5px;font-weight:500;text-align:center;
        min-height:1.3em;letter-spacing:0.02em}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <svg viewBox="0 0 980 350" role="img" aria-label="RAG search engine pipeline: query and image inputs through retrieval, fusion, reranking, and retrieval-augmented generation">
+  <svg viewBox="0 0 1000 360" role="img" aria-label="RAG search engine pipeline: text and image queries run through three parallel retrieval lanes — lexical (BM25), semantic (embeddings), and visual (CLIP) — that converge into reciprocal-rank fusion, reranking, and a retrieval-augmented answer">
     <defs>
       <marker id="arrow" markerWidth="7" markerHeight="7" refX="5.5" refY="3" orient="auto" markerUnits="userSpaceOnUse">
         <path d="M0,0 L6,3 L0,6 z" fill="context-stroke" />
       </marker>
     </defs>
 
+    <!-- retrieval grouping band + header -->
+    <rect class="band" x="304" y="42" width="188" height="288" rx="16" />
+    <text class="band-label" x="398" y="30" text-anchor="middle">Retrieval</text>
+
+    <!-- lane sublabels (legible without hover) -->
+    <text class="sublabel" x="396" y="114" text-anchor="middle">lexical</text>
+    <text class="sublabel" x="396" y="216" text-anchor="middle">semantic</text>
+    <text class="sublabel" x="396" y="318" text-anchor="middle">visual</text>
+
     <!-- edges (drawn first, under nodes) -->
-    <path class="edge" id="e_q_enh"    d="M125,130 L178,130" marker-end="url(#arrow)" />
-    <path class="edge" id="e_enh_bm"   d="M290,130 L353,70"  marker-end="url(#arrow)" />
-    <path class="edge" id="e_enh_emb"  d="M290,130 L353,175" marker-end="url(#arrow)" />
-    <path class="edge" id="e_img_clip" d="M125,280 L353,280" marker-end="url(#arrow)" />
-    <path class="edge" id="e_bm_rrf"   d="M465,70  L533,175" marker-end="url(#arrow)" />
-    <path class="edge" id="e_emb_rrf"  d="M465,175 L533,175" marker-end="url(#arrow)" />
-    <path class="edge" id="e_clip_rrf" d="M465,280 L533,175" marker-end="url(#arrow)" />
-    <path class="edge" id="e_rrf_rer"  d="M645,175 L693,175" marker-end="url(#arrow)" />
-    <path class="edge" id="e_rer_rag"  d="M805,175 L843,175" marker-end="url(#arrow)" />
+    <path class="edge" id="e_q_enh"    d="M132,112 L166,112" marker-end="url(#arrow)" />
+    <path class="edge" id="e_enh_bm"   d="M276,112 L320,78"  marker-end="url(#arrow)" />
+    <path class="edge" id="e_enh_emb"  d="M276,112 L320,180" marker-end="url(#arrow)" />
+    <path class="edge" id="e_img_clip" d="M132,282 L320,282" marker-end="url(#arrow)" />
+    <path class="edge" id="e_bm_rrf"   d="M470,78  L538,180" marker-end="url(#arrow)" />
+    <path class="edge" id="e_emb_rrf"  d="M470,180 L538,180" marker-end="url(#arrow)" />
+    <path class="edge" id="e_clip_rrf" d="M470,282 L538,180" marker-end="url(#arrow)" />
+    <path class="edge" id="e_rrf_rer"  d="M660,180 L698,180" marker-end="url(#arrow)" />
+    <path class="edge" id="e_rer_rag"  d="M812,180 L850,180" marker-end="url(#arrow)" />
 
     <!-- nodes -->
-    <g class="node" data-id="query"><rect x="15"  y="109" width="110" height="42" rx="8"/><text x="70"  y="130" text-anchor="middle" dominant-baseline="central">Query</text></g>
-    <g class="node" data-id="image"><rect x="15"  y="259" width="110" height="42" rx="8"/><text x="70"  y="280" text-anchor="middle" dominant-baseline="central">Image</text></g>
-    <g class="node" data-id="enhance"><rect x="180" y="109" width="110" height="42" rx="8"/><text x="235" y="130" text-anchor="middle" dominant-baseline="central">Enhance</text></g>
-    <g class="node" data-id="bm25"><rect x="355" y="49"  width="110" height="42" rx="8"/><text x="410" y="70"  text-anchor="middle" dominant-baseline="central">BM25</text></g>
-    <g class="node" data-id="embed"><rect x="355" y="154" width="110" height="42" rx="8"/><text x="410" y="175" text-anchor="middle" dominant-baseline="central">Embeddings</text></g>
-    <g class="node" data-id="clip"><rect x="355" y="259" width="110" height="42" rx="8"/><text x="410" y="280" text-anchor="middle" dominant-baseline="central">CLIP</text></g>
-    <g class="node" data-id="rrf"><rect x="535" y="154" width="110" height="42" rx="8"/><text x="590" y="175" text-anchor="middle" dominant-baseline="central">RRF fusion</text></g>
-    <g class="node" data-id="rerank"><rect x="695" y="154" width="110" height="42" rx="8"/><text x="750" y="175" text-anchor="middle" dominant-baseline="central">Rerank</text></g>
-    <g class="node" data-id="rag"><rect x="845" y="154" width="120" height="42" rx="8"/><text x="905" y="175" text-anchor="middle" dominant-baseline="central">RAG answer</text></g>
+    <g class="node" data-id="query"><rect x="24"  y="92"  width="108" height="40" rx="8"/><text x="78"  y="112" text-anchor="middle" dominant-baseline="central">Query</text></g>
+    <g class="node" data-id="image"><rect x="24"  y="262" width="108" height="40" rx="8"/><text x="78"  y="282" text-anchor="middle" dominant-baseline="central">Image</text></g>
+    <g class="node" data-id="enhance"><rect x="168" y="92"  width="108" height="40" rx="8"/><text x="222" y="112" text-anchor="middle" dominant-baseline="central">Enhance</text></g>
+    <g class="node" data-id="bm25"><rect x="322" y="58"  width="148" height="40" rx="8"/><text x="396" y="78"  text-anchor="middle" dominant-baseline="central">BM25</text></g>
+    <g class="node" data-id="embed"><rect x="322" y="160" width="148" height="40" rx="8"/><text x="396" y="180" text-anchor="middle" dominant-baseline="central">Embeddings</text></g>
+    <g class="node" data-id="clip"><rect x="322" y="262" width="148" height="40" rx="8"/><text x="396" y="282" text-anchor="middle" dominant-baseline="central">CLIP</text></g>
+    <g class="node" data-id="rrf"><rect x="540" y="160" width="120" height="40" rx="8"/><text x="600" y="180" text-anchor="middle" dominant-baseline="central">RRF fusion</text></g>
+    <g class="node" data-id="rerank"><rect x="700" y="160" width="112" height="40" rx="8"/><text x="756" y="180" text-anchor="middle" dominant-baseline="central">Rerank</text></g>
+    <g class="node out" data-id="rag"><rect x="852" y="160" width="126" height="40" rx="8"/><text x="915" y="180" text-anchor="middle" dominant-baseline="central">RAG answer</text></g>
   </svg>
-  <p class="cap" id="cap">Hover a stage to see what it does.</p>
+  <p class="cap" id="cap">Hover or tap a stage to see what it does.</p>
 </div>
 
 <script>
@@ -65,10 +95,10 @@
     query:   "The user's text query.",
     image:   "Or an image as the query — multimodal search.",
     enhance: "LLM query enhancement: spell-correct, rewrite, expand.",
-    bm25:    "Lexical retrieval — probabilistic BM25 keyword ranking.",
-    embed:   "Semantic retrieval — sentence-transformer vector search.",
-    clip:    "Image search via CLIP vision embeddings.",
-    rrf:     "Reciprocal-rank fusion blends the ranked lists.",
+    bm25:    "Lexical lane — probabilistic BM25 keyword ranking.",
+    embed:   "Semantic lane — sentence-transformer vector search.",
+    clip:    "Visual lane — image search via CLIP vision embeddings.",
+    rrf:     "Reciprocal-rank fusion blends the three ranked lists.",
     rerank:  "Cross-encoder rescoring of the fused candidates.",
     rag:     "Grounded answer with citations from the top results."
   };
@@ -83,24 +113,35 @@
     rerank:  ["e_rrf_rer","e_rer_rag"],
     rag:     ["e_rer_rag"]
   };
-  const DEFAULT = "Hover a stage to see what it does.";
+  const DEFAULT = "Hover or tap a stage to see what it does.";
   const cap = document.getElementById("cap");
-  document.querySelectorAll(".node").forEach((n) => {
-    const id = n.dataset.id;
-    const on = () => {
-      n.classList.add("active");
-      (edges[id] || []).forEach((e) => document.getElementById(e)?.classList.add("lit"));
-      cap.textContent = caps[id] || DEFAULT;
-    };
-    const off = () => {
-      n.classList.remove("active");
-      (edges[id] || []).forEach((e) => document.getElementById(e)?.classList.remove("lit"));
-      cap.textContent = DEFAULT;
-    };
-    n.addEventListener("mouseenter", on);
-    n.addEventListener("mouseleave", off);
-  });
+  const nodes = [...document.querySelectorAll(".node")];
 
+  function clearAll() {
+    nodes.forEach((x) => x.classList.remove("active"));
+    document.querySelectorAll(".edge").forEach((e) => e.classList.remove("lit"));
+    cap.textContent = DEFAULT;
+  }
+  function show(n) {
+    const id = n.dataset.id;
+    n.classList.add("active");
+    (edges[id] || []).forEach((e) => document.getElementById(e)?.classList.add("lit"));
+    cap.textContent = caps[id] || DEFAULT;
+  }
+
+  // pinned: a tapped node stays lit until tapped again or another node/background
+  // is tapped — so touch devices (no hover) can explore the pipeline too.
+  let pinned = null;
+  nodes.forEach((n) => {
+    n.addEventListener("mouseenter", () => { if (!pinned) show(n); });
+    n.addEventListener("mouseleave", () => { if (!pinned) clearAll(); });
+    n.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      if (pinned === n) { pinned = null; clearAll(); return; }
+      clearAll(); show(n); pinned = n;
+    });
+  });
+  document.addEventListener("click", () => { if (pinned) { pinned = null; clearAll(); } });
 </script>
 <!-- Figure embed channel: theme sync + ready handshake (see /figures/_embed.js). -->
 <script src="/figures/_embed.js"></script>
