@@ -6,48 +6,14 @@
 # in that repo. Adjust CSV/OUT below if your local paths differ, then run:
 #   uv run --with plotly --with pandas --with numpy python scripts/gen_efficiency_wages_fig.py
 #
+import os, sys
 import numpy as np, pandas as pd
 import plotly.graph_objects as go
 
-
-def theme_block(roles):
-    """<style>+<script> injected into the Plotly HTML <head>: background follows
-    the host theme, and the plot recolors (warm, amber-on-neutral) per theme."""
-    return (
-        "<style>:root{--emb-bg:#ece6d7}"
-        "@media (prefers-color-scheme:dark){:root{--emb-bg:#1c1912}}"
-        ':root[data-theme="light"]{--emb-bg:#ece6d7}:root[data-theme="dark"]{--emb-bg:#1c1912}'
-        "html,body{margin:0;background:var(--emb-bg)}"
-        ".plot-container,.svg-container{background:transparent!important}</style>"
-        # Shared embed-side contract (theme sync + emb-ready handshake); the one
-        # canonical definition lives in static/figures/_embed.js.
-        '<script src="/figures/_embed.js"></script>'
-        "<script>(function(){"
-        "var PAL={light:{ink:'#5f594c',grid:'rgba(120,113,92,0.22)',axis:'rgba(120,113,92,0.55)',"
-        "c0:'#9a6310',c1:'#6f664c',c2:'#a8572b'},"
-        "dark:{ink:'#b1a98f',grid:'rgba(138,131,112,0.2)',axis:'rgba(138,131,112,0.5)',"
-        "c0:'#edb24e',c1:'#9a9070',c2:'#d98a52'}};"
-        "var ROLES=" + roles + ";"
-        "function rgba(h,a){var n=parseInt(h.slice(1),16);"
-        "return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}"
-        "function curT(){return document.documentElement.dataset.theme||"
-        "(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}"
-        "function apply(){var gd=document.querySelector('.plotly-graph-div');"
-        "if(!gd||!window.Plotly){return setTimeout(apply,60);}var p=PAL[curT()]||PAL.dark;"
-        "Plotly.relayout(gd,{'font.color':p.ink,'legend.font.color':p.ink,"
-        "'xaxis.gridcolor':p.grid,'xaxis.linecolor':p.axis,'xaxis.tickcolor':p.axis,"
-        "'xaxis.tickfont.color':p.ink,'xaxis.title.font.color':p.ink,"
-        "'yaxis.gridcolor':p.grid,'yaxis.linecolor':p.axis,'yaxis.tickcolor':p.axis,"
-        "'yaxis.tickfont.color':p.ink,'yaxis.title.font.color':p.ink});"
-        "if(gd.layout&&gd.layout.updatemenus&&gd.layout.updatemenus.length){"
-        "Plotly.relayout(gd,{'updatemenus[0].font.color':p.ink,'updatemenus[0].bordercolor':p.axis});}"
-        "ROLES.forEach(function(r){var c=p[r[2]];"
-        "if(r[1]==='line'){Plotly.restyle(gd,{'line.color':[c],'marker.color':[c]},[r[0]]);}"
-        "else{Plotly.restyle(gd,{'fillcolor':[rgba(c,0.14)]},[r[0]]);}});}"
-        "apply();new MutationObserver(apply).observe(document.documentElement,"
-        "{attributes:true,attributeFilter:['data-theme']});"
-        "})();</script>"
-    )
+# Shared figure palette + theme block (single source of truth for the
+# warm-charcoal + amber values; this generator supplies only its ROLES).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from figure_theme import theme_block
 
 
 CSV = "/Users/jesper/repos/efficiency-wages/data/derived/agent_wage_long.csv"

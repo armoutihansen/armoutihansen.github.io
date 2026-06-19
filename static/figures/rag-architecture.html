@@ -4,12 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>RAG Search Engine — architecture</title>
+<!-- Canonical warm-charcoal + amber palette tokens (--ink/--amber/--line/--emb-bg),
+     single-sourced from scripts/figure_theme.py -> static/figures/_palette.css. -->
+<link rel="stylesheet" href="/figures/_palette.css" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&display=swap');
-  :root { --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
-  @media (prefers-color-scheme:dark){ :root{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; } }
-  :root[data-theme="light"]{ --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
-  :root[data-theme="dark"]{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; }
   html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
   .wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;
         height:100vh;gap:12px;padding:8px 12px;box-sizing:border-box}

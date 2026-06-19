@@ -1,0 +1,9 @@
+/* Figure palette — GENERATED from scripts/figure_theme.py (PAL). Do not
+ * hand-edit; change the palette there and re-run `python scripts/figure_theme.py`.
+ * This is the canonical warm-charcoal + amber token source shared by the
+ * hand-written figures. Figures <link> it, then may override --line/add
+ * figure-local tokens (e.g. --dim) locally. */
+:root { --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
+@media (prefers-color-scheme:dark){ :root{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; } }
+:root[data-theme="light"]{ --ink:#5f594c; --amber:#9a6310; --line:rgba(120,113,92,0.55); --emb-bg:#ece6d7; }
+:root[data-theme="dark"]{ --ink:#b1a98f; --amber:#edb24e; --line:rgba(138,131,112,0.5); --emb-bg:#1c1912; }

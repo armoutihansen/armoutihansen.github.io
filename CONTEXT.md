@@ -59,6 +59,19 @@ _Avoid_: re-inlining the handshake into individual figures, the generators, or t
 (the drift this consolidated); putting figure-specific data or palette logic in the
 channel.
 
+**Figure palette**:
+The warm-charcoal + amber tokens every figure recolors with — a concern of its own,
+distinct from the embed channel (the channel only carries the theme *signal*; the colours
+are not its business). One canonical source: `scripts/figure_theme.py` holds the values as
+Python data. From it, the generators inject `theme_block(ROLES)` (the `<style>` + recolor
+`<script>`, supplying only their per-figure `ROLES`), and `write_palette_css()` emits
+`static/figures/_palette.css`, which the hand-written figures `<link>` and reference as
+`var(--ink)`/`var(--amber)`/… instead of re-declaring the tokens. Two delivery mechanisms,
+one set of values. Adding a generated figure needs only its `ROLES`; a palette change is
+edited in `figure_theme.py` and re-emitted (re-run the two generators and the module).
+_Avoid_: transcribing hex/rgba values into a generator, a figure, or the CSS by hand
+(the drift this consolidated); folding the palette into the embed channel.
+
 ## Visual Direction
 
 **Aesthetic axis — "Premium dark, one interactive quant hero"** (see ADR 0003):
