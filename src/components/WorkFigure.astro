@@ -1,0 +1,48 @@
+---
+import type { Project } from "../data/projects";
+
+// The illustration panel for a Work item: caption (title, legend, optional
+// metric toggle), the embedded figure or image, and a note. Rendered only when
+// a project carries figure data. Its theme sync and toggle wiring are the host
+// side of the figure embed channel (src/scripts/figure-embed-host.ts); the
+// classes here are the contract that host queries.
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<figure class="work__panel">
+  <figcaption class="work__panel-cap">
+    {project.figureTitle && <span class="work__panel-title">{project.figureTitle}</span>}
+    {project.legend && (
+      <span class="work__legend">
+        {project.legend.map((l) => (
+          <span><i style={`background:${l.color}`} />{l.label}</span>
+        ))}
+      </span>
+    )}
+    {project.controls && (
+      <span class="work__toggle" role="tablist" aria-label={project.figureTitle}>
+        {project.controls.map((c, i) => (
+          <button
+            type="button"
+            class="work__toggle-btn"
+            role="tab"
+            data-key={c.key}
+            aria-selected={i === 0 ? "true" : "false"}
+          >{c.label}</button>
+        ))}
+      </span>
+    )}
+  </figcaption>
+  <div class="work__panel-frame">
+    {project.embed ? (
+      <iframe src={project.embed} title={project.imageAlt ?? project.title} loading="lazy" />
+    ) : (
+      <img src={project.image} alt={project.imageAlt ?? project.title} loading="lazy" decoding="async" />
+    )}
+  </div>
+  {project.figureNote && <p class="work__panel-note">{project.figureNote}</p>}
+</figure>

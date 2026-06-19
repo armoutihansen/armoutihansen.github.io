@@ -912,11 +912,6 @@ main {
   color: var(--faint);
 }
 
-.work__viz {
-  margin-top: 1.1rem;
-  max-width: 30rem;
-}
-
 /* ----- publications ----- */
 .pub {
   display: grid;
