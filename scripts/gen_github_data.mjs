@@ -3,6 +3,7 @@
 // static, so the site makes no GitHub API calls at build or request time.
 //   node scripts/gen_github_data.mjs
 import { writeFileSync } from "node:fs";
+import { LANG_ALIASES, EXCLUDED_LANGS, rankLanguages } from "./lib/languages.mjs";
 
 const USER = "armoutihansen";
 
@@ -59,11 +60,21 @@ const repos = await api(`/users/${USER}/repos?per_page=100&sort=pushed&type=owne
 const owned = repos.filter((r) => !r.fork && !r.archived);
 const contrib = await contributions();
 
-const langCount = {};
-for (const r of owned) if (r.language) langCount[r.language] = (langCount[r.language] || 0) + 1;
-const ranked = Object.entries(langCount).sort((a, b) => b[1] - a[1]);
-const total = ranked.reduce((s, [, n]) => s + n, 0) || 1;
-const languages = ranked.slice(0, 5).map(([name, n]) => ({ name, pct: Math.round((100 * n) / total) }));
+// Aggregate GitHub's per-repo language byte counts into one totals map. One
+// extra API call per owned repo; the languages endpoint returns { lang: bytes }.
+const byteTotals = {};
+for (const r of owned) {
+  const langs = await api(`/repos/${r.full_name}/languages`);
+  for (const [name, bytes] of Object.entries(langs)) {
+    byteTotals[name] = (byteTotals[name] || 0) + bytes;
+  }
+}
+
+const languages = rankLanguages(byteTotals, {
+  aliases: LANG_ALIASES,
+  exclude: EXCLUDED_LANGS,
+  topN: 5,
+});
 
 const out = {
   user: USER,
@@ -82,3 +93,6 @@ console.log(
     `langs=${languages.map((l) => `${l.name}:${l.pct}`).join(",")} lastPush=${out.lastPush} ` +
     `contrib=${contrib.total} weeks=${contrib.weeks.length}`,
 );
+if (process.env.DEBUG_LANG_TOTALS) {
+  console.error("byteTotals=" + JSON.stringify(byteTotals, null, 2));
+}
