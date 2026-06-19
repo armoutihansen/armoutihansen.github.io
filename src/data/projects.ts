@@ -102,13 +102,23 @@ export const projects: Project[] = [
     title: "choicekit",
     primaryGroup: "Applied analysis & modeling",
     category: "Python package",
-    status: "Early-stage",
-    summary: "A Python package for reusable choice-modeling workflows, in development.",
-    problem: "Choice-modeling code gets hard to trust when every project restarts from a loose script.",
-    approach: "Move estimation machinery into tested package code and leave project files for data and interpretation.",
-    result: "Early, but aimed at a clean boundary between modeling tools and one-off analysis.",
-    tools: ["Python", "choice modeling", "package design"],
-    href: "https://github.com/armoutihansen/choicekit"
+    status: "In development",
+    summary:
+      "A scikit-learn-compatible package for discrete choice modeling on wide-form data, in development.",
+    problem:
+      "Discrete-choice packages expect long-form data and their own fit loops, so they sit outside scikit-learn's cross-validation, pipelines, and tuning.",
+    approach:
+      "Estimators inherit from scikit-learn's BaseEstimator and read wide-form X, y — one row per choice situation, {alt}_{feature} columns — so they drop straight into GridSearchCV, cross-validation, and pipelines.",
+    result:
+      "Intended interface: a ConditionalLogitClassifier you tune with GridSearchCV like any sklearn model. Early-stage and not yet released.",
+    tools: ["Python", "scikit-learn", "discrete choice", "conditional logit"],
+    href: "https://github.com/armoutihansen/choicekit",
+    embed: "/figures/choicekit-sklearn.html",
+    figureTitle: "sklearn-native usage",
+    figureNote:
+      "Intended interface: a choicekit estimator tuned with GridSearchCV on wide-form X, y — one row per choice situation.",
+    imageAlt:
+      "Code panel: a wide-form choice table feeding a choicekit ConditionalLogitClassifier passed to scikit-learn's GridSearchCV and fit on X, y"
   },
   {
     title: "Efficiency Wages with Motivated Agents",

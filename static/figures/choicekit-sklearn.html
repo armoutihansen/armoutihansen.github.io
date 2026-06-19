@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>choicekit — scikit-learn-native usage</title>
+<!-- Canonical warm-charcoal + amber palette tokens (--ink/--amber/--line/--emb-bg),
+     single-sourced from scripts/figure_theme.py -> static/figures/_palette.css.
+     This figure overrides --line (a lighter hairline) and adds the figure-local
+     --dim token below, after the link, so they win the cascade. -->
+<link rel="stylesheet" href="/figures/_palette.css" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+  :root { --dim:#6d6757; --line:rgba(120,113,92,0.5); }
+  @media (prefers-color-scheme:dark){ :root{ --dim:#8a8370; --line:rgba(138,131,112,0.4); } }
+  :root[data-theme="light"]{ --dim:#6d6757; --line:rgba(120,113,92,0.5); }
+  :root[data-theme="dark"]{ --dim:#8a8370; --line:rgba(138,131,112,0.4); }
+  html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
+  .wrap{display:flex;flex-direction:column;justify-content:center;height:100vh;
+        box-sizing:border-box;padding:12px 18px;gap:9px}
+  .bar{display:flex;justify-content:space-between;align-items:baseline;
+       font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)}
+  .bar .tag{border:1px solid var(--line);border-radius:5px;padding:1px 7px}
+
+  /* wide-form data tell: one sklearn row = one choice situation */
+  .wide{border:1px solid var(--line);border-radius:6px;overflow:hidden;
+        font-size:10.5px;color:var(--ink)}
+  .wide table{border-collapse:collapse;width:100%}
+  .wide th,.wide td{padding:3px 8px;text-align:right;white-space:nowrap}
+  .wide thead th{color:var(--amber);font-weight:600;letter-spacing:0.02em;
+                 border-bottom:1px solid var(--line)}
+  .wide tbody tr + tr td{border-top:1px solid color-mix(in srgb,var(--line) 55%,transparent)}
+  .wide .yh{color:var(--amber)}
+  .wide .yc{color:var(--amber);font-weight:600;text-align:left}
+  .wide .lab{color:var(--dim);text-align:left}
+
+  .code{font-size:12px;line-height:1.66;color:var(--ink)}
+  .ln{opacity:0;transform:translateY(3px);transition:opacity .22s ease,transform .22s ease}
+  .ln.show{opacity:1;transform:none}
+  .kw{color:var(--amber)}              /* keywords: from import */
+  .fn{color:var(--ink);font-weight:600}/* class / call names */
+  .st{color:var(--dim)}                /* strings, params */
+  .cm{color:var(--dim);font-style:italic}
+  .cursor{display:inline-block;width:0.6em;height:1.05em;vertical-align:-0.18em;
+          background:var(--amber);opacity:0;animation:blink 1s step-end infinite}
+  .cursor.on{opacity:1}
+  @keyframes blink{50%{opacity:0}}
+  .ctl{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--dim);
+       background:none;border:0;cursor:pointer;padding:0;font-family:inherit}
+  .ctl:hover{color:var(--amber)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar"><span>choicekit · wide-form X, y</span><span class="tag">intended interface</span></div>
+
+  <!-- One row = one complete choice situation. Columns are {alt}_{feature}; y is the chosen alternative. -->
+  <div class="wide">
+    <table>
+      <thead>
+        <tr>
+          <th class="lab">situation</th>
+          <th>car_price</th><th>train_price</th><th>bike_price</th>
+          <th>car_time</th><th>train_time</th>
+          <th class="yh">y</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="lab">0</td><td>15</td><td>5</td><td>0</td><td>20</td><td>30</td><td class="yc">train</td></tr>
+        <tr><td class="lab">1</td><td>12</td><td>6</td><td>0</td><td>15</td><td>28</td><td class="yc">car</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code" id="code">
+    <div class="ln"><span class="kw">from</span> choicekit <span class="kw">import</span> <span class="fn">ConditionalLogitClassifier</span></div>
+    <div class="ln"><span class="kw">from</span> sklearn.model_selection <span class="kw">import</span> <span class="fn">GridSearchCV</span></div>
+    <div class="ln">&nbsp;</div>
+    <div class="ln"><span class="cm"># inherits BaseEstimator — drops into the sklearn ecosystem</span></div>
+    <div class="ln">search = <span class="fn">GridSearchCV</span>(</div>
+    <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">ConditionalLogitClassifier</span>(),</div>
+    <div class="ln">&nbsp;&nbsp;&nbsp;&nbsp;<span class="st">{<span class="st">"l2"</span>: [<span class="st">0.0</span>, <span class="st">0.1</span>, <span class="st">1.0</span>]}</span>, cv=<span class="st">5</span>,</div>
+    <div class="ln">)</div>
+    <div class="ln">search.<span class="fn">fit</span>(X, y)<span class="cm">&nbsp;&nbsp;# X: wide-form frame, y: chosen alt</span></div>
+    <div class="ln"><span class="kw">→</span> best l2=<span class="st">0.1</span> · mean CV log-loss <span class="st">0.71</span><span class="cursor" id="cur"></span></div>
+  </div>
+
+  <div class="bar"><span></span><button class="ctl" id="replay">↻ replay</button></div>
+</div>
+
+<script>
+  const lines = [...document.querySelectorAll(".ln")];
+  const cur = document.getElementById("cur");
+  let timers = [];
+  function play() {
+    timers.forEach(clearTimeout); timers = [];
+    lines.forEach((l) => l.classList.remove("show"));
+    cur.classList.add("on");
+    lines.forEach((l, i) => {
+      timers.push(setTimeout(() => {
+        l.classList.add("show");
+        if (i === lines.length - 1) setTimeout(() => cur.classList.remove("on"), 1400);
+      }, 300 * (i + 1)));
+    });
+  }
+  document.getElementById("replay").addEventListener("click", play);
+  play();
+
+</script>
+<!-- Figure embed channel: theme sync + ready handshake (see /figures/_embed.js). -->
+<script src="/figures/_embed.js"></script>
+</body>
+</html>
