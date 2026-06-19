@@ -1,17 +1,8 @@
 ---
+import type { Publication } from "../data/publications";
+
 interface Props {
-  publication: {
-    title: string;
-    authors: string;
-    venue: string;
-    year: string;
-    details: string;
-    href: string;
-    links?: { label: string; href: string }[];
-    type: string;
-    abstract: string;
-    cover?: string;
-  };
+  publication: Publication;
   compact?: boolean;
 }
 

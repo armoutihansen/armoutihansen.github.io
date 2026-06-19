@@ -1,25 +1,9 @@
 ---
 import { pad2 } from "../data/format";
+import type { Project } from "../data/projects";
 
 interface Props {
-  project: {
-    title: string;
-    category: string;
-    status: string;
-    summary: string;
-    problem?: string;
-    approach?: string;
-    result?: string;
-    tools: string[];
-    href: string;
-    embed?: string;
-    image?: string;
-    imageAlt?: string;
-    figureTitle?: string;
-    figureNote?: string;
-    legend?: { label: string; color: string }[];
-    controls?: { key: string; label: string }[];
-  };
+  project: Project;
   index?: number;
   figure?: boolean;
   compact?: boolean;

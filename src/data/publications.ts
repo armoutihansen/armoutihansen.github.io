@@ -1,4 +1,17 @@
-export const publications = [
+export interface Publication {
+  title: string;
+  authors: string;
+  venue: string;
+  year: string;
+  details: string;
+  href: string;
+  links?: { label: string; href: string }[];
+  type: "Publication" | "Working paper" | "Research project";
+  abstract: string;
+  cover?: string;
+}
+
+export const publications: Publication[] = [
   {
     title: "Efficiency Wages with Motivated Agents",
     authors: "Jesper Armouti-Hansen, Lea Cassar, Anna Dereky, and Florian Engl",

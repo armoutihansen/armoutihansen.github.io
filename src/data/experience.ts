@@ -1,4 +1,13 @@
-export const experience = [
+export interface ExperienceItem {
+  role: string;
+  organization: string;
+  logo?: string;
+  period: string;
+  location: string;
+  bullets: string[];
+}
+
+export const experience: ExperienceItem[] = [
   {
     role: "Data Scientist",
     organization: "AXA Konzern AG",

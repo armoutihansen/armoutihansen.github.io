@@ -1,13 +1,8 @@
 ---
+import type { ExperienceItem } from "../data/experience";
+
 interface Props {
-  item: {
-    role: string;
-    organization: string;
-    period: string;
-    location: string;
-    bullets: string[];
-    logo?: string;
-  };
+  item: ExperienceItem;
 }
 
 const { item } = Astro.props;
