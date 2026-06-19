@@ -41,6 +41,52 @@ export const capabilities = [
   }
 ];
 
+export interface EducationEntry {
+  degree: string;
+  institution: string;
+  period: string;
+  location: string;
+  detail: string;
+  logo?: string;
+}
+
+export const education: EducationEntry[] = [
+  {
+    degree: "PhD in Economics (Dr. rer. pol.)",
+    institution: "University of Cologne",
+    period: "2015 – 2021",
+    location: "Cologne, Germany",
+    detail: "Summa cum laude. Focus on microeconomics, statistics, and econometrics.",
+    logo: "/images/logos/university-of-cologne-wordmark.jpg"
+  },
+  {
+    degree: "MSc International Economics and Public Policy",
+    institution: "University of Mainz",
+    period: "2012 – 2014",
+    location: "Mainz, Germany",
+    detail: "GPA 1.6.",
+    logo: "/images/logos/university-of-mainz.svg"
+  },
+  {
+    degree: "BA Financial Management and Services",
+    institution: "Copenhagen Business Academy",
+    period: "2008 – 2012",
+    location: "Copenhagen, Denmark",
+    detail: "",
+    logo: "/images/logos/copenhagen-business-academy.png"
+  },
+  {
+    degree: "Exchange semester",
+    institution: "European University of Cyprus",
+    period: "2010",
+    location: "Nicosia, Cyprus",
+    detail: "",
+    logo: "/images/logos/european-university-of-cyprus.png"
+  }
+];
+
+export const spokenLanguages: string[] = ["English", "German", "Danish"];
+
 export const skills = {
   languages: ["Python", "R", "SQL", "Stata", "TypeScript"],
   pythonStack: [
@@ -66,3 +112,16 @@ export const skills = {
   ],
   tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "pixi", "JupyterLab", "Linux", "LaTeX"]
 };
+
+export interface SkillGroup {
+  label: string;
+  items: string[];
+}
+
+export const skillGroups: SkillGroup[] = [
+  { label: "Programming languages", items: skills.languages },
+  { label: "Python stack", items: skills.pythonStack },
+  { label: "Methods", items: skills.methods },
+  { label: "Tools & workflow", items: skills.tools },
+  { label: "Languages", items: spokenLanguages }
+];

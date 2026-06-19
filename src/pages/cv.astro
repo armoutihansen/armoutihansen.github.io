@@ -3,53 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ExperienceEntry from "../components/ExperienceEntry.astro";
 import { experience } from "../data/experience";
-import { capabilities, profile, skills } from "../data/profile";
+import { capabilities, education, profile, skillGroups } from "../data/profile";
 import { teaching } from "../data/teaching";
-
-const education = [
-  {
-    degree: "PhD in Economics (Dr. rer. pol.)",
-    institution: "University of Cologne",
-    period: "2015 – 2021",
-    location: "Cologne, Germany",
-    detail: "Summa cum laude. Focus on microeconomics, statistics, and econometrics.",
-    logo: "/images/logos/university-of-cologne-wordmark.jpg"
-  },
-  {
-    degree: "MSc International Economics and Public Policy",
-    institution: "University of Mainz",
-    period: "2012 – 2014",
-    location: "Mainz, Germany",
-    detail: "GPA 1.6.",
-    logo: "/images/logos/university-of-mainz.svg"
-  },
-  {
-    degree: "BA Financial Management and Services",
-    institution: "Copenhagen Business Academy",
-    period: "2008 – 2012",
-    location: "Copenhagen, Denmark",
-    detail: "",
-    logo: "/images/logos/copenhagen-business-academy.png"
-  },
-  {
-    degree: "Exchange semester",
-    institution: "European University of Cyprus",
-    period: "2010",
-    location: "Nicosia, Cyprus",
-    detail: "",
-    logo: "/images/logos/european-university-of-cyprus.png"
-  }
-];
-
-const spokenLanguages = ["English", "German", "Danish"];
-
-const skillGroups = [
-  { label: "Programming languages", items: skills.languages },
-  { label: "Python stack", items: skills.pythonStack },
-  { label: "Methods", items: skills.methods },
-  { label: "Tools & workflow", items: skills.tools },
-  { label: "Languages", items: spokenLanguages }
-];
 ---
 
 <BaseLayout title="CV" description="CV for Jesper Armouti-Hansen — quantitative analyst with an economics PhD, working in statistical modeling, machine learning, and model evaluation.">
