@@ -133,7 +133,10 @@ serious work. On the home, the four featured projects use a **compact** variant 
 entry — index, kind, title, summary, tools, no Problem/Approach/Result — laid out as a
 two-column (2×2) grid in the capabilities rhythm (column-first fill, aligned row
 dividers); the full Problem/Approach/Result form is reserved for `/projects/`, the
-inspect layer.
+inspect layer. On `/projects/`, each project's illustration is an **integrated tonal
+surface** — the figure's own `--emb-bg` tint rendered edge-to-edge with sharp corners,
+no border/shadow/radius/card fill — with its caption and note on the page background;
+only the interactive hero deck keeps a frame (ADR 0006). Publication covers keep theirs.
 
 **Item shape (Research)**:
 Compact bibliographic entries: mono `year · venue`, serif title, authors with Jesper's

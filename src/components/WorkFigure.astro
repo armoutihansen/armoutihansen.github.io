@@ -53,15 +53,14 @@ const { project } = Astro.props;
      global.css — only this fully self-contained set lives here. See ADR 0004.
      The panel's placement (.work--figure grid) is WorkItem's concern and stays
      global; this owns the panel's interior. */
+  /* A plain layout grid (caption -> figure -> note), not a card. The box chrome
+     (border, shadow, radius, paper-sunk fill, inset padding) is deliberately
+     gone: the figure's own --emb-bg tint is the single surface, with the
+     caption and note sitting on the page background. See ADR 0006. */
   .work__panel {
     margin: 0;
     display: grid;
     gap: 0.7rem;
-    padding: clamp(0.9rem, 0.6rem + 1vw, 1.3rem);
-    background: var(--paper-sunk);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
   }
 
   .work__panel-cap {
@@ -135,14 +134,16 @@ const { project } = Astro.props;
     border-color: var(--accent);
   }
 
+  /* The integrated tonal surface: no fill or radius of its own, so the figure's
+     own --emb-bg tint renders edge-to-edge with sharp corners. The footprint
+     (aspect-ratio, max-height), the crop (overflow:hidden), and the absolutely
+     -positioned iframe/img fill are kept so row rhythm is unchanged. ADR 0006. */
   .work__panel-frame {
     position: relative;
     width: 100%;
     aspect-ratio: 16 / 10;
     max-height: 460px;
     overflow: hidden;
-    border-radius: var(--radius-sm);
-    background: var(--paper-sunk);
   }
 
   .work__panel-frame iframe,
