@@ -274,11 +274,20 @@ describe("figure-embed asset existence", () => {
     }
   });
 
-  it("excludes external (https) embeds from the local-asset check", () => {
-    // CitiBike uses an external embed URL; it must not be expected on disk.
+  it("hosts every figure in-repo — no embed points at an external host", () => {
+    // Every substantive figure is a committed local file; none depend on an
+    // external host (the CitiBike station-risk map was the last external embed
+    // and is now in-repo).
+    const external = projects
+      .map((p) => p.embed)
+      .filter((e): e is string => typeof e === "string" && /^https?:/.test(e));
+    expect(external).toEqual([]);
+  });
+
+  it("hosts the CitiBike station-risk map in-repo", () => {
     const citibike = byTitle("CitiBike Demand, Risk, and Net Flow");
-    expect(citibike.embed?.startsWith("http")).toBe(true);
-    expect(committedFigurePaths.has(citibike.embed!)).toBe(false);
+    expect(citibike.embed).toBe("/figures/citibike-station-risk.html");
+    expect(committedFigurePaths.has(citibike.embed!)).toBe(true);
   });
 });
 
