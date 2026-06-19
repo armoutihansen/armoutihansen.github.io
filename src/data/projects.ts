@@ -52,15 +52,14 @@ export const projects: Project[] = [
     result: "Three separate measures — demand, imbalance, and exposure-adjusted risk — that a single ranking would have conflated.",
     tools: ["Python", "pandas", "feature engineering", "risk analysis", "forecasting"],
     href: "/DSC/",
-    embed: "https://armoutihansen.xyz/citibike-data-science/src/figures/station_risk_tiers.html",
+    embed: "/figures/citibike-station-risk.html",
     figureTitle: "Station-level crash risk",
-    figureNote: "Each dot is a CitiBike station.",
+    figureNote: "Each dot is a station; amber flags the highest exposure-adjusted per-trip risk.",
     legend: [
-      { label: "Lower", color: "#2f8f3e" },
-      { label: "Medium", color: "#e8932a" },
-      { label: "Higher", color: "#d23b3b" }
+      { label: "Lower", color: "#8a8370" },
+      { label: "Higher", color: "#edb24e" }
     ],
-    imageAlt: "Interactive map of New York with CitiBike stations colored by per-trip crash risk"
+    imageAlt: "Map of New York with 2,567 CitiBike stations as dots, the highest exposure-adjusted per-trip crash-risk stations in amber"
   },
   {
     title: "RAG Search Engine",
