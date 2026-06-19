@@ -237,17 +237,21 @@ const featuredTitles = [
   "The Informativeness of Frequency-Report Scoring Rules"
 ] as const;
 
-// Domain invariants for single-group project data (see CONTEXT.md), enforced at
-// import so every consumer and the build are protected — not just the page that
-// happens to render the projects.
-function assertInvariants(): void {
-  const titles = projects.map((p) => p.title);
+// Domain invariants for single-group project data (see CONTEXT.md), checkable
+// against any arrays so the failure modes can be unit-tested without corrupting
+// the real data. Mirrors the `checkInvariants` shape in publications.ts. The
+// import-time `assertInvariants()` runs this on the live data.
+export function checkInvariants(
+  projectList: Project[],
+  groups: readonly ProjectGroup[]
+): void {
+  const titles = projectList.map((p) => p.title);
   const duplicates = titles.filter((t, i) => titles.indexOf(t) !== i);
   if (duplicates.length > 0) {
     throw new Error(`Duplicate project titles: ${[...new Set(duplicates)].join(", ")}`);
   }
-  const known = new Set<string>(projectGroups.map((g) => g.title));
-  const unknown = projects.map((p) => p.primaryGroup).filter((g) => !known.has(g));
+  const known = new Set<string>(groups.map((g) => g.title));
+  const unknown = projectList.map((p) => p.primaryGroup).filter((g) => !known.has(g));
   if (unknown.length > 0) {
     throw new Error(`Unknown project groups: ${[...new Set(unknown)].join(", ")}`);
   }
@@ -256,6 +260,25 @@ function assertInvariants(): void {
   if (missingFeatured.length > 0) {
     throw new Error(`Featured titles not found in projects: ${missingFeatured.join(", ")}`);
   }
+  // Every substantive project (any group other than the "Also on GitHub" link
+  // group) is illustrated: it must carry an `embed` or `image`. Link-group
+  // entries render as a compact link list, so they legitimately have neither.
+  // See ADR 0005 — a figureless substantive project is demoted to the link
+  // group rather than rendered text-only.
+  const unillustrated = projectList
+    .filter((p) => p.primaryGroup !== LINK_GROUP && !p.embed && !p.image)
+    .map((p) => p.title);
+  if (unillustrated.length > 0) {
+    throw new Error(
+      `Substantive projects with no figure (embed or image): ${unillustrated.join(", ")}`
+    );
+  }
+}
+
+// Enforced at import so every consumer and the build are protected — not just
+// the page that happens to render the projects.
+function assertInvariants(): void {
+  checkInvariants(projects, projectGroups);
 }
 assertInvariants();
 

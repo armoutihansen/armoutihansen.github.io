@@ -4,13 +4,26 @@ import {
   selectedWork,
   featuredProjects,
   projectGroups,
-  type Project
+  checkInvariants,
+  type Project,
+  type ProjectGroupTitle
 } from "./projects";
 // Committed figure sources imported as raw strings (Vite's ?raw), so the
 // embed-channel marker assertions run without Node's fs types — keeping
 // `astro check` clean (no @types/node).
 import choicekitFigure from "../../static/figures/choicekit-sklearn.html?raw";
 import econFigureHtml from "../../static/figures/econ-theories-completeness.html?raw";
+// Every committed figure source under static/figures/, keyed by its served
+// "/figures/<name>" path. Glob (eager) is type-clean without @types/node and
+// lets the embed-asset-existence test assert a file is actually committed.
+const figureFiles = import.meta.glob("../../static/figures/*.html", {
+  eager: true,
+  query: "?raw",
+  import: "default"
+}) as Record<string, string>;
+const committedFigurePaths = new Set(
+  Object.keys(figureFiles).map((p) => p.replace("../../static", ""))
+);
 
 const APPLIED = "Applied analysis & modeling";
 const RESEARCH = "Research & replication";
@@ -20,6 +33,23 @@ function byTitle(title: string): Project {
   const project = projects.find((p) => p.title === title);
   if (!project) throw new Error(`No project titled ${title}`);
   return project;
+}
+
+// A minimal well-formed substantive (non-link-group) entry to mutate per
+// failure-mode test, so we exercise checkInvariants against supplied arrays
+// without corrupting the real data.
+function validProject(overrides: Partial<Project> = {}): Project {
+  return {
+    title: "A Project",
+    primaryGroup: APPLIED,
+    category: "Analysis",
+    status: "Case study",
+    summary: "A one-line summary.",
+    tools: ["Python"],
+    href: "https://example.com/project",
+    embed: "/figures/example.html",
+    ...overrides
+  };
 }
 
 describe("project data invariants", () => {
@@ -186,6 +216,69 @@ describe("Economic Theories & ML figure", () => {
     expect(html).not.toContain("representative agent");
     expect(html).not.toContain("evaluation level");
     expect(html).not.toContain("individual-level");
+  });
+});
+
+describe("checkInvariants", () => {
+  it("passes on the real data", () => {
+    expect(() => checkInvariants(projects, projectGroups)).not.toThrow();
+  });
+
+  it("throws on duplicate titles", () => {
+    const bad = [validProject(), validProject()];
+    expect(() => checkInvariants(bad, projectGroups)).toThrow(/Duplicate project titles/);
+  });
+
+  it("throws on an unknown group", () => {
+    const bad = [validProject({ primaryGroup: "Made-up group" as ProjectGroupTitle })];
+    expect(() => checkInvariants(bad, projectGroups)).toThrow(/Unknown project groups/);
+  });
+
+  it("throws when a featured title is not in the project list", () => {
+    // The real featured set references real titles; an empty array drops them all.
+    expect(() => checkInvariants([], projectGroups)).toThrow(/Featured titles not found/);
+  });
+
+  it("throws when a substantive (non-link-group) project has no embed or image", () => {
+    const bad = realProjectsWith(validProject({ embed: undefined, image: undefined }));
+    expect(() => checkInvariants(bad, projectGroups)).toThrow(/no figure \(embed or image\)/);
+  });
+
+  it("allows a substantive project illustrated by image instead of embed", () => {
+    const ok = realProjectsWith(validProject({ embed: undefined, image: "/images/x.png" }));
+    expect(() => checkInvariants(ok, projectGroups)).not.toThrow();
+  });
+
+  it("allows a link-group project with no embed or image", () => {
+    const ok = realProjectsWith(
+      validProject({ primaryGroup: GITHUB, embed: undefined, image: undefined })
+    );
+    expect(() => checkInvariants(ok, projectGroups)).not.toThrow();
+  });
+});
+
+// Helper: append a fixture to the real projects so the featured-titles rule is
+// satisfied while we isolate the figure-coverage rule under test.
+function realProjectsWith(extra: Project): Project[] {
+  return [...projects, { ...extra, title: `${extra.title} (fixture)` }];
+}
+
+describe("figure-embed asset existence", () => {
+  it("ships a committed file under static/figures/ for every local embed", () => {
+    const localEmbeds = projects
+      .map((p) => p.embed)
+      .filter((e): e is string => typeof e === "string" && e.startsWith("/figures/"));
+    expect(localEmbeds.length).toBeGreaterThan(0);
+    for (const embed of localEmbeds) {
+      expect(committedFigurePaths.has(embed)).toBe(true);
+    }
+  });
+
+  it("excludes external (https) embeds from the local-asset check", () => {
+    // CitiBike uses an external embed URL; it must not be expected on disk.
+    const citibike = byTitle("CitiBike Demand, Risk, and Net Flow");
+    expect(citibike.embed?.startsWith("http")).toBe(true);
+    expect(committedFigurePaths.has(citibike.embed!)).toBe(false);
   });
 });
 

@@ -156,10 +156,16 @@ predictably, and tap targets stay comfortable.
   exceed those sources.
 - Single-group project data prevents duplicate project rendering across the work page.
   The **Selected work** module (`src/data/projects.ts`) owns the project list, the group
-  taxonomy, the ordered featured set, and the invariants (unique titles, known groups,
-  featured titles exist) — enforced at import via `assertInvariants()`, so any consumer
-  and the build are protected. Pages read `selectedWork()` and `featuredProjects()`
-  rather than re-deriving grouping or hardcoding which projects are featured.
+  taxonomy, the ordered featured set, and the invariants — enforced at import via
+  `assertInvariants()`, which calls the exported, fixture-testable
+  `checkInvariants(projects, groups)` (mirroring the publications module). The rules:
+  unique titles, all groups known, every featured title exists, and **figure coverage** —
+  every substantive project (any group other than the "Also on GitHub" link group) must
+  carry an `embed` or `image`, so the uniform side-by-side illustrated rhythm holds at the
+  data layer. A figureless substantive project is demoted to "Also on GitHub" rather than
+  rendered text-only (see ADR 0005). Any consumer and the build are protected. Pages read
+  `selectedWork()` and `featuredProjects()` rather than re-deriving grouping or hardcoding
+  which projects are featured.
 - The hero's two analyses and the Work page's open-source strip run on **committed,
   precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`;
   `scripts/gen_github_data.mjs` → `github.json`) — no model or API call at build or request
@@ -171,3 +177,9 @@ predictably, and tap targets stay comfortable.
   as venue "Work in progress." Its source repo (`~/repos/pred_comp_soc_pref`, ADR 0009,
   2026-06-13) retired the journal-paper program. The owner reviewed this and chose to
   keep it as "Work in progress." Leave it as-is unless the owner says otherwise.
+- **CitiBike's figure uses an external `embed` URL** (`https://armoutihansen.xyz/…/station_risk_tiers.html`),
+  unlike every other project, whose `embed` is a local `/figures/*.html` file committed under
+  `static/figures/`. This is a known, accepted inconsistency, not an oversight: the figure-coverage
+  invariant and the embed-asset-existence test treat it as satisfying coverage while excluding it
+  from the local-file check (it can break if the external host moves). Leave it unless the figure is
+  brought in-repo.
