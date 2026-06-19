@@ -110,9 +110,13 @@ def main():
 
   function recolor() {{
     var ink = token("--ink"), amber = token("--amber");
+    // The receding ink dots wash out against the light basemap — lift them in
+    // light mode only; the amber (signal) tiers and dark mode are unchanged.
+    var lift = theme() === "light" ? 0.18 : 0;
     markers.forEach(function (m) {{
       var st = STYLE[m.__t], c = st[2] ? amber : ink;
-      m.setStyle({{ color: c, fillColor: c, fillOpacity: st[1] }});
+      var op = st[2] ? st[1] : Math.min(1, st[1] + lift);
+      m.setStyle({{ color: c, fillColor: c, fillOpacity: op }});
     }});
   }}
   recolor();
