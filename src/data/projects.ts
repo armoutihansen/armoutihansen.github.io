@@ -1,13 +1,8 @@
 export const projectGroups = [
   {
-    title: "Applied analysis",
+    title: "Applied analysis & modeling",
     intro:
-      "Data work aimed at a decision: pick the measure that matters, build the analysis, and state what it supports."
-  },
-  {
-    title: "Modeling & tools",
-    intro:
-      "Search and ranking, choice-modeling code, and small tool-calling systems."
+      "Data work aimed at a decision and the tools that support it: pick the measure that matters, build the analysis, and state what it supports — plus the search, ranking, and tool-calling code that goes with it."
   },
   {
     title: "Research & replication",
@@ -46,7 +41,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     title: "CitiBike Demand, Risk, and Net Flow",
-    primaryGroup: "Applied analysis",
+    primaryGroup: "Applied analysis & modeling",
     category: "Operational analysis",
     status: "Case study",
     summary:
@@ -69,7 +64,7 @@ export const projects: Project[] = [
   },
   {
     title: "RAG Search Engine",
-    primaryGroup: "Modeling & tools",
+    primaryGroup: "Applied analysis & modeling",
     category: "Retrieval system",
     status: "GitHub project",
     summary:
@@ -85,6 +80,52 @@ export const projects: Project[] = [
     figureNote: "Hybrid retrieval, fused and reranked, then answered with citations.",
     imageAlt:
       "Diagram of the hybrid search pipeline: query and image inputs through BM25, embeddings and CLIP retrieval, RRF fusion, reranking, and a RAG answer"
+  },
+  {
+    title: "Minimal Coding Agent",
+    primaryGroup: "Applied analysis & modeling",
+    category: "AI tooling",
+    status: "GitHub project",
+    summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
+    problem: "How much can a coding agent do with only a few explicit tools and no framework?",
+    approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
+    result: "A working agent that reads, runs, and edits code in a loop — and surfaces where it needs guardrails.",
+    tools: ["Python", "tool-calling", "Gemini API", "CLI"],
+    href: "https://github.com/armoutihansen/build-ai-agent",
+    embed: "/figures/coding-agent-trace.html",
+    figureTitle: "Agent run",
+    figureNote: "An example run — the agent finds a failing test and fixes it.",
+    imageAlt:
+      "Terminal trace of an example coding-agent run: list files, run tests, read the source, patch the bug, and re-run the tests"
+  },
+  {
+    title: "choicekit",
+    primaryGroup: "Applied analysis & modeling",
+    category: "Python package",
+    status: "Early-stage",
+    summary: "A Python package for reusable choice-modeling workflows, in development.",
+    problem: "Choice-modeling code gets hard to trust when every project restarts from a loose script.",
+    approach: "Move estimation machinery into tested package code and leave project files for data and interpretation.",
+    result: "Early, but aimed at a clean boundary between modeling tools and one-off analysis.",
+    tools: ["Python", "choice modeling", "package design"],
+    href: "https://github.com/armoutihansen/choicekit"
+  },
+  {
+    title: "Efficiency Wages with Motivated Agents",
+    primaryGroup: "Research & replication",
+    category: "Replication package",
+    status: "Published · GEB 2024",
+    summary: "Replication data and code for a published paper on wages, motivation, and effort.",
+    problem: "Do wage incentives and prosocial motivation reinforce each other, or work through separate channels?",
+    approach: "Built reproducible analyses around experimental data and documented the paper's online appendix.",
+    result: "A peer-reviewed empirical project with a complete replication package.",
+    tools: ["Python", "Stata", "experimental data", "replication"],
+    href: "https://github.com/armoutihansen/efficiency-wages",
+    embed: "/figures/efficiency-wages-effort.html",
+    figureTitle: "Chosen effort by wage",
+    figureNote: "Mean chosen effort by offered wage, with 95% confidence bands.",
+    imageAlt:
+      "Interactive chart of mean chosen effort by offered wage, Prosocial versus GE treatments"
   },
   {
     title: "The Informativeness of Frequency-Report Scoring Rules",
@@ -121,52 +162,6 @@ export const projects: Project[] = [
     result: "Theory specifications scored on out-of-sample prediction and compared against the machine-learning benchmark.",
     tools: ["Python", "machine learning", "model evaluation"],
     href: "https://github.com/armoutihansen/econ-theories-ml"
-  },
-  {
-    title: "choicekit",
-    primaryGroup: "Modeling & tools",
-    category: "Python package",
-    status: "Early-stage",
-    summary: "A Python package for reusable choice-modeling workflows, in development.",
-    problem: "Choice-modeling code gets hard to trust when every project restarts from a loose script.",
-    approach: "Move estimation machinery into tested package code and leave project files for data and interpretation.",
-    result: "Early, but aimed at a clean boundary between modeling tools and one-off analysis.",
-    tools: ["Python", "choice modeling", "package design"],
-    href: "https://github.com/armoutihansen/choicekit"
-  },
-  {
-    title: "Minimal Coding Agent",
-    primaryGroup: "Modeling & tools",
-    category: "AI tooling",
-    status: "GitHub project",
-    summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
-    problem: "How much can a coding agent do with only a few explicit tools and no framework?",
-    approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
-    result: "A working agent that reads, runs, and edits code in a loop — and surfaces where it needs guardrails.",
-    tools: ["Python", "tool-calling", "Gemini API", "CLI"],
-    href: "https://github.com/armoutihansen/build-ai-agent",
-    embed: "/figures/coding-agent-trace.html",
-    figureTitle: "Agent run",
-    figureNote: "An example run — the agent finds a failing test and fixes it.",
-    imageAlt:
-      "Terminal trace of an example coding-agent run: list files, run tests, read the source, patch the bug, and re-run the tests"
-  },
-  {
-    title: "Efficiency Wages with Motivated Agents",
-    primaryGroup: "Research & replication",
-    category: "Replication package",
-    status: "Published · GEB 2024",
-    summary: "Replication data and code for a published paper on wages, motivation, and effort.",
-    problem: "Do wage incentives and prosocial motivation reinforce each other, or work through separate channels?",
-    approach: "Built reproducible analyses around experimental data and documented the paper's online appendix.",
-    result: "A peer-reviewed empirical project with a complete replication package.",
-    tools: ["Python", "Stata", "experimental data", "replication"],
-    href: "https://github.com/armoutihansen/efficiency-wages",
-    embed: "/figures/efficiency-wages-effort.html",
-    figureTitle: "Chosen effort by wage",
-    figureNote: "Mean chosen effort by offered wage, with 95% confidence bands.",
-    imageAlt:
-      "Interactive chart of mean chosen effort by offered wage, Prosocial versus GE treatments"
   },
   {
     title: "Personal Knowledge System",
