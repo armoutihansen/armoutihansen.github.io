@@ -134,9 +134,10 @@ const { project } = Astro.props;
     border-color: var(--accent);
   }
 
-  /* The integrated tonal surface: no fill or radius of its own, so the figure's
-     own --emb-bg tint renders edge-to-edge with sharp corners. The footprint
-     (aspect-ratio, max-height), the crop (overflow:hidden), and the absolutely
+  /* The integrated tonal surface: no fill or border of its own, so the figure's
+     own --emb-bg tint renders edge-to-edge — softened with a small radius
+     (the figure clips to it via overflow:hidden), not the old framed card. The
+     footprint (aspect-ratio, max-height), the crop, and the absolutely
      -positioned iframe/img fill are kept so row rhythm is unchanged. ADR 0006. */
   .work__panel-frame {
     position: relative;
@@ -144,6 +145,7 @@ const { project } = Astro.props;
     aspect-ratio: 16 / 10;
     max-height: 460px;
     overflow: hidden;
+    border-radius: var(--radius-sm);
   }
 
   .work__panel-frame iframe,

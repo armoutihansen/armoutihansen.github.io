@@ -35,10 +35,14 @@ the `WorkFigure` panel only** (the co-located chrome, per
 - `.work__panel` becomes a plain layout grid (caption → figure → note): border, drop
   shadow, radius, the `paper-sunk` fill, and the inset padding are removed; the grid and
   its vertical gap rhythm stay.
-- `.work__panel-frame` loses its surface — `background` and `border-radius` are removed —
-  while `aspect-ratio: 16/10` (mobile `4/3`), `max-height`, `overflow:hidden`, and the
+- `.work__panel-frame` loses its `paper-sunk` background but keeps a small `--radius-sm`
+  corner radius — a gentle softening of the tonal block, not the old card chrome — while
+  `aspect-ratio: 16/10` (mobile `4/3`), `max-height`, `overflow:hidden`, and the
   absolutely-positioned `iframe`/`img` fill are kept, so the figure footprint and row
-  rhythm are unchanged. The tonal block is a clean, sharp-cornered rectangle.
+  rhythm are unchanged.
+- The figure column is **top-aligned** (`.work--figure { align-items: start }`) so each
+  figure's caption row sits level with the project's meta row, rather than floating
+  vertically centred against the text.
 - `--emb-bg` is **unchanged** (stays `= --paper-sunk`); no figure is regenerated and the
   palette is not touched. This is a CSS-only presentation change plus docs.
 - The change applies uniformly to both the `embed` (iframe) and the currently-unused

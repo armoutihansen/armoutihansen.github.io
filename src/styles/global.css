@@ -698,14 +698,15 @@ main {
   min-width: 0;
 }
 
-/* Featured project: a wide illustration to the right of the text, vertically
-   centered. The figure is an integrated tonal surface (its own --emb-bg tint,
-   no box chrome) rather than a framed card; the front-page hero keeps its
-   frame as the one interactive centrepiece. See ADR 0006. */
+/* Featured project: a wide illustration to the right of the text, top-aligned
+   so the figure's caption row sits level with the project's meta row. The
+   figure is an integrated tonal surface (its own --emb-bg tint, no box chrome)
+   rather than a framed card; the front-page hero keeps its frame as the one
+   interactive centrepiece. See ADR 0006. */
 .work--figure {
   grid-template-columns: minmax(0, 1fr) clamp(320px, 44vw, 540px);
   column-gap: clamp(1.5rem, 4vw, 3rem);
-  align-items: center;
+  align-items: start;
 }
 
 /* Panel chrome (.work__panel*) is co-located in WorkFigure.astro; see ADR 0004. */
