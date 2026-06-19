@@ -92,9 +92,9 @@ const languages = gh.languages.map((l) => ({
     </div>
   </div>
 
-  <div class="ghlang" aria-label="Top languages by share of authored code">
+  <div class="ghlang">
       <span class="ghstrip__label ghlang__label">Languages</span>
-      <ul class="ghlang__list">
+      <ul class="ghlang__list" aria-label="Top languages by share of authored code">
         {languages.map((l) => (
           <li class="ghlang__row">
             <span class="ghlang__name">{l.name}</span>
@@ -297,9 +297,12 @@ const languages = gh.languages.map((l) => ({
     grid-template-rows: auto auto;
     align-items: baseline;
     column-gap: 0.6rem;
-    row-gap: 0.1rem;
-    font-size: var(--fs-small);
-    line-height: 1.25;
+    row-gap: 0.25rem;
+    /* Match the contribution calendar's month labels exactly. */
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    line-height: 1;
     color: var(--muted);
   }
 
@@ -316,9 +319,7 @@ const languages = gh.languages.map((l) => ({
     grid-row: 1;
     grid-column: 2;
     justify-self: end;
-    font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
-    font-weight: 600;
     color: var(--ink);
   }
 
@@ -345,18 +346,50 @@ const languages = gh.languages.map((l) => ({
   @media (min-width: 56em) {
     .ghstrip {
       grid-template-columns: 3fr 1fr;
+      grid-template-rows: auto auto auto;
       column-gap: clamp(1.4rem, 1rem + 2vw, 3rem);
       align-items: start;
+    }
+
+    /* Flatten the wrappers so the calendar and the bar list become siblings in
+       one shared grid row; stretching that row makes the two illustrations the
+       same height, and distributing the bars aligns their top and bottom edges
+       with the calendar's. */
+    .ghstrip__main,
+    .ghstrip__calcol,
+    .ghlang {
+      display: contents;
+    }
+
+    .ghstrip__top {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .ghlang__label {
+      grid-column: 2;
+      grid-row: 1;
+      margin-bottom: 0;
     }
 
     .ghcal--full {
       display: none;
     }
     .ghcal--nine {
+      grid-column: 1;
+      grid-row: 2;
       display: grid;
     }
-    .ghlang {
-      display: block;
+
+    .ghlang__list {
+      grid-column: 2;
+      grid-row: 2;
+      align-self: stretch;
+      align-content: space-between;
+    }
+
+    .ghstrip__stat {
+      grid-column: 1;
+      grid-row: 3;
     }
   }
 </style>
