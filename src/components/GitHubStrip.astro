@@ -98,10 +98,10 @@ const languages = gh.languages.map((l) => ({
         {languages.map((l) => (
           <li class="ghlang__row">
             <span class="ghlang__name">{l.name}</span>
+            <span class="sr-only">{l.display}</span>
             <span class="ghlang__bar" aria-hidden="true">
               <span class="ghlang__fill" style={`width: ${l.pct}%`} />
             </span>
-            <span class="ghlang__pct">{l.display}</span>
           </li>
         ))}
       </ul>
@@ -293,10 +293,7 @@ const languages = gh.languages.map((l) => ({
 
   .ghlang__row {
     display: grid;
-    grid-template-columns: 1fr auto;
     grid-template-rows: auto auto;
-    align-items: baseline;
-    column-gap: 0.6rem;
     row-gap: 0.25rem;
     /* Match the contribution calendar's month labels exactly. */
     font-family: var(--font-mono);
@@ -313,14 +310,6 @@ const languages = gh.languages.map((l) => ({
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .ghlang__pct {
-    grid-row: 1;
-    grid-column: 2;
-    justify-self: end;
-    font-variant-numeric: tabular-nums;
-    color: var(--ink);
   }
 
   .ghlang__bar {
