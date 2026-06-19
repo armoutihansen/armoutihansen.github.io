@@ -1,29 +1,12 @@
 ---
 import model from "../data/hero-model.json";
 import { profile } from "../data/profile";
+import { bandStats, type HeroPoint } from "../data/hero-model";
 
-type Pt = { p: number; y: number };
-const points = model.points as Pt[];
+const points = model.points as HeroPoint[];
 const DEFAULT_HI = 0.75;
 
-function bandStats(hi: number) {
-  const lo = 1 - hi;
-  let auto = 0;
-  let autoCorrect = 0;
-  for (const { p, y } of points) {
-    if (p > lo && p < hi) continue;
-    auto++;
-    if ((p >= 0.5 ? 1 : 0) === y) autoCorrect++;
-  }
-  const n = points.length;
-  return {
-    autoPct: Math.round((100 * auto) / n),
-    reviewPct: Math.round((100 * (n - auto)) / n),
-    autoAcc: auto ? Math.round((100 * autoCorrect) / auto) : 0,
-  };
-}
-
-const d0 = bandStats(DEFAULT_HI);
+const d0 = bandStats(points, DEFAULT_HI);
 const dataJson = JSON.stringify(points);
 
 // Panel 2 — real finding from the CitiBike project (static/DSC): collision
@@ -437,6 +420,8 @@ const rBase = rPadT + rPlotH;
 </style>
 
 <script>
+  import { bandStats, type HeroPoint } from "../data/hero-model";
+
   // ---------- Panel 1: model-confidence interaction ----------
   const fig = document.querySelector(".predict");
   const dataEl = document.querySelector("[data-hero-points]");
@@ -445,8 +430,7 @@ const rBase = rPadT + rPlotH;
   const handle = fig?.querySelector("[data-handle]") as HTMLElement | null;
 
   if (fig && dataEl && canvas && ctx && handle) {
-    type Pt = { p: number; y: number };
-    const points: Pt[] = JSON.parse(dataEl.textContent || "[]");
+    const points: HeroPoint[] = JSON.parse(dataEl.textContent || "[]");
     const out = {
       auto: fig.querySelector('[data-k="auto"]'),
       review: fig.querySelector('[data-k="review"]'),
@@ -495,7 +479,7 @@ const rBase = rPadT + rPlotH;
       const availH = baseY - topY;
 
       const nbins = Math.max(22, Math.min(64, Math.floor(plotW / 9)));
-      const bins: Pt[][] = Array.from({ length: nbins }, () => []);
+      const bins: HeroPoint[][] = Array.from({ length: nbins }, () => []);
       for (const pt of points) {
         let b = Math.floor(pt.p * nbins);
         if (b < 0) b = 0;
@@ -571,31 +555,14 @@ const rBase = rPadT + rPlotH;
       ctx!.globalAlpha = 1;
     }
 
-    function stats() {
-      const lo = 1 - hi;
-      let auto = 0;
-      let correct = 0;
-      for (const { p, y } of points) {
-        if (p > lo && p < hi) continue;
-        auto++;
-        if ((p >= 0.5 ? 1 : 0) === y) correct++;
-      }
-      const n = points.length;
-      return {
-        auto: Math.round((100 * auto) / n),
-        review: Math.round((100 * (n - auto)) / n),
-        acc: auto ? Math.round((100 * correct) / auto) : 0,
-      };
-    }
-
     function syncUI() {
-      const s = stats();
-      if (out.auto) out.auto.textContent = s.auto + "%";
-      if (out.review) out.review.textContent = s.review + "%";
-      if (out.acc) out.acc.textContent = s.acc + "%";
+      const s = bandStats(points, hi);
+      if (out.auto) out.auto.textContent = s.autoPct + "%";
+      if (out.review) out.review.textContent = s.reviewPct + "%";
+      if (out.acc) out.acc.textContent = s.autoAcc + "%";
       if (L) handle!.style.left = px(hi) + "px";
       handle!.setAttribute("aria-valuenow", String(Math.round(hi * 100)));
-      handle!.setAttribute("aria-valuetext", s.review + "% of cases sent to review");
+      handle!.setAttribute("aria-valuetext", s.reviewPct + "% of cases sent to review");
     }
 
     function setHiFromClientX(clientX: number) {
