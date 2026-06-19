@@ -1,52 +1,117 @@
 ---
 import gh from "../data/github.json";
+import { lastMonths, type Contributions } from "../data/github-calendar";
 
-const c = gh.contributions;
+const c = gh.contributions as Contributions;
 
-// Full last-12-months calendar, spanning the page width below the intro.
-const weeks = c.weeks;
-let months = c.months.map((m) => ({ label: m.label, col: m.col }));
-if (months.length > 1 && months[1].col - months[0].col < 3) months = months.slice(1);
-const nWeeks = weeks.length;
+// Mobile keeps the full last-12-months calendar; desktop narrows to the trailing
+// 9 months to free a column for the languages panel. Both come from the same
+// pure truncation helper so the math is tested, not hand-inlined here.
+function strip(months: { label: string; col: number }[]) {
+  const m = months.map((x) => ({ label: x.label, col: x.col }));
+  // Drop a cramped leading label that would collide with the next one.
+  if (m.length > 1 && m[1].col - m[0].col < 3) return m.slice(1);
+  return m;
+}
+
+const full = { weeks: c.weeks, months: strip(c.months) };
+const nine = (() => {
+  const t = lastMonths(c, 9);
+  return { weeks: t.weeks, months: strip(t.months) };
+})();
+
 const scale = [0, 1, 2, 3, 4];
 const aria = `${c.total} contributions in the last year`;
+
+// Top authored languages (byte-based, top-5 from the data layer). Bars are
+// decorative; the visible "Name 79%" text carries the value to assistive tech.
+const languages = gh.languages.map((l) => ({
+  name: l.name,
+  pct: l.pct,
+  // Sub-0.5% languages round to 0 in the data; never show a literal "0%".
+  display: l.pct < 1 ? "<1%" : `${l.pct}%`,
+}));
 ---
 
-<div class="ghstrip" style={`--nweeks: ${nWeeks}`}>
-  <div class="ghstrip__top">
-    <span class="ghstrip__label">Open source</span>
-    <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
+<div class="ghstrip">
+  <div class="ghstrip__main">
+    <div class="ghstrip__top">
+      <span class="ghstrip__label">Open source</span>
+      <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
+    </div>
+
+    <div class="ghstrip__calcol">
+      {/* Desktop: trailing 9 months. */}
+      <div class="ghcal ghcal--nine" style={`--nweeks: ${nine.weeks.length}`}>
+        <div
+          class="ghcal__months"
+          style={`grid-template-columns: repeat(${nine.weeks.length}, minmax(0, 1fr))`}
+          aria-hidden="true"
+        >
+          {nine.months.map((m) => (
+            <span class="ghcal__month" style={`grid-column: ${m.col + 1}`}>{m.label}</span>
+          ))}
+        </div>
+        <div class="ghcal__grid" role="img" aria-label={aria}>
+          {nine.weeks.map((week) =>
+            week.map((level) => (
+              <span class:list={["ghcal__cell", level === null ? "is-empty" : `lvl-${level}`]} />
+            )),
+          )}
+        </div>
+      </div>
+
+      {/* Mobile / narrow: full 12 months. */}
+      <div class="ghcal ghcal--full" style={`--nweeks: ${full.weeks.length}`}>
+        <div
+          class="ghcal__months"
+          style={`grid-template-columns: repeat(${full.weeks.length}, minmax(0, 1fr))`}
+          aria-hidden="true"
+        >
+          {full.months.map((m) => (
+            <span class="ghcal__month" style={`grid-column: ${m.col + 1}`}>{m.label}</span>
+          ))}
+        </div>
+        <div class="ghcal__grid" role="img" aria-label={aria}>
+          {full.weeks.map((week) =>
+            week.map((level) => (
+              <span class:list={["ghcal__cell", level === null ? "is-empty" : `lvl-${level}`]} />
+            )),
+          )}
+        </div>
+      </div>
+
+      <p class="ghstrip__stat">
+        <span><strong>{c.total}</strong> contributions in the last year</span>
+        <span class="ghcal__key">
+          <span>Less</span>
+          {scale.map((l) => <span class:list={["ghcal__cell", "ghcal__keycell", `lvl-${l}`]} />)}
+          <span>More</span>
+        </span>
+      </p>
+    </div>
   </div>
 
-  <div class="ghcal">
-    <div class="ghcal__months" style={`grid-template-columns: repeat(${nWeeks}, minmax(0, 1fr))`} aria-hidden="true">
-      {months.map((m) => (
-        <span class="ghcal__month" style={`grid-column: ${m.col + 1}`}>{m.label}</span>
-      ))}
+  <div class="ghlang">
+      <span class="ghstrip__label ghlang__label">Languages</span>
+      <ul class="ghlang__list" aria-label="Top languages by share of authored code">
+        {languages.map((l) => (
+          <li class="ghlang__row">
+            <span class="ghlang__name">{l.name}</span>
+            <span class="sr-only">{l.display}</span>
+            <span class="ghlang__bar" aria-hidden="true">
+              <span class="ghlang__fill" style={`width: ${l.pct}%`} />
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
-    <div class="ghcal__grid" role="img" aria-label={aria}>
-      {weeks.map((week) =>
-        week.map((level) => (
-          <span class:list={["ghcal__cell", level === null ? "is-empty" : `lvl-${level}`]} />
-        )),
-      )}
-    </div>
-  </div>
-
-  <p class="ghstrip__stat">
-    <span><strong>{c.total}</strong> contributions in the last year</span>
-    <span class="ghcal__key">
-      <span>Less</span>
-      {scale.map((l) => <span class:list={["ghcal__cell", "ghcal__keycell", `lvl-${l}`]} />)}
-      <span>More</span>
-    </span>
-  </p>
 </div>
 
 <style>
   .ghstrip {
     /* --cell sizes only the legend key swatches now; the calendar cells flex
-       to fill the full page width via the grid below. */
+       to fill their column via the grids below. */
     --cell: clamp(9px, 1.1vw, 13px);
     --cellgap: 3px;
     width: 100%;
@@ -85,10 +150,31 @@ const aria = `${c.total} contributions in the last year`;
     color: var(--accent-deep);
   }
 
+  /* The header + calendar stack as one column ("main"); the desktop breakpoint
+     below puts this column beside the languages panel. Keeping the header inside
+     this column lets the "Languages" heading top-align with "Open source". */
+  .ghstrip__main {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .ghstrip__calcol {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
   /* ----- contribution calendar ----- */
   .ghcal {
     display: grid;
     gap: 0.3rem;
+    min-width: 0;
+  }
+
+  /* Mobile shows the full year; the 9-month grid is desktop-only. */
+  .ghcal--nine {
+    display: none;
   }
 
   .ghcal__months {
@@ -182,5 +268,117 @@ const aria = `${c.total} contributions in the last year`;
   }
   .ghcal__key > span:last-child {
     margin-left: 0.15rem;
+  }
+
+  /* ----- languages panel (desktop only) ----- */
+  .ghlang {
+    display: none;
+    min-width: 0;
+  }
+
+  .ghlang__label {
+    display: block;
+    /* Matches .ghstrip__main's header-to-calendar gap so the bars line up with
+       the calendar's top while the heading lines up with "Open source". */
+    margin-bottom: 0.5rem;
+  }
+
+  .ghlang__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .ghlang__row {
+    display: grid;
+    grid-template-rows: auto auto;
+    row-gap: 0.25rem;
+    /* Match the contribution calendar's month labels exactly. */
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    letter-spacing: var(--track-meta);
+    line-height: 1;
+    color: var(--muted);
+  }
+
+  .ghlang__name {
+    grid-row: 1;
+    grid-column: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ghlang__bar {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--line);
+    overflow: hidden;
+  }
+
+  .ghlang__fill {
+    display: block;
+    height: 100%;
+    /* Literal percentage width set inline; the floor keeps sub-0.5% bars
+       (Stata, JavaScript) visibly a bar rather than vanishing. Uniform accent
+       fill so the panel reads as one figure with the calendar. */
+    min-width: 6px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+
+  @media (min-width: 56em) {
+    .ghstrip {
+      grid-template-columns: 3fr 1fr;
+      grid-template-rows: auto auto auto;
+      column-gap: clamp(1.4rem, 1rem + 2vw, 3rem);
+      align-items: start;
+    }
+
+    /* Flatten the wrappers so the calendar and the bar list become siblings in
+       one shared grid row; stretching that row makes the two illustrations the
+       same height, and distributing the bars aligns their top and bottom edges
+       with the calendar's. */
+    .ghstrip__main,
+    .ghstrip__calcol,
+    .ghlang {
+      display: contents;
+    }
+
+    .ghstrip__top {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    .ghlang__label {
+      grid-column: 2;
+      grid-row: 1;
+      margin-bottom: 0;
+    }
+
+    .ghcal--full {
+      display: none;
+    }
+    .ghcal--nine {
+      grid-column: 1;
+      grid-row: 2;
+      display: grid;
+    }
+
+    .ghlang__list {
+      grid-column: 2;
+      grid-row: 2;
+      align-self: stretch;
+      align-content: space-between;
+    }
+
+    .ghstrip__stat {
+      grid-column: 1;
+      grid-row: 3;
+    }
   }
 </style>
