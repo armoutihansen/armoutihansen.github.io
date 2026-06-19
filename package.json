@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
-    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview"
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "check": "ASTRO_TELEMETRY_DISABLED=1 astro check"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.9",
@@ -15,6 +16,8 @@
     "astro": "^6.1.9"
   },
   "devDependencies": {
-    "playwright-core": "^1.60.0"
+    "@astrojs/check": "^0.9.9",
+    "playwright-core": "^1.60.0",
+    "typescript": "^5.9.3"
   }
 }

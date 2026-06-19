@@ -38,6 +38,8 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: npm ci
+      - name: Type-check with Astro
+        run: npm run check
       - name: Refresh GitHub stats
         # Regenerate src/data/github.json so the deployed graph is current. If the
         # public scrape fails, keep the committed snapshot rather than failing deploy.
