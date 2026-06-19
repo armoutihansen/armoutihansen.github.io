@@ -171,7 +171,13 @@ export const projects: Project[] = [
       "Benchmarked theory-based specifications against machine-learning models and examined the remaining predictive gap.",
     result: "Theory specifications scored on out-of-sample prediction and compared against the machine-learning benchmark.",
     tools: ["Python", "machine learning", "model evaluation"],
-    href: "https://github.com/armoutihansen/econ-theories-ml"
+    href: "https://github.com/armoutihansen/econ-theories-ml",
+    embed: "/figures/econ-theories-completeness.html",
+    figureTitle: "The completeness ladder",
+    figureNote:
+      "Completeness climbs as the model captures more individual heterogeneity — a single type is far from enough, and even a handful of latent types don't exhaust it.",
+    imageAlt:
+      "Line chart of completeness rising from about 38% to 92% as the model moves from a single agent through more latent types to the full heterogeneity structure"
   },
   {
     title: "Personal Knowledge System",

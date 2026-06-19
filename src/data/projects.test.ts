@@ -10,6 +10,7 @@ import {
 // embed-channel marker assertions run without Node's fs types — keeping
 // `astro check` clean (no @types/node).
 import choicekitFigure from "../../static/figures/choicekit-sklearn.html?raw";
+import econFigureHtml from "../../static/figures/econ-theories-completeness.html?raw";
 
 const APPLIED = "Applied analysis & modeling";
 const RESEARCH = "Research & replication";
@@ -166,5 +167,45 @@ describe("choicekit figure file", () => {
   it("depicts the sklearn-native wide-form usage it claims", () => {
     expect(html).toContain("GridSearchCV");
     expect(html).toContain("ConditionalLogitClassifier");
+  });
+});
+
+describe("Economic Theories & ML figure", () => {
+  it("ships a non-empty committed figure HTML under static/figures/", () => {
+    expect(econFigureHtml.length).toBeGreaterThan(0);
+  });
+
+  it("carries the embed-channel contract markers (referenced _embed.js, shared palette/theme)", () => {
+    expect(econFigureHtml).toContain('src="/figures/_embed.js"');
+    expect(econFigureHtml).toContain("--emb-bg");
+    expect(econFigureHtml).toContain("data-theme");
+  });
+
+  it("makes the heterogeneity-richness claim, with no level-dependence language", () => {
+    const html = econFigureHtml.toLowerCase();
+    expect(html).not.toContain("representative agent");
+    expect(html).not.toContain("evaluation level");
+    expect(html).not.toContain("individual-level");
+  });
+});
+
+describe("Economic Theories & ML project entry", () => {
+  const econ = byTitle("Economic Theories and Machine Learning");
+
+  it("references the committed figure via embed", () => {
+    expect(econ.embed).toBe("/figures/econ-theories-completeness.html");
+  });
+
+  it("supplies a figure title, note, and image alt", () => {
+    expect(econ.figureTitle && econ.figureTitle.length).toBeTruthy();
+    expect(econ.figureNote && econ.figureNote.length).toBeTruthy();
+    expect(econ.imageAlt && econ.imageAlt.length).toBeTruthy();
+  });
+
+  it("keeps the figure copy free of level-dependence framing", () => {
+    const copy = [econ.figureTitle, econ.figureNote, econ.imageAlt].join(" ").toLowerCase();
+    expect(copy).not.toContain("representative agent");
+    expect(copy).not.toContain("evaluation level");
+    expect(copy).not.toContain("individual-level");
   });
 });
