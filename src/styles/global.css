@@ -1171,19 +1171,13 @@ details.abstract p {
   border-top: var(--hairline);
 }
 
-.group__head {
-  margin-bottom: clamp(1rem, 0.8rem + 0.8vw, 1.5rem);
-}
-
-.group__head h2 {
-  font-size: clamp(1.4rem, 1.2rem + 1vw, 1.9rem);
-}
-
-.group__head p {
-  margin: 0.6rem 0 0;
-  max-width: var(--measure);
-  color: var(--muted);
-  font-size: var(--fs-small);
+/* Projects groups reuse SectionHeading (like CV and Publications) so every
+   inner page shares one section-head rhythm. Their titles are short category
+   labels rather than the home page's descriptive headlines, so a wider guard
+   cap keeps them on one line instead of the 20ch the home heads use to wrap on
+   purpose. */
+.group .section__head h2 {
+  max-width: 30ch;
 }
 
 .morelist {

@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WorkItem from "../components/WorkItem.astro";
 import GitHubStrip from "../components/GitHubStrip.astro";
+import SectionHeading from "../components/SectionHeading.astro";
 import { selectedWork } from "../data/projects";
 
 const grouped = selectedWork();
@@ -25,10 +26,7 @@ const grouped = selectedWork();
   <div class="section">
     {grouped.map((group) => (
       <section class="group" aria-labelledby={group.headingId}>
-        <div class="group__head">
-          <h2 id={group.headingId}>{group.title}</h2>
-          <p>{group.intro}</p>
-        </div>
+        <SectionHeading id={group.headingId} title={group.title} intro={group.intro} />
         {group.isLinkGroup ? (
           <p class="morelist">
             {group.projects.map((project, i) => (

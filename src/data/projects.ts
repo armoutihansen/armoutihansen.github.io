@@ -46,11 +46,11 @@ export const projects: Project[] = [
     status: "Case study",
     summary:
       "Station- and trip-level analysis of demand, net flow, and collision-adjusted risk across New York's bike-share network.",
-    problem: "Where does the network strain — heavy use, poor rebalancing, or higher risk per trip?",
+    problem: "What can CitiBike trip data and NYPD crash records, together, tell an operator and an insurer?",
     approach:
-      "Joined trip records with collision data and built station-level measures that separate raw volume from exposure-adjusted risk.",
-    result: "Three separate measures — demand, imbalance, and exposure-adjusted risk — that a single ranking would have conflated.",
-    tools: ["Python", "pandas", "feature engineering", "risk analysis", "forecasting"],
+      "Three analyses on 2023–2025 trips: demand and usage patterns; a per-trip crash-risk measure by station and time (NYPD crashes over trip exposure, empirical-Bayes smoothed); and a net-flow imbalance classifier for rebalancing.",
+    result: "A granular, interpretable risk-per-trip measure an insurer could use as a pricing factor, demand patterns showing seasonality and per-station stagnation, and stable net-flow patterns a classifier predicts to guide rebalancing.",
+    tools: ["Python", "pandas", "feature engineering", "risk analysis", "prediction"],
     href: "/DSC/",
     embed: "/figures/citibike-station-risk.html",
     figureTitle: "Station-level crash risk",
@@ -70,8 +70,8 @@ export const projects: Project[] = [
       "A hybrid movie-search engine combining lexical and semantic retrieval, reranking, image search, and RAG answers.",
     problem: "Plain search fails when a query is vague, visual, or more description than title.",
     approach:
-      "Combined BM25, embeddings, reciprocal rank fusion, CLIP, reranking, and caching, with explicit checks at each retrieval stage.",
-    result: "A pipeline with each retrieval stage measured separately, so ranking quality is attributable to a stage rather than the whole.",
+      "Combined BM25, embeddings, reciprocal rank fusion, CLIP, reranking, and caching, with a debug trace through the pipeline.",
+    result: "An evaluated pipeline: RRF search scored on precision, recall, and F1 against a golden set, with a debug mode that traces a query through each stage.",
     tools: ["Python", "RAG", "BM25", "embeddings", "CLIP", "evaluation"],
     href: "https://github.com/armoutihansen/rag-search-engine",
     embed: "/figures/rag-architecture.html",
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
     problem: "How much can a coding agent do with only a few explicit tools and no framework?",
     approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
-    result: "A working agent that reads, runs, and edits code in a loop — and surfaces where it needs guardrails.",
+    result: "A working agent that reads, runs, and edits code in a loop, with every tool call explicit.",
     tools: ["Python", "tool-calling", "Gemini API", "CLI"],
     href: "https://github.com/armoutihansen/build-ai-agent",
     embed: "/figures/coding-agent-trace.html",
@@ -145,14 +145,14 @@ export const projects: Project[] = [
     problem: "A count report is observable; the belief behind it is not. How much does the report actually pin down?",
     approach:
       "Characterized the identified set of beliefs behind each report under three scoring rules, then checked the bounds with simulation.",
-    result: "No rule dominates: which scoring rule gives the sharpest bounds depends on how concentrated the beliefs are.",
+    result: "No rule dominates: squared-distance gives the sharpest bounds when beliefs concentrate on a few categories, frequency-guessing when they're spread out, and Manhattan distance rarely wins but holds up across regimes.",
     tools: ["Python", "simulation", "pytest", "scoring rules"],
     href: "https://github.com/armoutihansen/frequency-beliefs",
     embed: "/figures/frequency-rules-winshare.html",
     figureTitle: "Sharpest-bound win share",
     controls: [
-      { key: "coord_avg", label: "Average-coordinate" },
-      { key: "mean_linear", label: "Linear-mean" }
+      { key: "coord_avg", label: "Avg. probability" },
+      { key: "mean_linear", label: "Belief mean" }
     ],
     figureNote:
       "Share of cases where each scoring rule gives the sharpest belief bounds, by belief concentration α.",
