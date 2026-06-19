@@ -1,3 +1,9 @@
+import { profile } from "./profile";
+
+export type PublicationLink = { label: string; href: string };
+
+export type PublicationType = "Publication" | "Working paper" | "Research project";
+
 export interface Publication {
   title: string;
   authors: string;
@@ -5,10 +11,17 @@ export interface Publication {
   year: string;
   details: string;
   href: string;
-  links?: { label: string; href: string }[];
-  type: "Publication" | "Working paper" | "Research project";
+  links?: PublicationLink[];
+  type: PublicationType;
   abstract: string;
   cover?: string;
+}
+
+// A publication with its links normalised to a guaranteed non-empty array, so
+// consumers (pages, PublicationItem) never re-derive the `links ?? href`
+// fallback or repair a missing list at render time.
+export interface ResolvedPublication extends Publication {
+  links: PublicationLink[];
 }
 
 export const publications: Publication[] = [
@@ -117,3 +130,72 @@ export const publications: Publication[] = [
       // "This project studies belief elicitation from frequency reports: subjects submit count vectors, and a scoring rule induces an identified set of latent beliefs consistent with each report. The paper characterizes that set for squared-distance, frequency-guessing, and Manhattan-distance rules and compares them by the sharpness of the bounds they yield. The headline result is contingent — no rule dominates. Squared-distance is sharpest when beliefs concentrate on a few categories, frequency-guessing when they are balanced, and Manhattan is the robust choice when concentration cannot be anticipated."
   }
 ];
+
+const KNOWN_TYPES: PublicationType[] = ["Publication", "Working paper", "Research project"];
+const JOURNAL_TYPE: PublicationType = "Publication";
+
+// The home's ordered featured publication set is the first N journal
+// publications, in array order.
+const DEFAULT_FEATURED_COUNT = 2;
+
+// Resolve the `links ?? href` fallback once: a bare `href` becomes a single
+// "Link" entry (the label PublicationItem previously synthesised at render
+// time), so every consumer receives a guaranteed non-empty links array.
+// Exported so the normalisation rule is testable on both source shapes
+// (`links`-present and `href`-only).
+export function resolveLinks(pub: Publication): PublicationLink[] {
+  return pub.links ?? (pub.href ? [{ label: "Link", href: pub.href }] : []);
+}
+
+function resolve(pub: Publication): ResolvedPublication {
+  return { ...pub, links: resolveLinks(pub) };
+}
+
+// Domain invariants for publication data (see CONTEXT.md), checkable against any
+// array so the failure modes can be unit-tested without corrupting the real
+// data. The import-time `assertInvariants()` runs this on the live array.
+export function checkInvariants(pubs: Publication[], ownerName: string): void {
+  const known = new Set<string>(KNOWN_TYPES);
+  const unknown = pubs.map((p) => p.type).filter((t) => !known.has(t));
+  if (unknown.length > 0) {
+    throw new Error(`Unknown publication types: ${[...new Set(unknown)].join(", ")}`);
+  }
+  const missingAuthor = pubs.filter((p) => !p.authors.includes(ownerName)).map((p) => p.title);
+  if (missingAuthor.length > 0) {
+    throw new Error(`Publications missing owner name "${ownerName}" in authors: ${missingAuthor.join(", ")}`);
+  }
+  // Every journal publication must resolve to at least one link. Working papers
+  // and research projects can legitimately have nothing to link yet (e.g.
+  // "Predictive Completeness …", which CONTEXT.md flags is kept as a link-less
+  // "Work in progress" entry), so the link guarantee is scoped to the entries
+  // whose rendered shape contract requires explicit links.
+  const noLinks = pubs
+    .filter((p) => p.type === JOURNAL_TYPE && resolveLinks(p).length === 0)
+    .map((p) => p.title);
+  if (noLinks.length > 0) {
+    throw new Error(`Journal publications resolving to zero links: ${noLinks.join(", ")}`);
+  }
+}
+
+// Enforced at import so every consumer and the build are protected — not just
+// the page that happens to render the publications.
+function assertInvariants(): void {
+  checkInvariants(publications, profile.name);
+}
+assertInvariants();
+
+// Peer-reviewed journal publications, in array order.
+export function journalPublications(): ResolvedPublication[] {
+  return publications.filter((p) => p.type === JOURNAL_TYPE).map(resolve);
+}
+
+// The exact complement of journalPublications(): working papers and research
+// projects, in array order.
+export function otherWork(): ResolvedPublication[] {
+  return publications.filter((p) => p.type !== JOURNAL_TYPE).map(resolve);
+}
+
+// The home's ordered featured set: the first n journal publications.
+export function featuredPublications(n: number = DEFAULT_FEATURED_COUNT): ResolvedPublication[] {
+  return journalPublications().slice(0, n);
+}

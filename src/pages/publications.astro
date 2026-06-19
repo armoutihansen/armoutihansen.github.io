@@ -2,10 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PublicationItem from "../components/PublicationItem.astro";
 import SectionHeading from "../components/SectionHeading.astro";
-import { publications } from "../data/publications";
+import { journalPublications, otherWork } from "../data/publications";
 
-const journalPublications = publications.filter((item) => item.type === "Publication");
-const otherWork = publications.filter((item) => item.type !== "Publication");
+const journals = journalPublications();
+const other = otherWork();
 ---
 
 <BaseLayout
@@ -28,7 +28,7 @@ const otherWork = publications.filter((item) => item.type !== "Publication");
       intro="Peer-reviewed work in behavioral, organizational, and decision economics."
     />
     <div class="publist">
-      {journalPublications.map((publication) => <PublicationItem publication={publication} />)}
+      {journals.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>
 
@@ -38,7 +38,7 @@ const otherWork = publications.filter((item) => item.type !== "Publication");
       intro="Current work and replication material: stated assumptions, public code, and interpretation."
     />
     <div class="publist">
-      {otherWork.map((publication) => <PublicationItem publication={publication} />)}
+      {other.map((publication) => <PublicationItem publication={publication} />)}
     </div>
   </section>
 </BaseLayout>

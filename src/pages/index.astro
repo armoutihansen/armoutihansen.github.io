@@ -8,13 +8,13 @@ import ExperienceEntry from "../components/ExperienceEntry.astro";
 import { experience } from "../data/experience";
 import { capabilities, profile } from "../data/profile";
 import { featuredProjects } from "../data/projects";
-import { publications } from "../data/publications";
+import { featuredPublications, journalPublications } from "../data/publications";
 import { pad2 } from "../data/format";
 
 const featured = featuredProjects();
-const featuredPublications = publications.filter((item) => item.type === "Publication").slice(0, 2);
+const featuredPubs = featuredPublications(2);
 const recentExperience = experience.slice(0, 2);
-const paperCount = publications.filter((item) => item.type === "Publication").length;
+const paperCount = journalPublications().length;
 
 const credibility = [
   { figure: String(paperCount), label: "peer-reviewed papers" },
@@ -72,7 +72,7 @@ const credibility = [
       ))}
     </div>
     <div class="publist">
-      {featuredPublications.map((publication) => <PublicationItem publication={publication} compact />)}
+      {featuredPubs.map((publication) => <PublicationItem publication={publication} compact />)}
     </div>
     <p class="section__more"><a href="/publications/">Research background</a></p>
   </section>

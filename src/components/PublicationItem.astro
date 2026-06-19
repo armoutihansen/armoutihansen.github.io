@@ -1,16 +1,17 @@
 ---
-import type { Publication } from "../data/publications";
+import type { ResolvedPublication } from "../data/publications";
+import { profile } from "../data/profile";
 
 interface Props {
-  publication: Publication;
+  publication: ResolvedPublication;
   compact?: boolean;
 }
 
 const { publication, compact = false } = Astro.props;
 
-const NAME = "Jesper Armouti-Hansen";
+const NAME = profile.name;
 const authorParts = publication.authors.split(NAME);
-const links = publication.links ?? (publication.href ? [{ label: "Link", href: publication.href }] : []);
+const links = publication.links;
 const showCover = Boolean(publication.cover);
 ---
 
