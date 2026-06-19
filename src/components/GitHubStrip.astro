@@ -34,12 +34,12 @@ const languages = gh.languages.map((l) => ({
 ---
 
 <div class="ghstrip">
-  <div class="ghstrip__top">
-    <span class="ghstrip__label">Open source</span>
-    <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
-  </div>
+  <div class="ghstrip__main">
+    <div class="ghstrip__top">
+      <span class="ghstrip__label">Open source</span>
+      <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
+    </div>
 
-  <div class="ghstrip__body">
     <div class="ghstrip__calcol">
       {/* Desktop: trailing 9 months. */}
       <div class="ghcal ghcal--nine" style={`--nweeks: ${nine.weeks.length}`}>
@@ -90,8 +90,9 @@ const languages = gh.languages.map((l) => ({
         </span>
       </p>
     </div>
+  </div>
 
-    <div class="ghlang" aria-label="Top languages by share of authored code">
+  <div class="ghlang" aria-label="Top languages by share of authored code">
       <span class="ghstrip__label ghlang__label">Languages</span>
       <ul class="ghlang__list">
         {languages.map((l) => (
@@ -105,7 +106,6 @@ const languages = gh.languages.map((l) => ({
         ))}
       </ul>
     </div>
-  </div>
 </div>
 
 <style>
@@ -150,11 +150,13 @@ const languages = gh.languages.map((l) => ({
     color: var(--accent-deep);
   }
 
-  /* The body is a single column on mobile; the desktop breakpoint below turns
-     it into a 3fr calendar / 1fr languages grid. */
-  .ghstrip__body {
+  /* The header + calendar stack as one column ("main"); the desktop breakpoint
+     below puts this column beside the languages panel. Keeping the header inside
+     this column lets the "Languages" heading top-align with "Open source". */
+  .ghstrip__main {
     display: grid;
     gap: 0.5rem;
+    min-width: 0;
   }
 
   .ghstrip__calcol {
@@ -276,7 +278,9 @@ const languages = gh.languages.map((l) => ({
 
   .ghlang__label {
     display: block;
-    margin-bottom: 0.6rem;
+    /* Matches .ghstrip__main's header-to-calendar gap so the bars line up with
+       the calendar's top while the heading lines up with "Open source". */
+    margin-bottom: 0.5rem;
   }
 
   .ghlang__list {
@@ -284,20 +288,23 @@ const languages = gh.languages.map((l) => ({
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 0.55rem;
+    gap: 0.35rem;
   }
 
   .ghlang__row {
     display: grid;
     grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
     align-items: baseline;
     column-gap: 0.6rem;
-    row-gap: 0.2rem;
+    row-gap: 0.1rem;
     font-size: var(--fs-small);
+    line-height: 1.25;
     color: var(--muted);
   }
 
   .ghlang__name {
+    grid-row: 1;
     grid-column: 1;
     min-width: 0;
     overflow: hidden;
@@ -306,6 +313,7 @@ const languages = gh.languages.map((l) => ({
   }
 
   .ghlang__pct {
+    grid-row: 1;
     grid-column: 2;
     justify-self: end;
     font-family: var(--font-mono);
@@ -315,6 +323,7 @@ const languages = gh.languages.map((l) => ({
   }
 
   .ghlang__bar {
+    grid-row: 2;
     grid-column: 1 / -1;
     height: 6px;
     border-radius: 3px;
@@ -334,9 +343,9 @@ const languages = gh.languages.map((l) => ({
   }
 
   @media (min-width: 56em) {
-    .ghstrip__body {
+    .ghstrip {
       grid-template-columns: 3fr 1fr;
-      gap: clamp(1.4rem, 1rem + 2vw, 3rem);
+      column-gap: clamp(1.4rem, 1rem + 2vw, 3rem);
       align-items: start;
     }
 
