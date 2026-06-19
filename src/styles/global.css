@@ -1182,7 +1182,10 @@ details.abstract p {
 
 .morelist {
   margin: 0;
-  max-width: var(--measure);
+  /* A scannable link row, not prose — the reading measure doesn't apply, so it
+     runs to its natural width and stays on one line (wrapping only when the
+     viewport is genuinely too narrow). */
+  max-width: none;
   line-height: 2;
 }
 
