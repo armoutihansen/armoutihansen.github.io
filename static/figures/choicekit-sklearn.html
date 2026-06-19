@@ -16,8 +16,15 @@
   :root[data-theme="light"]{ --dim:#6d6757; --line:rgba(120,113,92,0.5); }
   :root[data-theme="dark"]{ --dim:#8a8370; --line:rgba(138,131,112,0.4); }
   html,body{margin:0;background:var(--emb-bg);font-family:'JetBrains Mono',ui-monospace,monospace}
-  .wrap{display:flex;flex-direction:column;justify-content:center;height:100vh;
-        box-sizing:border-box;padding:12px 18px;gap:9px}
+
+  /* The figure scales to fit its host frame instead of being clipped: .stage is
+     the frame, .wrap is sized to its natural content and centred, then scaled
+     down by JS (fit()) so it always fits at any panel width — the HTML analogue
+     of the SVG figures' viewBox auto-fit. */
+  .stage{height:100vh;display:grid;place-items:center;overflow:hidden;
+         grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr)}
+  .wrap{display:flex;flex-direction:column;gap:9px;padding:8px 14px;
+        box-sizing:border-box;transform-origin:center center}
   .bar{display:flex;justify-content:space-between;align-items:baseline;
        font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim)}
   .bar .tag{border:1px solid var(--line);border-radius:5px;padding:1px 7px}
@@ -25,7 +32,7 @@
   /* wide-form data tell: one sklearn row = one choice situation */
   .wide{border:1px solid var(--line);border-radius:6px;overflow:hidden;
         font-size:10.5px;color:var(--ink)}
-  .wide table{border-collapse:collapse;width:100%}
+  .wide table{border-collapse:collapse}
   .wide th,.wide td{padding:3px 8px;text-align:right;white-space:nowrap}
   .wide thead th{color:var(--amber);font-weight:600;letter-spacing:0.02em;
                  border-bottom:1px solid var(--line)}
@@ -51,6 +58,7 @@
 </style>
 </head>
 <body>
+<div class="stage">
 <div class="wrap">
   <div class="bar"><span>choicekit · wide-form X, y</span><span class="tag">intended interface</span></div>
 
@@ -87,6 +95,7 @@
 
   <div class="bar"><span></span><button class="ctl" id="replay">↻ replay</button></div>
 </div>
+</div>
 
 <script>
   const lines = [...document.querySelectorAll(".ln")];
@@ -106,6 +115,23 @@
   document.getElementById("replay").addEventListener("click", play);
   play();
 
+  // Scale the content to fit the host frame at any panel width (never clip).
+  const stage = document.querySelector(".stage");
+  const wrap = document.querySelector(".wrap");
+  function fit() {
+    wrap.style.transform = "none";
+    const s = Math.min(stage.clientWidth / wrap.offsetWidth,
+                       stage.clientHeight / wrap.offsetHeight, 1);
+    wrap.style.transform = "scale(" + s + ")";
+  }
+  // Observe BOTH the frame (panel resize) and the content (web-font reflow —
+  // a transform does not trigger ResizeObserver, so re-fitting here can't loop).
+  const ro = new ResizeObserver(fit);
+  ro.observe(stage);
+  ro.observe(wrap);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  window.addEventListener("load", fit);
+  fit();
 </script>
 <!-- Figure embed channel: theme sync + ready handshake (see /figures/_embed.js). -->
 <script src="/figures/_embed.js"></script>
