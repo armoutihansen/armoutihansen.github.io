@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PublicationItem from "../components/PublicationItem.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import ResearchStrip from "../components/ResearchStrip.astro";
 import { journalPublications, otherWork } from "../data/publications";
 
 const journals = journalPublications();
@@ -20,6 +21,7 @@ const other = otherWork();
       working papers and replication code. The methods are econometric and the assumptions are
       stated; the replication packages are public.
     </p>
+    <ResearchStrip />
   </header>
 
   <section class="section">

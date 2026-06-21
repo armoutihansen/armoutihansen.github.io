@@ -121,7 +121,18 @@ keeps the same hierarchy, inverted — same language, secondary, not a separate 
   credibility, contact.
 - `/projects/` (nav: Work): an open-source footprint strip (precomputed from the GitHub
   API → `src/data/github.json`), then grouped selected work from single-group project data.
-- `/publications/` (nav: Research): publications, working papers, replication packages.
+- `/publications/` (nav: Research): a credibility stat strip in the hero (CV figures + a
+  Google Scholar **citation count** from `src/data/scholar.json`), then publications,
+  working papers, replication packages. The strip is the Research analog of the Work
+  page's open-source strip — it raises the page's floor so it no longer reads as
+  neglected, but Research stays a **subordinate credibility section, not a co-headline**
+  with Work: entries stay compact bibliographic, covers stay, abstracts stay collapsed,
+  and there are **no per-paper figures**. _Avoid_: showing **h-index / i10-index** (both
+  single-digit — they undercut rather than add); re-adding per-paper figures or a
+  Work-style Problem/Approach/Result ledger to chase visual parity (this was considered
+  and deliberately rejected — the data papers' figures would be heavy to recolor, theory
+  diagrams read poorly out of context, and near-parity fights the quantitative-analyst
+  identity).
 - `/cv/`: experience, strengths, skills, education, languages, PDF download.
 
 **Hero pattern**:
@@ -184,6 +195,13 @@ predictably, and tap targets stay comfortable.
   precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`;
   `scripts/gen_github_data.mjs` → `github.json`) — no model or API call at build or request
   time. Refresh by re-running the scripts. See ADR 0003.
+- The Research page's **citation count** is the one figure not script-generated:
+  `src/data/scholar.json` is maintained **by hand** from the public Google Scholar profile
+  and shape-checked by a small validator — **no scraping** (it is against Scholar's terms),
+  so the displayed number stays consistent with the profile a visitor clicks through to.
+  Refresh = read the number off Scholar and edit `scholar.json`'s count + `asOf` date. An
+  optional OpenAlex (sanctioned, key-less) auto-fill may back the validator, but the
+  displayed number is the hand-entered Scholar figure, not OpenAlex's (different count).
 
 ## Flagged Ambiguities
 

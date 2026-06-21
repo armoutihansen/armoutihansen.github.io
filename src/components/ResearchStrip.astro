@@ -1,0 +1,157 @@
+---
+// The Research analog of the Work page's open-source strip (GitHubStrip): a
+// credibility stat band for the /publications/ hero. It raises the page's floor
+// so it no longer reads as neglected, while Research stays a subordinate
+// credibility section (no per-paper figures). Data — including the hand-
+// maintained Scholar citation count — comes from the scholar module. See
+// CONTEXT.md -> "Page topology".
+import { researchStats } from "../data/credibility";
+import { scholarUrl, asOfLabel } from "../data/scholar";
+
+const stats = researchStats();
+const asOf = asOfLabel();
+---
+
+<div class="rstrip">
+  <div class="rstrip__top">
+    <span class="rstrip__label">Research record</span>
+    <a class="rstrip__link" href={scholarUrl} rel="me noreferrer">Google Scholar &rarr;</a>
+  </div>
+
+  <div class="rstrip__stats">
+    {stats.map((s) => (
+      <div class="rstrip__stat">
+        <strong class="rstrip__fig">{s.figure}</strong>
+        <span class="rstrip__lab">{s.label}</span>
+      </div>
+    ))}
+  </div>
+
+  <p class="rstrip__note">Citations per Google Scholar, as of {asOf}.</p>
+</div>
+
+<style>
+  /* Self-contained strip chrome, co-located with its markup (the entry rhythm,
+     tokens, and shared ledger selectors stay in global.css — see ADR 0004). */
+  .rstrip {
+    width: 100%;
+    margin-top: clamp(1.7rem, 1.1rem + 1.6vw, 2.6rem);
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .rstrip__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.3rem 1rem;
+  }
+
+  .rstrip__label,
+  .rstrip__link {
+    font-family: var(--font-mono);
+    font-size: var(--fs-meta);
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+  }
+
+  .rstrip__label {
+    color: var(--accent-deep);
+  }
+
+  .rstrip__link {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.16s ease;
+  }
+
+  .rstrip__link:hover {
+    color: var(--accent-deep);
+  }
+
+  /* ---- Mobile: a ledger. One stat per row, figure and label on a shared
+     baseline, hairline-divided — the same rhythm as the work/pub lists. The
+     fixed-width figure column keeps every label's left edge aligned. ---- */
+  .rstrip__stats {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .rstrip__stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    padding: 0.8rem 0;
+    border-top: var(--hairline);
+  }
+
+  .rstrip__fig {
+    flex: 0 0 auto;
+    min-width: 3.1rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: clamp(1.55rem, 1.3rem + 1vw, 1.85rem);
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--accent-deep);
+  }
+
+  .rstrip__lab {
+    margin: 0;
+    color: var(--muted);
+    font-size: var(--fs-small);
+    line-height: 1.3;
+  }
+
+  .rstrip__note {
+    margin: 0.15rem 0 0;
+    font-size: var(--fs-meta);
+    color: var(--faint);
+  }
+
+  /* ---- Desktop: a horizontal stat band. Content-sized columns distributed
+     with space-between (first flush-left, last flush-right) so there is no
+     trailing void, separated by vertical hairlines for deliberate structure.
+     The figure stacks over its label. ---- */
+  @media (min-width: 50em) {
+    .rstrip__stats {
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 0;
+      padding-top: 1.15rem;
+      border-top: var(--hairline);
+    }
+
+    .rstrip__stat {
+      flex: 0 1 auto;
+      display: grid;
+      grid-template-rows: auto auto;
+      align-content: start;
+      gap: 0.4rem;
+      padding: 0.1rem 0 0.1rem clamp(1.2rem, 2.6vw, 2.4rem);
+      border-top: 0;
+      border-left: var(--hairline);
+    }
+
+    .rstrip__stat:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .rstrip__fig {
+      min-width: 0;
+      font-size: clamp(1.95rem, 1.5rem + 1.4vw, 2.45rem);
+    }
+
+    .rstrip__lab {
+      max-width: 8.5rem;
+      line-height: 1.35;
+    }
+  }
+</style>
