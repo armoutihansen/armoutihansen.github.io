@@ -95,8 +95,10 @@ export const publications: Publication[] = [
     authors: "Jesper Armouti-Hansen and Matthias Kraekel",
     venue: "Working paper",
     year: "",
+    cover: "/images/publications/optimal-selling.png",
     details: "",
-    href: "",
+    href: "/papers/optimal-selling.pdf",
+    links: [{ label: "Manuscript", href: "/papers/optimal-selling.pdf" }],
     type: "Working paper",
     abstract:
       "We show that choosing a non-centralized distribution channel—that is, a retailer or an intermediary (e.g., sales representative, social media influencer)— instead of a centralized channel for selling goods with uncertain consumption quality can be optimal for a manufacturer as a self-commitment device. By this choice, the manufacturer can save costs from interacting with consumers (e.g., costs for sales activities). We derive conditions under which this self-commitment argument holds. In addition, we show that decentralized selling through a retailer can be even optimal if the manufacturer has to reimburse the retailer for the anticipated costs from consumer interaction, and if the manufacturer and the retailer simultaneously exert sales activities, which eliminates the self-commitment property of a retailer. In a second step, we discuss our self-commitment result under product competition, consumer naivety, product innovation, and product quality improvement."
@@ -107,8 +109,10 @@ export const publications: Publication[] = [
     authors: "Jesper Armouti-Hansen",
     venue: "Work in progress",
     year: "",
+    cover: "/images/publications/predictive-completeness.png",
     details: "A machine learning benchmark approach",
-    href: "",
+    href: "/papers/predictive-completeness.pdf",
+    links: [{ label: "Manuscript", href: "/papers/predictive-completeness.pdf" }],
     type: "Research project",
     abstract:
       "This project uses machine learning benchmarks to evaluate how much predictable variation in experimental social preference data is captured by parameterized behavioral models, including extensions with heterogeneous preference types."
@@ -118,10 +122,11 @@ export const publications: Publication[] = [
     authors: "Jesper Armouti-Hansen",
     venue: "Working paper",
     year: "2026",
+    cover: "/images/publications/frequency-beliefs.png",
     details: "Manuscript complete; replication package finalised",
     href: "https://github.com/armoutihansen/frequency-beliefs",
     links: [
-      { label: "Manuscript", href: "https://github.com/armoutihansen/frequency-beliefs/blob/main/paper/main.pdf" },
+      { label: "Manuscript", href: "/papers/frequency-beliefs.pdf" },
       { label: "Replication package", href: "https://github.com/armoutihansen/frequency-beliefs" }
     ],
     type: "Research project",
@@ -165,10 +170,10 @@ export function checkInvariants(pubs: Publication[], ownerName: string): void {
     throw new Error(`Publications missing owner name "${ownerName}" in authors: ${missingAuthor.join(", ")}`);
   }
   // Every journal publication must resolve to at least one link. Working papers
-  // and research projects can legitimately have nothing to link yet (e.g.
-  // "Predictive Completeness …", which CONTEXT.md flags is kept as a link-less
-  // "Work in progress" entry), so the link guarantee is scoped to the entries
-  // whose rendered shape contract requires explicit links.
+  // and research projects can legitimately have nothing to link yet (a draft with
+  // no public manuscript), so the link guarantee is scoped to the entries whose
+  // rendered shape contract requires explicit links. The current working papers
+  // each carry a local "Manuscript" link, but that is data, not an invariant.
   const noLinks = pubs
     .filter((p) => p.type === JOURNAL_TYPE && resolveLinks(p).length === 0)
     .map((p) => p.title);

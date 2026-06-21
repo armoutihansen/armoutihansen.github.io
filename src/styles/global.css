@@ -827,6 +827,14 @@ main {
   align-self: start;
 }
 
+/* Working-paper covers are screenshots of a manuscript's first page, not journal
+   covers. A faint shadow + page-white fill makes the thumbnail read as a sheet of
+   paper rather than a flat tile (see ADR 0007). */
+.pub__cover--page {
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
 .pub__meta {
   margin: 0;
   font-family: var(--font-mono);

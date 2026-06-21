@@ -13,6 +13,10 @@ const NAME = profile.name;
 const authorParts = publication.authors.split(NAME);
 const links = publication.links;
 const showCover = Boolean(publication.cover);
+const isJournal = publication.type === "Publication";
+const coverAlt = isJournal
+  ? `${publication.venue} journal cover`
+  : `First page of “${publication.title}”`;
 ---
 
 <article class:list={["pub", { "pub--has-cover": showCover }]}>
@@ -44,9 +48,9 @@ const showCover = Boolean(publication.cover);
   </div>
   {showCover && (
     <img
-      class="pub__cover"
+      class:list={["pub__cover", { "pub__cover--page": !isJournal }]}
       src={publication.cover}
-      alt={`${publication.venue} journal cover`}
+      alt={coverAlt}
       loading="lazy"
       decoding="async"
     />
