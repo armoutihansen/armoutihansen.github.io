@@ -14,6 +14,7 @@ import {
 import choicekitFigure from "../../static/figures/choicekit-sklearn.html?raw";
 import econFigureHtml from "../../static/figures/econ-theories-completeness.html?raw";
 import efficiencyWagesFigureHtml from "../../static/figures/efficiency-wages-effort.html?raw";
+import frequencyFigureHtml from "../../static/figures/frequency-rules-winshare.html?raw";
 // Every committed figure source under static/figures/, keyed by its served
 // "/figures/<name>" path. Glob (eager) is type-clean without @types/node and
 // lets the embed-asset-existence test assert a file is actually committed.
@@ -302,6 +303,65 @@ describe("Efficiency Wages figure", () => {
     for (const hex of found) {
       if (allowed.has(hex.toLowerCase())) continue;
       throw new Error(`stray non-PAL hex in efficiency-wages figure: ${hex}`);
+    }
+  });
+});
+
+describe("Frequency figure", () => {
+  it("ships a non-empty committed figure HTML under static/figures/", () => {
+    expect(frequencyFigureHtml.length).toBeGreaterThan(0);
+  });
+
+  it("carries the embed-channel contract markers (referenced _embed.js, shared palette/theme)", () => {
+    expect(frequencyFigureHtml).toContain('src="/figures/_embed.js"');
+    expect(frequencyFigureHtml).toContain("--emb-bg");
+    expect(frequencyFigureHtml).toContain("data-theme");
+  });
+
+  it("keeps the figure-local emb:metric toggle listener", () => {
+    // The metric-toggle listener is spliced into the generator after
+    // finish_figure returns; assert it survived in the committed HTML.
+    expect(frequencyFigureHtml).toContain("emb:metric");
+    expect(frequencyFigureHtml).toContain("Plotly.restyle");
+  });
+
+  it("recolors from PAL values, with no stray hardcoded hex outside the palette", () => {
+    // finish_figure paints the committed (light-theme) figure from figure_theme.py's
+    // PAL["light"]: c0 amber drives the Squared-distance line, c2 clay the
+    // Frequency-guessing line, c1 warm-grey the Manhattan-distance line.
+    const PAL_C0_LIGHT = "#9a6310";
+    const PAL_C2_LIGHT = "#a8572b";
+    const PAL_C1_LIGHT = "#6f664c";
+    expect(frequencyFigureHtml).toContain(`"color":"${PAL_C0_LIGHT}"`); // Squared distance
+    expect(frequencyFigureHtml).toContain(`"color":"${PAL_C2_LIGHT}"`); // Frequency guessing
+    expect(frequencyFigureHtml).toContain(`"color":"${PAL_C1_LIGHT}"`); // Manhattan distance
+
+    // Every six-digit hex the figure embeds must be either a PAL value (the
+    // theme_block script ships both light and dark PAL slices for the runtime
+    // recolor), the shared dark-hoverlabel font chrome, or a Plotly-default
+    // template colour — never a hand-transcribed colour that could drift from PAL.
+    const PAL_HEX = new Set([
+      // light
+      "#5f594c", "#9a6310", "#6f664c", "#a8572b", "#ece6d7",
+      // dark
+      "#b1a98f", "#edb24e", "#9a9070", "#d98a52", "#1c1912"
+    ]);
+    // The dark hoverlabel font colour (HOVERLABEL in figure_theme.py — shared
+    // figure chrome, deliberately not a PAL token).
+    const HOVERLABEL_FONT = "#ece4d3";
+    // Plotly's bundled default template ships its own palette in to_html output.
+    const PLOTLY_TEMPLATE_HEX = new Set([
+      "#0d0887", "#46039f", "#7201a8", "#9c179e", "#bd3786", "#d8576b", "#ed7953",
+      "#fb9f3a", "#fdca26", "#f0f921", "#8e0152", "#c51b7d", "#de77ae", "#f1b6da",
+      "#fde0ef", "#f7f7f7", "#e6f5d0", "#b8e186", "#7fbc41", "#4d9221", "#276419",
+      "#2a3f5f", "#e5ecf6", "#ebf0f8", "#c8d4e3", "#636efa", "#ef553b", "#00cc96",
+      "#ab63fa", "#ffa15a", "#19d3f3", "#ff6692", "#b6e880", "#ff97ff", "#fecb52"
+    ]);
+    const allowed = new Set([...PAL_HEX, HOVERLABEL_FONT, ...PLOTLY_TEMPLATE_HEX]);
+    const found = frequencyFigureHtml.match(/#[0-9a-fA-F]{6}\b/g) ?? [];
+    for (const hex of found) {
+      if (allowed.has(hex.toLowerCase())) continue;
+      throw new Error(`stray non-PAL hex in frequency figure: ${hex}`);
     }
   });
 });
