@@ -63,14 +63,24 @@ channel.
 The warm-charcoal + amber tokens every figure recolors with — a concern of its own,
 distinct from the embed channel (the channel only carries the theme *signal*; the colours
 are not its business). One canonical source: `scripts/figure_theme.py` holds the values as
-Python data. From it, the generators inject `theme_block(ROLES)` (the `<style>` + recolor
-`<script>`, supplying only their per-figure `ROLES`), and `write_palette_css()` emits
+Python data. Three mechanisms read from it so the values are defined exactly once.
+`finish_figure(fig, *, roles, x_title, y_title, div_id)` builds a generated Plotly figure
+in the house style: the generator supplies only its data, trace *structure*, one `roles`
+map (`[idx, kind, role]`), and a stable `div_id`, and `finish_figure` does the rest — the
+build-time recolor (line/marker for `line`, fillcolor at 0.14 alpha for `band`), the shared
+font/transparent backgrounds/hoverlabel/axis-colour skeleton, and the `theme_block(roles)`
+injection. The `div_id` makes regeneration deterministic (plotly otherwise stamps a random
+id on the plot `<div>` per run), so a clean `git diff` after re-running a generator is the
+regression gate. The same `roles` map drives the runtime recolor: `theme_block(ROLES)` emits the `<style>` +
+recolor `<script>` that re-paints the plot per host theme. So both build-time and runtime
+colours come from `PAL` keyed by one map. Third, `write_palette_css()` emits
 `static/figures/_palette.css`, which the hand-written figures `<link>` and reference as
-`var(--ink)`/`var(--amber)`/… instead of re-declaring the tokens. Two delivery mechanisms,
-one set of values. Adding a generated figure needs only its `ROLES`; a palette change is
-edited in `figure_theme.py` and re-emitted (re-run the two generators and the module).
+`var(--ink)`/`var(--amber)`/… instead of re-declaring the tokens. Three delivery
+mechanisms, one set of values. Adding a generated figure needs only its `roles`; a palette
+change is edited in `figure_theme.py` and re-emitted (re-run the generators and the module).
 _Avoid_: transcribing hex/rgba values into a generator, a figure, or the CSS by hand
-(the drift this consolidated); folding the palette into the embed channel.
+(the drift this consolidated); re-implementing the house-style scaffolding in a generator
+instead of `finish_figure`; folding the palette into the embed channel.
 
 ## Visual Direction
 

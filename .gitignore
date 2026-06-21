@@ -3,3 +3,6 @@ dist/
 .astro/
 .DS_Store
 static/.DS_Store
+
+# Python bytecode from scripts/gen_*.py
+__pycache__/
