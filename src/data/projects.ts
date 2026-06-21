@@ -2,7 +2,7 @@ export const projectGroups = [
   {
     title: "Applied analysis & modeling",
     intro:
-      "Data work aimed at a decision and the tools that support it: pick the measure that matters, build the analysis, and state what it supports — plus the search, ranking, and tool-calling code that goes with it."
+      "Data work aimed at a decision: choosing the right measure, building the analysis, and being clear about what it does and doesn't support — plus the search, ranking, and tool-calling code that goes with it."
   },
   {
     title: "Research & replication",
@@ -49,7 +49,7 @@ export const projects: Project[] = [
     problem: "What can CitiBike trip data and NYPD crash records, together, tell an operator and an insurer?",
     approach:
       "Three analyses on 2023–2025 trips: demand and usage patterns; a per-trip crash-risk measure by station and time (NYPD crashes over trip exposure, empirical-Bayes smoothed); and a net-flow imbalance classifier for rebalancing.",
-    result: "A granular, interpretable risk-per-trip measure an insurer could use as a pricing factor, demand patterns showing seasonality and per-station stagnation, and stable net-flow patterns a classifier predicts to guide rebalancing.",
+    result: "An interpretable per-trip risk measure an insurer could use as a rating input, demand patterns showing seasonality and per-station stagnation, and stable net-flow patterns a classifier predicts to guide rebalancing.",
     tools: ["Python", "pandas", "feature engineering", "risk analysis", "prediction"],
     href: "/DSC/",
     embed: "/figures/citibike-station-risk.html",
@@ -172,7 +172,7 @@ export const projects: Project[] = [
     tools: ["Python", "machine learning", "model evaluation"],
     href: "https://github.com/armoutihansen/econ-theories-ml",
     embed: "/figures/econ-theories-completeness.html",
-    figureTitle: "The completeness ladder",
+    figureTitle: "Completeness by model heterogeneity",
     figureNote:
       "Completeness climbs as the model captures more individual heterogeneity — a single type is far from enough, and even a handful of latent types don't exhaust it.",
     imageAlt:
