@@ -61,6 +61,16 @@ def _axis(theme):
     return "rgba(" + PAL[theme]["neutral"] + "," + AXIS_ALPHA[theme] + ")"
 
 
+# The dark hover tooltip shared by every generated figure. Copy-pasted across
+# the generators today and NOT part of PAL (it is its own dark-on-warm chrome,
+# not a theme token), so it lives here as the one canonical definition.
+HOVERLABEL = dict(
+    bgcolor="rgba(20,18,14,0.92)",
+    font=dict(color="#ece4d3", size=12),
+    bordercolor="rgba(138,131,112,0.4)",
+)
+
+
 def _pal_js(theme):
     """One theme's slice of the JS PAL object, byte-compatible with the
     hand-written original (ink/grid/axis/c0/c1/c2)."""
@@ -73,13 +83,28 @@ def _pal_js(theme):
     )
 
 
+def _roles_js(roles):
+    """Serialize the Python roles list to the exact JS literal the runtime
+    recolor expects: single quotes, no spaces, unquoted ints — e.g.
+    `[[0,'line','c0']]`. Hand-built (not json.dumps) to stay byte-identical."""
+    return "[" + ",".join(
+        "[%d,'%s','%s']" % (idx, kind, role) for idx, kind, role in roles
+    ) + "]"
+
+
+def _rgba(hex_color, alpha):
+    """hex -> rgba(r,g,b,alpha), matching the JS rgba() helper in theme_block."""
+    n = int(hex_color.lstrip("#"), 16)
+    return "rgba(%d,%d,%d,%s)" % ((n >> 16) & 255, (n >> 8) & 255, n & 255, alpha)
+
+
 def theme_block(roles):
     """<style>+<script> injected into the Plotly HTML <head>: background follows
     the host theme, and the plot recolors (warm, amber-on-neutral) per theme.
 
-    `roles` is the JS literal mapping trace index -> palette role (e.g.
-    "[[0,'line','c0'],...]"). It is the ONLY per-figure input; everything else is
-    single-sourced from this module's PAL."""
+    `roles` is the Python list mapping trace index -> palette role (e.g.
+    `[[0, "line", "c0"], ...]`), serialized here to the JS literal. It is the ONLY
+    per-figure input; everything else is single-sourced from this module's PAL."""
     light, dark = PAL["light"], PAL["dark"]
     return (
         "<style>:root{--emb-bg:" + light["emb-bg"] + "}"
@@ -94,7 +119,7 @@ def theme_block(roles):
         "<script>(function(){"
         "var PAL={light:" + _pal_js("light") + ","
         "dark:" + _pal_js("dark") + "};"
-        "var ROLES=" + roles + ";"
+        "var ROLES=" + _roles_js(roles) + ";"
         "function rgba(h,a){var n=parseInt(h.slice(1),16);"
         "return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')';}"
         "function curT(){return document.documentElement.dataset.theme||"
@@ -115,6 +140,51 @@ def theme_block(roles):
         "{attributes:true,attributeFilter:['data-theme']});"
         "})();</script>"
     )
+
+
+def finish_figure(fig, *, roles, x_title, y_title, div_id):
+    """Build a generated Plotly figure in the house style and return its HTML.
+
+    The generator supplies only data, trace STRUCTURE, the `roles` map, and a
+    stable `div_id`; every colour — build-time (here) and runtime (theme_block's
+    JS) — comes from PAL, keyed by that one map. For each `[idx, kind, role]`: a
+    'line' trace gets its line/marker colour set to PAL["light"][role]; a 'band'
+    trace gets its fillcolor set to that role colour at 0.14 alpha (the Python
+    twin of the JS recolor in theme_block). The shared font, transparent
+    backgrounds, dark hoverlabel, and axis-colour skeleton are merged on top of
+    the generator's bespoke layout/axis settings (margins, legend,
+    type/range/tickangle/...), which survive untouched.
+
+    `div_id` makes the output deterministic: plotly otherwise stamps a fresh
+    random uuid on the plot <div> per run, so regenerating would always diff.
+    With a stable id, `python scripts/gen_*_fig.py` is reproducible and a clean
+    `git diff` is the real regression gate."""
+    light = PAL["light"]
+    for idx, kind, role in roles:
+        c = light[role]
+        if kind == "line":
+            fig.data[idx].line.color = c
+            fig.data[idx].marker.color = c
+        else:
+            fig.data[idx].fillcolor = _rgba(c, "0.14")
+
+    # Merge the shared house style onto the generator's bespoke layout/axes.
+    fig.update_layout(
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font=dict(family="'Hanken Grotesk', system-ui, sans-serif",
+                  color=light["ink"], size=13),
+        hoverlabel=HOVERLABEL,
+    )
+    axis = dict(showgrid=True, gridcolor=_grid("light"), zeroline=False,
+                linecolor=_grid("light"), ticks="outside", tickcolor=_grid("light"),
+                tickfont=dict(family="'JetBrains Mono', monospace", size=11))
+    fig.update_xaxes(title_text=x_title, **axis)
+    fig.update_yaxes(title_text=y_title, **axis)
+
+    html = fig.to_html(include_plotlyjs="cdn", full_html=True, div_id=div_id,
+                       config={"responsive": True, "displayModeBar": False})
+    return html.replace("<head>", "<head>" + theme_block(roles))
 
 
 # --- shared CSS for the hand-written figures --------------------------------
