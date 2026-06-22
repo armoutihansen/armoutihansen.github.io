@@ -1,0 +1,45 @@
+{
+  "_doc": "CitiBike system-wide per-trip crash risk by time of day. Recomputed from the owner's AXA/DSC project (notebooks/risk_analysis.ipynb): NYPD collision severity (hazard H) and CitiBike departures (exposure E) aggregated over 2025 trips, risk = H / E, EB-smoothed (lambda ~ 1 at this aggregate exposure, so R_eb ~ R_raw). x_daytime = R / min(R). The exposure normalization inverts the ranking: most crash severity is at midday, but per-trip risk peaks at night.",
+  "bins": [
+    {
+      "key": "morning",
+      "label": "Morning",
+      "H": 17098.4,
+      "E": 21509434,
+      "R": 0.000795,
+      "x_daytime": 1.0
+    },
+    {
+      "key": "midday",
+      "label": "Midday",
+      "H": 36349.5,
+      "E": 39540191,
+      "R": 0.000919,
+      "x_daytime": 1.16
+    },
+    {
+      "key": "evening",
+      "label": "Evening",
+      "H": 32203.9,
+      "E": 38072046,
+      "R": 0.000846,
+      "x_daytime": 1.06
+    },
+    {
+      "key": "late_evening",
+      "label": "Late eve",
+      "H": 21252.0,
+      "E": 15983245,
+      "R": 0.00133,
+      "x_daytime": 1.67
+    },
+    {
+      "key": "night",
+      "label": "Night",
+      "H": 12234.7,
+      "E": 4134270,
+      "R": 0.002959,
+      "x_daytime": 3.72
+    }
+  ]
+}

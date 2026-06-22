@@ -74,3 +74,31 @@ grounded in demonstrable ability (CV, research, GitHub) — no overclaiming.
 - The honesty rule is load-bearing: every visualisation must depict a method or finding the
   owner can defend in an interview. Approximate values (e.g. CitiBike bars read off the
   project's own chart) are acceptable; invented results are not.
+
+## Amendments
+
+### 2026-06-22 — Panel 2 becomes the second interactive analysis (exposure normalization)
+
+Decision 3 originally specified Panel 2 as a *static* "risk per trip → time of day" bar
+chart, in service of decision 2's "one load-bearing centrepiece, no motion for its own
+sake." Reviewing the rendered hero, Panel 2 was the weakest element — a generic bar chart
+of five **eyeballed** values, the least data-backed thing in a hero whose whole premise is
+real precomputed data.
+
+Panel 2 is now interactive: a toggle between **total crash severity** (peaks midday) and
+**risk per trip** (severity ÷ trip exposure, EB-smoothed; peaks at night ≈3.7×). Dividing
+by exposure **inverts the ranking** — night has the fewest crashes and fewest riders but
+the highest per-trip risk. That flip *is* the interaction.
+
+This deliberately relaxes "one interactive centrepiece" to **two interactive analyses**,
+justified because the second one **teaches a distinct idea** (the actuarially-credible
+per-trip risk an insurer prices on — on-identity) rather than adding motion. It stays the
+*supporting act*: a two-state toggle, not a drag-to-explore showpiece competing with Panel
+1. Decision 2's real target — "no motion for its own sake" — is preserved; the motion
+carries the insight.
+
+It also **strengthens the honesty rule**: the eyeballed bars are replaced by real values
+recomputed from the owner's CitiBike project (`scripts/gen_citibike_tod.py` →
+`scripts/data/citibike_tod_risk.json`; provenance: AXA/DSC `notebooks/risk_analysis.ipynb`).
+The "approximate values… read off the project's own chart" clause above no longer applies
+to Panel 2 — it now ships committed, regenerable data like Panel 1.

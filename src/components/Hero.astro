@@ -1,5 +1,6 @@
 ---
 import model from "../data/hero-model.json";
+import tod from "../../scripts/data/citibike_tod_risk.json";
 import { profile } from "../data/profile";
 import { bandStats, type HeroPoint } from "../data/hero-model";
 
@@ -9,26 +10,49 @@ const DEFAULT_HI = 0.75;
 const d0 = bandStats(points, DEFAULT_HI);
 const dataJson = JSON.stringify(points);
 
-// Panel 2 — real finding from the CitiBike project (static/DSC): collision
-// severity per trip by time of day. Values read from the project's chart.
-const riskBars = [
-  { label: "Morning", v: 0.0012 },
-  { label: "Midday", v: 0.0011 },
-  { label: "Evening", v: 0.0011 },
-  { label: "Late eve", v: 0.0021 },
-  { label: "Night", v: 0.0049 },
-];
-const RMAX = 0.0052;
-const RW = 340;
-const RH = 196;
-const rPadL = 8;
-const rPadR = 8;
-const rPadT = 16;
-const rPadB = 28;
+// Panel 2 — real CitiBike finding (the owner's AXA/DSC project), recomputed to
+// committed data by scripts/gen_citibike_tod.py. Two views the visitor toggles:
+// total crash severity (peaks midday) vs. risk per trip (severity ÷ exposure,
+// EB-smoothed; peaks at night ~3.7×). The exposure normalisation inverts the
+// ranking — that flip is the interaction. Opens on the headline (risk). ADR 0003.
+const todBins = tod.bins;
+const RW = 360;
+const RH = 188;
+const rPadL = 10;
+const rPadR = 10;
+const rPadT = 12;
+const rPadB = 30;
 const rPlotW = RW - rPadL - rPadR;
 const rPlotH = RH - rPadT - rPadB;
-const rbw = rPlotW / riskBars.length;
 const rBase = rPadT + rPlotH;
+const rSlot = rPlotW / todBins.length;
+const rBarW = 38;
+const maxH = Math.max(...todBins.map((b) => b.H));
+const maxR = Math.max(...todBins.map((b) => b.R));
+const minH = Math.min(...todBins.map((b) => b.H));
+const minR = Math.min(...todBins.map((b) => b.R));
+const todLayout = todBins.map((b, i) => ({
+  label: b.label,
+  x: rPadL + i * rSlot + (rSlot - rBarW) / 2,
+  cx: rPadL + i * rSlot + rSlot / 2,
+  fracSev: b.H / maxH,
+  fracRisk: b.R / maxR,
+}));
+const peakSevI = todBins.reduce((m, b, i) => (b.H > todBins[m].H ? i : m), 0);
+const PEAK_RISK = todBins.reduce((m, b, i) => (b.R > todBins[m].R ? i : m), 0);
+const fmtM = (n: number) => (n / 1e6).toFixed(1) + "M";
+// Three readouts that mirror Panel 1's — they update (and the peak flips Midday→
+// Night) when the metric toggles, so the exposure-normalization story is carried
+// in numbers, like the model panel's auto/review/accuracy row.
+const todReadouts = {
+  sev: { peak: todBins[peakSevI].label, mult: (maxH / minH).toFixed(1) + "×", exp: fmtM(todBins[peakSevI].E) },
+  risk: { peak: todBins[PEAK_RISK].label, mult: (maxR / minR).toFixed(1) + "×", exp: fmtM(todBins[PEAK_RISK].E) },
+};
+const todNotes = {
+  sev: "Total NYPD crash severity by time of day — most crashes fall at midday.",
+  risk: "Severity ÷ trip exposure, EB-smoothed — the per-trip risk an insurer would price on.",
+};
+const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes });
 ---
 
 <section class="lede" aria-labelledby="lede-name">
@@ -83,56 +107,53 @@ const rBase = rPadT + rPlotH;
         </figure>
       </div>
 
-      <!-- Slide 2 — CitiBike risk per trip -->
-      <div class="deck__slide" role="group" aria-roledescription="slide" aria-label="CitiBike risk per trip by time of day">
-        <figure class="rpanel">
+      <!-- Slide 2 — CitiBike crash risk: total severity ⇄ risk per trip -->
+      <div class="deck__slide" role="group" aria-roledescription="slide" aria-label="CitiBike crash risk by time of day">
+        <figure class="rpanel" data-tod>
           <figcaption class="predict__cap">
-            <span class="predict__title">Risk per trip → time of day</span>
-            <span class="predict__meta">CitiBike × NYPD collisions</span>
+            <span class="predict__title">CitiBike crash risk</span>
+            <span class="predict__meta">NYPD × trips · 2025</span>
           </figcaption>
-          <svg
-            class="rpanel__svg"
-            viewBox={`0 0 ${RW} ${RH}`}
-            preserveAspectRatio="xMidYMid meet"
-            role="img"
-            aria-label="Bar chart of collision severity per CitiBike trip by time of day. Risk is roughly four times higher at night than during the day, despite lower ridership."
-          >
-            {
-              riskBars.map((b, i) => {
-                const h = (b.v / RMAX) * rPlotH;
-                const w = rbw * 0.6;
-                const x = rPadL + i * rbw + (rbw - w) / 2;
-                const y = rBase - h;
-                const night = b.label === "Night";
-                return (
-                  <g class="rpanel__bar">
-                    <rect
-                      x={x}
-                      y={y}
-                      width={w}
-                      height={h}
-                      rx="1.5"
-                      fill={night ? "var(--accent-deep)" : "var(--accent)"}
-                      opacity={night ? "1" : "0.8"}
-                    />
-                    <text x={x + w / 2} y={rBase + 13} text-anchor="middle" class="rpanel__xlabel">
-                      {b.label}
-                    </text>
-                  </g>
-                );
-              })
-            }
-            <text
-              x={rPadL + 4 * rbw + rbw / 2}
-              y={rBase - (0.0049 / RMAX) * rPlotH - 6}
-              text-anchor="middle"
-              class="rpanel__callout">≈4×</text>
-            <line x1={rPadL} y1={rBase + 0.5} x2={RW - rPadR} y2={rBase + 0.5} stroke="var(--line-strong)" stroke-width="1" />
-          </svg>
-          <p class="predict__hint rpanel__note">
-            Collisions matched to stations (BallTree 300&nbsp;m), severity-weighted, EB-smoothed — risk per trip peaks
-            at night, ~4× daytime.
-          </p>
+          <div class="rpanel__stage">
+            <svg
+              class="rpanel__svg"
+              viewBox={`0 0 ${RW} ${RH}`}
+              preserveAspectRatio="xMidYMax meet"
+              role="img"
+              aria-label="Crash risk across five times of day. Switching from total crash severity to risk per trip — severity divided by trip exposure — inverts the ranking: night has the fewest crashes and fewest riders but ~3.7× the per-trip risk of the safest window."
+            >
+              {todLayout.map((b, i) => (
+                <g class="rbar">
+                  <rect
+                    class:list={["rbar__rect", { "is-peak": i === PEAK_RISK }]}
+                    data-sev={b.fracSev.toFixed(4)}
+                    data-risk={b.fracRisk.toFixed(4)}
+                    x={b.x}
+                    y={rPadT}
+                    width={rBarW}
+                    height={rPlotH}
+                    rx="1.5"
+                    style={`transform: scaleY(${b.fracRisk.toFixed(4)})`}
+                  />
+                  <text x={b.cx} y={rBase + 14} text-anchor="middle" class="rpanel__xlabel">{b.label}</text>
+                </g>
+              ))}
+              <line x1={rPadL} y1={rBase + 0.5} x2={RW - rPadR} y2={rBase + 0.5} stroke="var(--line-strong)" stroke-width="1" />
+            </svg>
+          </div>
+          <div class="predict__foot">
+            <dl class="predict__readouts">
+              <div><dt>Peak</dt><dd data-k="peak">{todReadouts.risk.peak}</dd></div>
+              <div><dt>Peak ÷ low</dt><dd data-k="mult">{todReadouts.risk.mult}</dd></div>
+              <div><dt>Exposure</dt><dd data-k="exp">{todReadouts.risk.exp}</dd></div>
+            </dl>
+            <div class="rtoggle" role="group" aria-label="Risk metric">
+              <button type="button" data-tod-go="sev" aria-pressed="false">Total severity</button>
+              <button type="button" data-tod-go="risk" aria-pressed="true">Risk per trip</button>
+            </div>
+          </div>
+          <p class="predict__hint rpanel__note" data-tod-note>{todNotes.risk}</p>
+          <script type="application/json" data-tod-readouts is:inline set:html={todData}></script>
         </figure>
       </div>
     </div>
@@ -367,7 +388,8 @@ const rBase = rPadT + rPlotH;
     color: var(--ink);
   }
 
-  .predict__readouts dd[data-k="acc"] {
+  .predict__readouts dd[data-k="acc"],
+  .predict__readouts dd[data-k="mult"] {
     color: var(--accent-deep);
   }
 
@@ -381,18 +403,67 @@ const rBase = rPadT + rPlotH;
   }
 
   /* ---- risk panel ---- */
-  .rpanel__svg {
+  .rpanel__stage {
     flex: 1;
+    min-height: 150px;
+    display: flex;
+  }
+
+  .rpanel__svg {
     width: 100%;
+    height: 100%;
     min-height: 0;
   }
 
-  .rpanel__bar rect {
-    transition: opacity 0.15s ease;
+  /* Bars grow from the baseline; toggling severity⇄risk re-scales (and re-ranks)
+     them. Drawn full-height, then scaleY'd to the active metric's fraction. */
+  .rbar__rect {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    fill: var(--accent);
+    opacity: 0.78;
+    transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.3s ease, fill 0.3s ease;
   }
 
-  .rpanel__bar:hover rect {
+  .rbar__rect.is-peak {
+    fill: var(--accent-deep);
     opacity: 1;
+  }
+
+  .rtoggle {
+    display: inline-flex;
+    width: max-content;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .rtoggle button {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: var(--track-label);
+    text-transform: uppercase;
+    color: var(--muted);
+    background: transparent;
+    border: 0;
+    padding: 0.4rem 0.75rem;
+    min-height: 2.2rem;
+    cursor: pointer;
+    transition: color 0.16s ease, background 0.16s ease;
+  }
+
+  .rtoggle button + button {
+    border-left: 1px solid var(--line);
+  }
+
+  .rtoggle button:hover {
+    color: var(--ink);
+  }
+
+  .rtoggle button[aria-pressed="true"] {
+    color: var(--on-accent);
+    background: var(--accent);
   }
 
   .rpanel__xlabel {
@@ -401,13 +472,6 @@ const rBase = rPadT + rPlotH;
     letter-spacing: 0.02em;
     text-transform: uppercase;
     fill: var(--faint);
-  }
-
-  .rpanel__callout {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    font-weight: 700;
-    fill: var(--accent-deep);
   }
 
   .rpanel__note {
@@ -643,6 +707,40 @@ const rBase = rPadT + rPlotH;
       };
       requestAnimationFrame(stepFn);
     }
+  }
+
+  // ---------- Panel 2: total severity ⇄ risk per trip toggle ----------
+  const todPanel = document.querySelector("[data-tod]");
+  if (todPanel) {
+    const tBars = Array.from(todPanel.querySelectorAll<SVGRectElement>(".rbar__rect"));
+    const tNote = todPanel.querySelector<HTMLElement>("[data-tod-note]");
+    const tBtns = Array.from(todPanel.querySelectorAll<HTMLButtonElement>("[data-tod-go]"));
+    const dataEl = todPanel.querySelector("[data-tod-readouts]");
+    const { readouts, notes } = JSON.parse(dataEl?.textContent || "{}");
+    const out = {
+      peak: todPanel.querySelector('[data-k="peak"]'),
+      mult: todPanel.querySelector('[data-k="mult"]'),
+      exp: todPanel.querySelector('[data-k="exp"]'),
+    };
+    const peakOf = (key: "sev" | "risk") =>
+      tBars.reduce((m, b, i) => (+(b.dataset[key] || 0) > +(tBars[m].dataset[key] || 0) ? i : m), 0);
+    const peak = { sev: peakOf("sev"), risk: peakOf("risk") };
+
+    const setTod = (state: "sev" | "risk") => {
+      tBars.forEach((b, i) => {
+        b.style.transform = `scaleY(${b.dataset[state] || "0"})`;
+        b.classList.toggle("is-peak", i === peak[state]);
+      });
+      const r = readouts?.[state];
+      if (r) {
+        if (out.peak) out.peak.textContent = r.peak;
+        if (out.mult) out.mult.textContent = r.mult;
+        if (out.exp) out.exp.textContent = r.exp;
+      }
+      if (tNote && notes) tNote.textContent = notes[state];
+      tBtns.forEach((btn) => btn.setAttribute("aria-pressed", String(btn.dataset.todGo === state)));
+    };
+    tBtns.forEach((btn) => btn.addEventListener("click", () => setTod(btn.dataset.todGo as "sev" | "risk")));
   }
 
   // ---------- Deck: scroll/tab navigation between the two panels ----------

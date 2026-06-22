@@ -41,9 +41,15 @@ exercises competing with serious applied work.
 
 **Plain, concrete voice**:
 Copy is short, specific, and confident. No throat-clearing, no buzzword stacks, no
-"I turn X into Y" filler, no AI-flavoured hedging.
+"I turn X into Y" filler, no AI-flavoured hedging. Sampled from his own repo prose
+(`~/repos/frequency-beliefs`, `~/repos/efficiency-wages`): state what a thing *is* and
+what it *does*, in concrete specifics, then stop — the result carries the weight, never
+a value-tag asserting it.
 _Avoid_: verbose abstractions, triplet-list padding, vague nouns ("decision support",
-"operational interpretation") used as a substitute for a concrete claim.
+"operational interpretation") used as a substitute for a concrete claim; **importance-
+assertions / value-tags** that editorialize a claim's significance instead of stating a
+fact ("it's what gets a model trusted in production", "this is mission-critical") — he
+never does this in his own writing.
 
 **Figure embed channel**:
 The contract between the Work page and the interactive illustration iframes it hosts.
@@ -145,10 +151,15 @@ keeps the same hierarchy, inverted — same language, secondary, not a separate 
 Eyebrow `Quantitative Analyst · Economics PhD`, large serif name (Fraunces), a lead that
 mirrors his CV summary (minus the job-search line), a mono fact line, and primary actions —
 paired with the **interactive hero deck**: a two-panel, tab/scroll switcher carrying
-(1) _model confidence → decision_ (a real logistic-regression classifier with a draggable
-confidence band, coverage vs. accuracy) and (2) _risk per trip → time of day_ (the real
-CitiBike finding). Both are genuine analyses of his, drawn from committed static data — no
-runtime model, no portrait. The home research strip shows credibility stats, not tools.
+**two interactive analyses** (1) _model confidence → decision_ (a real logistic-regression
+classifier with a draggable confidence band, coverage vs. accuracy) and (2) _CitiBike crash
+risk_ (a toggle between **total crash severity**, which peaks midday, and **risk per trip**
+— severity ÷ trip exposure, EB-smoothed — which peaks at night ≈3.7×; the exposure
+normalization inverts the ranking, and that flip is the interaction). Panel 2 is the
+*supporting act*, not a second competing showpiece — it earns its interactivity by teaching
+the exposure-normalization idea, not by adding motion (ADR 0003, 2026-06-22 amendment). Both
+are genuine analyses of his, drawn from committed static data — no runtime model, no
+portrait. The home research strip shows credibility stats, not tools.
 
 **Item shape (Work)**:
 Each project appears once, under one primary group, as an editorial entry: index, kind
@@ -198,9 +209,11 @@ predictably, and tap targets stay comfortable.
   `selectedWork()` and `featuredProjects()` rather than re-deriving grouping or hardcoding
   which projects are featured.
 - The hero's two analyses and the Work page's open-source strip run on **committed,
-  precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`;
-  `scripts/gen_github_data.mjs` → `github.json`) — no model or API call at build or request
-  time. Refresh by re-running the scripts. See ADR 0003.
+  precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`; Panel 2's time-of-day
+  bins `scripts/gen_citibike_tod.py` → `scripts/data/citibike_tod_risk.json`, recomputed from
+  the owner's AXA/DSC `risk_analysis.ipynb`; `scripts/gen_github_data.mjs` → `github.json`) —
+  no model or API call at build or request time. Refresh by re-running the scripts. See ADR
+  0003 (and its 2026-06-22 amendment for Panel 2).
 - The Research page's **citation count** is the one figure not script-generated:
   `src/data/scholar.json` is maintained **by hand** from the public Google Scholar profile
   and shape-checked by a small validator — **no scraping** (it is against Scholar's terms),
