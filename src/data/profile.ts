@@ -22,7 +22,7 @@ export const capabilities = [
   {
     label: "Model evaluation",
     summary:
-      "Accuracy, calibration, and error-pattern checks that decide where a model can run on its own and where it needs review. It's what gets a model trusted in production."
+      "Accuracy, calibration, and error-pattern checks that decide where a model can run on its own and where it needs review."
   },
   {
     label: "Statistical & econometric modeling",
