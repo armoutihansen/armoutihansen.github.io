@@ -187,6 +187,18 @@ def finish_figure(fig, *, roles, x_title, y_title, div_id):
     return html.replace("<head>", "<head>" + theme_block(roles))
 
 
+def write_figure_html(html, out_path):
+    """The one canonical figure-artifact write: utf-8, with a uniform log line.
+    Generators end with this instead of their own open()/print() (the three
+    Plotly tails were copy-pasted and omitted the encoding)."""
+    out = os.path.normpath(out_path)
+    with open(out, "w", encoding="utf-8") as f:
+        f.write(html)
+    rel = os.path.relpath(out, os.path.join(os.path.dirname(__file__), ".."))
+    print("wrote %s (%d KB)" % (rel, len(html) // 1024))
+    return out
+
+
 # --- shared CSS for the hand-written figures --------------------------------
 # Hand-written figures <link> this file and reference var(--ink)/var(--amber)/
 # var(--emb-bg)/var(--line) instead of re-declaring the warm-charcoal + amber

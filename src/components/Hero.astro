@@ -2,7 +2,7 @@
 import model from "../data/hero-model.json";
 import tod from "../../scripts/data/citibike_tod_risk.json";
 import { profile } from "../data/profile";
-import { bandStats, type HeroPoint } from "../data/hero-model";
+import { bandStats, todPanel, type HeroPoint, type TodBin } from "../data/hero-model";
 
 const points = model.points as HeroPoint[];
 const DEFAULT_HI = 0.75;
@@ -15,7 +15,10 @@ const dataJson = JSON.stringify(points);
 // total crash severity (peaks midday) vs. risk per trip (severity ÷ exposure,
 // EB-smoothed; peaks at night ~3.7×). The exposure normalisation inverts the
 // ranking — that flip is the interaction. Opens on the headline (risk). ADR 0003.
-const todBins = tod.bins;
+const todBins = tod.bins as TodBin[];
+// The data story (peaks, multipliers, readouts) lives in todPanel(); the rest
+// here is view-only SVG bar geometry.
+const { sev, risk, peakRiskI, maxH, maxR } = todPanel(todBins);
 const RW = 360;
 const RH = 188;
 const rPadL = 10;
@@ -27,10 +30,6 @@ const rPlotH = RH - rPadT - rPadB;
 const rBase = rPadT + rPlotH;
 const rSlot = rPlotW / todBins.length;
 const rBarW = 38;
-const maxH = Math.max(...todBins.map((b) => b.H));
-const maxR = Math.max(...todBins.map((b) => b.R));
-const minH = Math.min(...todBins.map((b) => b.H));
-const minR = Math.min(...todBins.map((b) => b.R));
 const todLayout = todBins.map((b, i) => ({
   label: b.label,
   x: rPadL + i * rSlot + (rSlot - rBarW) / 2,
@@ -38,16 +37,9 @@ const todLayout = todBins.map((b, i) => ({
   fracSev: b.H / maxH,
   fracRisk: b.R / maxR,
 }));
-const peakSevI = todBins.reduce((m, b, i) => (b.H > todBins[m].H ? i : m), 0);
-const PEAK_RISK = todBins.reduce((m, b, i) => (b.R > todBins[m].R ? i : m), 0);
-const fmtM = (n: number) => (n / 1e6).toFixed(1) + "M";
-// Three readouts that mirror Panel 1's — they update (and the peak flips Midday→
-// Night) when the metric toggles, so the exposure-normalization story is carried
-// in numbers, like the model panel's auto/review/accuracy row.
-const todReadouts = {
-  sev: { peak: todBins[peakSevI].label, mult: (maxH / minH).toFixed(1) + "×", exp: fmtM(todBins[peakSevI].E) },
-  risk: { peak: todBins[PEAK_RISK].label, mult: (maxR / minR).toFixed(1) + "×", exp: fmtM(todBins[PEAK_RISK].E) },
-};
+// Readouts mirror Panel 1's — they update (and the peak flips Midday→Night) when
+// the metric toggles, carrying the exposure-normalization story in numbers.
+const todReadouts = { sev, risk };
 const todNotes = {
   sev: "Total NYPD crash severity by time of day — most crashes fall at midday.",
   risk: "Severity ÷ trip exposure, EB-smoothed — the per-trip risk an insurer would price on.",
@@ -125,7 +117,7 @@ const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes });
               {todLayout.map((b, i) => (
                 <g class="rbar">
                   <rect
-                    class:list={["rbar__rect", { "is-peak": i === PEAK_RISK }]}
+                    class:list={["rbar__rect", { "is-peak": i === peakRiskI }]}
                     data-sev={b.fracSev.toFixed(4)}
                     data-risk={b.fracRisk.toFixed(4)}
                     x={b.x}

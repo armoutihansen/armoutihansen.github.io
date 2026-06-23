@@ -21,7 +21,7 @@ import plotly.graph_objects as go
 # Shared figure palette + theme block (single source of truth for the
 # warm-charcoal + amber values; this generator supplies only its ROLES).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from figure_theme import finish_figure
+from figure_theme import finish_figure, write_figure_html
 
 
 CSV = "/Users/jesper/repos/pred_comp_soc_pref/results/il_ladder.csv"
@@ -81,5 +81,4 @@ html = finish_figure(
     x_title="Heterogeneity captured  (1 type → latent types → full)",
     y_title="Completeness",
     div_id="econ-theories-completeness")
-open(OUT, "w").write(html)
-print("wrote", OUT, len(html), "bytes")
+write_figure_html(html, OUT)

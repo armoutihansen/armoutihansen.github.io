@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { bandStats, type HeroPoint } from "./hero-model";
+import { bandStats, todPanel, type HeroPoint, type TodBin } from "./hero-model";
 import model from "./hero-model.json";
+import tod from "../../scripts/data/citibike_tod_risk.json";
 
 const realPoints = model.points as HeroPoint[];
 
@@ -82,5 +83,34 @@ describe("bandStats", () => {
 
   it("returns zeros for an empty point set without dividing by zero", () => {
     expect(bandStats([], 0.75)).toEqual({ autoPct: 0, reviewPct: 0, autoAcc: 0 });
+  });
+});
+
+describe("todPanel", () => {
+  // Hand-built bins where severity and per-trip risk peak in DIFFERENT slots —
+  // the exposure normalization that is the whole point of Panel 2.
+  //   A: H=10 E=100  R=0.10   B: H=40 E=200  R=0.20   C: H=20 E=20  R=1.00
+  // sev peak = B (H=40), H spread 40/10 = 4.0×
+  // risk peak = C (R=1.00), R spread 1.00/0.10 = 10.0×
+  const flip: TodBin[] = [
+    { key: "a", label: "A", H: 10, E: 100, R: 0.1 },
+    { key: "b", label: "B", H: 40, E: 200, R: 0.2 },
+    { key: "c", label: "C", H: 20, E: 20, R: 1.0 }
+  ];
+
+  it("picks each metric's own peak and spread from a hand-computed fixture", () => {
+    const p = todPanel(flip);
+    expect(p.sev).toEqual({ peak: "B", mult: "4.0×", exp: "0.0M" });
+    expect(p.risk).toEqual({ peak: "C", mult: "10.0×", exp: "0.0M" });
+    expect(p.peakRiskI).toBe(2);
+    expect(p.maxH).toBe(40);
+    expect(p.maxR).toBe(1.0);
+  });
+
+  it("carries the real CitiBike headline: severity peaks midday, per-trip risk peaks at night ~3.7×", () => {
+    const p = todPanel(tod.bins as TodBin[]);
+    expect(p.sev.peak).toBe("Midday");
+    expect(p.risk.peak).toBe("Night");
+    expect(p.risk.mult).toBe("3.7×");
   });
 });

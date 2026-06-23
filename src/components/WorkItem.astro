@@ -1,5 +1,4 @@
 ---
-import { pad2 } from "../data/format";
 import type { Project } from "../data/projects";
 import WorkFigure from "./WorkFigure.astro";
 
@@ -13,7 +12,7 @@ interface Props {
 const { project, index, figure = false, compact = false } = Astro.props;
 const external = project.href.startsWith("http");
 const rel = external ? "noreferrer" : undefined;
-const num = index != null ? pad2(index) : undefined;
+const num = index != null ? String(index).padStart(2, "0") : undefined;
 const showFigure = figure && Boolean(project.embed || project.image);
 ---
 

@@ -13,7 +13,7 @@ import pandas as pd, plotly.graph_objects as go
 # Shared figure palette + theme block (single source of truth for the
 # warm-charcoal + amber values; this generator supplies only its ROLES).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from figure_theme import finish_figure
+from figure_theme import finish_figure, write_figure_html
 
 
 CSV = "/Users/jesper/repos/frequency-beliefs/outputs/design_exercise/rule_comparison.csv"
@@ -79,5 +79,4 @@ listener = (
     "})();</script>"
 )
 html = html.replace("</body>", listener + "</body>")
-open(OUT, "w").write(html)
-print("wrote", OUT, len(html), "bytes")
+write_figure_html(html, OUT)

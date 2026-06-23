@@ -10,7 +10,6 @@ import { capabilities, profile } from "../data/profile";
 import { featuredProjects } from "../data/projects";
 import { featuredPublications } from "../data/publications";
 import { homeCredibility } from "../data/credibility";
-import { pad2 } from "../data/format";
 
 const featured = featuredProjects();
 const featuredPubs = featuredPublications(2);
@@ -26,7 +25,7 @@ const credibility = homeCredibility();
     <div class="capabilities">
       {capabilities.map((item, i) => (
         <article class="capability">
-          <span class="capability__index">{pad2(i + 1)}</span>
+          <span class="capability__index">{String(i + 1).padStart(2, "0")}</span>
           <h3>{item.label}</h3>
           <p>{item.summary}</p>
         </article>
