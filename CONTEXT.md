@@ -1,7 +1,7 @@
 # Site Design
 
 The personal site of Jesper Armouti-Hansen. The design and copy are **re-anchored on
-his CV**: a quantitative analyst with an economics PhD, currently a data scientist at
+his CV**: a data scientist with an economics PhD, currently at
 AXA, whose demonstrated work is model evaluation, statistical/econometric modeling, and
 machine learning on structured data. Data analysis is a secondary strength. "Pricing" is
 not used as a label, skill, or claim.
@@ -9,8 +9,8 @@ not used as a label, skill, or claim.
 **No job-search signals on the public site.** He is currently employed (AXA) and does
 not want the site to read as actively looking. So: no "open to / seeking roles" lines,
 no "interested in moving toward …" aspiration, no contact copy about open positions.
-Market- and risk-modeling is his actual target direction, but it is kept OFF the public
-page — the site presents a neutral professional showcase (work, research, credentials),
+His target is broad data-science / quantitative roles (sector-agnostic), but any targeting
+is kept OFF the public page — the site presents a neutral professional showcase (work, research, credentials),
 and the targeting is conveyed in applications, not here. Do not re-add such signals.
 
 The site is job-search oriented in purpose, but reads as a neutral dossier. It should help recruiters, hiring managers, and
@@ -19,13 +19,19 @@ practice, and research credibility, and find a contact path.
 
 ## Language
 
-**Quantitative analyst (economics PhD)**:
-The target identity, mirrored from his CV summary. He works on model evaluation,
-statistical and econometric modeling, and machine learning on structured data, and is
-moving toward quantitative modeling in a market and risk context. Academic research is a
-credibility signal, not the headline.
-_Avoid_: claiming pricing/market/risk modeling as done work (it is the stated
-direction); scholar-coder; pure academic homepage; generic "data scientist" portfolio.
+**Data scientist (economics PhD)**:
+The target identity, mirrored from his CV. He works on statistical and econometric
+modeling, machine learning on structured data, model evaluation, calibration, and
+uncertainty quantification — currently a data scientist at AXA. Academic research (PhD,
+publications) is a credibility signal, not the headline. "Data scientist" is the honest,
+widest-traveling label; **"quantitative analyst" was dropped as a finance-coded overclaim**
+(see ADR 0011 / the deep-research determination — "quantitative analyst" is not the broad
+umbrella it sounds like; its default market reading is quant finance, which his profile does
+not back).
+_Avoid_: branding as "quantitative analyst" / "quant" (finance-coded, unbacked by
+markets/derivatives work); claiming pricing/market/risk modeling as done work;
+scholar-coder; pure academic homepage; a generic/templated data-scientist portfolio (the
+evidence-dossier model and analyst-signal test still govern distinctiveness).
 
 **Evidence dossier**:
 The page model. The site reads like a concise professional dossier: positioning,
@@ -92,8 +98,8 @@ instead of `finish_figure`; folding the palette into the embed channel.
 
 **Aesthetic axis — "Premium dark, one interactive quant hero"** (see ADR 0003):
 A premium, modern, dark-first showcase. Warm-charcoal paper, off-white ink, one restrained
-amber accent. The page must read as _rigorous, modern, builds things_ to a quantitative-
-analyst hiring lead — never as a front-end-designer showreel. It looks deliberately
+amber accent. The page must read as _rigorous, modern, builds things_ to a data-science /
+analytics hiring lead — never as a front-end-designer showreel. It looks deliberately
 designed, never like a default template. Light mode is retained but secondary.
 
 **Typography**:
@@ -143,12 +149,12 @@ keeps the same hierarchy, inverted — same language, secondary, not a separate 
   paper) or a Work-style Problem/Approach/Result ledger to chase visual parity (this was
   considered and deliberately rejected — the data papers' figures would be heavy to
   recolor, theory diagrams read poorly out of context, and near-parity fights the
-  quantitative-analyst identity); a first-page **cover** is the allowed exception because it
+  data-scientist identity); a first-page **cover** is the allowed exception because it
   is an artifact, not an extracted figure, and is not enlarged to chase legibility.
 - `/cv/`: experience, strengths, skills, education, languages, PDF download.
 
 **Hero pattern**:
-Eyebrow `Quantitative Analyst · Economics PhD`, large serif name (Fraunces), a lead that
+Eyebrow `Data Scientist · Economics PhD`, large serif name (Fraunces), a lead that
 mirrors his CV summary (minus the job-search line), a mono fact line, and primary actions —
 paired with the **interactive hero deck**: a two-panel, tab/scroll switcher carrying
 **two interactive analyses** (1) _model confidence → decision_ (a real logistic-regression
@@ -189,7 +195,7 @@ predictably, and tap targets stay comfortable.
 
 ## Relationships
 
-- The **quantitative-analyst (economics PhD)** identity determines content hierarchy.
+- The **data-scientist (economics PhD)** identity determines content hierarchy.
 - The **evidence dossier** model determines page structure and component shape.
 - The **analyst signal** test determines which projects are featured and how they're written.
 - The **plain, concrete voice** governs all copy. Ground truth for every claim is his
@@ -240,3 +246,15 @@ predictably, and tap targets stay comfortable.
   recoloured live with the site theme via the embed channel's `data-theme`. Leaflet and the
   basemap tiles load from a CDN at runtime (like the figures' web font); the `embed` itself
   is a local `/figures/*.html` file, and a test asserts no `embed` points at an external host.
+- **Positioning may overclaim (raised 2026-06-26, unresolved).** Two fresh-context mock
+  recruiters (a top-tier quant-analyst desk and a top-tier data-scientist role), reviewing
+  the CV, both returned reject/borderline with the same root cause: **"Quantitative Analyst"
+  overclaims relative to the evidence** — no markets/quant-finance signal, academia-heavy
+  center of mass, impact not quantified. The realistic, defensible identity is **DS** or
+  **quant-adjacent research / model validation / model risk**, leaning on the genuine niche
+  (PhD-level statistics + model validation, calibration, uncertainty quantification). This
+  site presents the *same* headline identity ("Quantitative analyst (economics PhD)" — see
+  Language) and a research-forward hierarchy, so the critique applies here too: **if the
+  owner repositions, the site's hero copy and section emphasis should move with the CV — they
+  are one story.** This is the owner's strategic call; do not change the positioning
+  unilaterally. The CV PDF is generated from `cv/cv.typ` (ADR 0010).

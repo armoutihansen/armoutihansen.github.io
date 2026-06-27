@@ -1,10 +1,10 @@
 export const profile = {
   name: "Jesper Armouti-Hansen",
-  title: "Quantitative Analyst · Economics PhD",
+  title: "Data Scientist · Economics PhD",
   email: "jesper@armoutihansen.xyz",
   location: "Cologne, Germany",
   summary:
-    "Quantitative analyst with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data, and assess when their output is reliable enough to act on.",
+    "Data scientist with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data, and assess when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
   links: [
