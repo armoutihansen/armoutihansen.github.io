@@ -1,6 +1,6 @@
 # armoutihansen.xyz
 
-Personal website for Jesper Armouti-Hansen — a quantitative analyst with an economics PhD.
+Personal website for Jesper Armouti-Hansen — a data scientist with an economics PhD.
 
 The site is built with [Astro](https://astro.build/) and deployed as a static site through GitHub Pages to [armoutihansen.xyz](https://armoutihansen.xyz).
 
