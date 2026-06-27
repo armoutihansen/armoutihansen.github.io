@@ -246,15 +246,11 @@ predictably, and tap targets stay comfortable.
   recoloured live with the site theme via the embed channel's `data-theme`. Leaflet and the
   basemap tiles load from a CDN at runtime (like the figures' web font); the `embed` itself
   is a local `/figures/*.html` file, and a test asserts no `embed` points at an external host.
-- **Positioning may overclaim (raised 2026-06-26, unresolved).** Two fresh-context mock
-  recruiters (a top-tier quant-analyst desk and a top-tier data-scientist role), reviewing
-  the CV, both returned reject/borderline with the same root cause: **"Quantitative Analyst"
-  overclaims relative to the evidence** — no markets/quant-finance signal, academia-heavy
-  center of mass, impact not quantified. The realistic, defensible identity is **DS** or
-  **quant-adjacent research / model validation / model risk**, leaning on the genuine niche
-  (PhD-level statistics + model validation, calibration, uncertainty quantification). This
-  site presents the *same* headline identity ("Quantitative analyst (economics PhD)" — see
-  Language) and a research-forward hierarchy, so the critique applies here too: **if the
-  owner repositions, the site's hero copy and section emphasis should move with the CV — they
-  are one story.** This is the owner's strategic call; do not change the positioning
-  unilaterally. The CV PDF is generated from `cv/cv.typ` (ADR 0010).
+- **Positioning: RESOLVED (2026-06-27) — repositioned to "Data scientist (economics PhD)".**
+  Mock recruiters plus a multi-source investigation found that **"Quantitative Analyst" is
+  finance-coded by default** (O\*NET "Financial Quantitative Analysts"; Wikipedia "Quantitative
+  analysis (finance)") and overclaimed for a profile with no markets/quant-finance background.
+  The site and CV were therefore repositioned to **Data Scientist** — one consistent identity
+  (see the **Language** term above and **ADR 0011**). "Quantitative Researcher" is kept as a
+  per-application CV variant only. Retained here as a pointer so the history is clear; do not
+  re-add the "quantitative analyst" headline. The CV PDF is generated from `cv/cv.typ` (ADR 0010).
