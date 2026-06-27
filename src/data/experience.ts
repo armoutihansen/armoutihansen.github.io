@@ -15,9 +15,9 @@ export const experience: ExperienceItem[] = [
     period: "Apr. 2026 – present",
     location: "Cologne, Germany",
     bullets: [
-      "Develop the production document-understanding pipeline that splits stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — routing low-confidence cases to human review.",
+      "Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.",
       "Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.",
-      "Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-VL 4B) to replace the two-stage BERT+CLIP and RNN stack."
+      "Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-VL 4B) to replace the existing two-stage BERT+CLIP and RNN stack."
     ]
   },
   {

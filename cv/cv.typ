@@ -90,9 +90,9 @@
 // ========================================================== CONTENT ==========
 #let experience = (
   (title: "Data Scientist, AXA Konzern AG", date: "Apr. 2026 – present", where: "Cologne, Germany", bullets: (
-    [Develop the production document-understanding pipeline that splits stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — routing low-confidence cases to human review.],
+    [Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.],
     [Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.],
-    [Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-VL 4B) to replace the two-stage BERT+CLIP and RNN stack.],
+    [Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-VL 4B) to replace the existing two-stage BERT+CLIP and RNN stack.],
   )),
   (title: "Postdoctoral Researcher in Economics, University of Bonn", date: "Jan. 2022 – Mar. 2026", where: "Bonn, Germany", bullets: (
     [Ran empirical and computational economics research — statistical and econometric modeling, machine-learning benchmarking, and partial-identification with simulation.],
