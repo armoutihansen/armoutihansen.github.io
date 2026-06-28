@@ -1,4 +1,4 @@
-# Editorial Brief redesign for analyst job search
+# Editorial Brief redesign
 
 ## Status
 
@@ -10,13 +10,13 @@ Accepted. Supersedes parts of [0001](0001-scholar-coder-stripped-redesign.md) â€
 A prior automated pass left the site reading as generic and AI-generated: inconsistent
 chrome, a verbose hedging voice, and small per-problem CSS hacks (e.g. `font-size: 0`
 brand/label swaps on mobile, a stack of max-width breakpoints patching individual
-elements). The owner's goal is concrete: present as a credible candidate for
-**quantitative, pricing, and data analyst** roles, with a site that looks professionally
-designed, reads concisely, and works well on every device.
+elements). The owner's goal is concrete: a clearly-positioned, credible data professional,
+with a site that looks professionally designed, reads concisely, and works well on every
+device.
 
 The "scholar-coder, strip-to-bones" direction in 0001 (no accent colour, no buttons, no
-surfaces, bibliographic-only item shapes) is too austere and too academic for a
-recruiter-facing analyst search, and its purity made thin copy feel thinner.
+surfaces, bibliographic-only item shapes) is too austere and too academic for the
+intended audience, and its purity made thin copy feel thinner.
 
 ## Decision
 

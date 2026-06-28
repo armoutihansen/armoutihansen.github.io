@@ -6,3 +6,6 @@ static/.DS_Store
 
 # Python bytecode from scripts/gen_*.py
 __pycache__/
+
+# Local-only working notes, never published
+private/

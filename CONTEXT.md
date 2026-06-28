@@ -6,15 +6,14 @@ AXA, whose demonstrated work is model evaluation, statistical/econometric modeli
 machine learning on structured data. Data analysis is a secondary strength. "Pricing" is
 not used as a label, skill, or claim.
 
-**No job-search signals on the public site.** He is currently employed (AXA) and does
-not want the site to read as actively looking. So: no "open to / seeking roles" lines,
-no "interested in moving toward …" aspiration, no contact copy about open positions.
-His target is broad data-science / quantitative roles (sector-agnostic), but any targeting
-is kept OFF the public page — the site presents a neutral professional showcase (work, research, credentials),
-and the targeting is conveyed in applications, not here. Do not re-add such signals.
+**The public site stays a neutral professional dossier.** It presents work, research,
+credentials, and a contact path — and nothing more: no "open to / seeking roles" lines,
+no "interested in moving toward …" aspiration, no contact copy about open positions. The
+presented identity is broad data science (sector-agnostic). Keep such signals off the
+page; do not add them.
 
-The site is job-search oriented in purpose, but reads as a neutral dossier. It should help recruiters, hiring managers, and
-analytics leads quickly read his analytical judgment, modeling ability, programming
+The site reads as a neutral dossier. It should let any reader — a peer, a collaborator, an
+analytics lead — quickly read his analytical judgment, modeling ability, programming
 practice, and research credibility, and find a contact path.
 
 ## Language
@@ -155,7 +154,7 @@ keeps the same hierarchy, inverted — same language, secondary, not a separate 
 
 **Hero pattern**:
 Eyebrow `Data Scientist · Economics PhD`, large serif name (Fraunces), a lead that
-mirrors his CV summary (minus the job-search line), a mono fact line, and primary actions —
+mirrors his CV summary, a mono fact line, and primary actions —
 paired with the **interactive hero deck**: a two-panel, tab/scroll switcher carrying
 **two interactive analyses** (1) _model confidence → decision_ (a real logistic-regression
 classifier with a draggable confidence band, coverage vs. accuracy) and (2) _CitiBike crash
@@ -246,11 +245,11 @@ predictably, and tap targets stay comfortable.
   recoloured live with the site theme via the embed channel's `data-theme`. Leaflet and the
   basemap tiles load from a CDN at runtime (like the figures' web font); the `embed` itself
   is a local `/figures/*.html` file, and a test asserts no `embed` points at an external host.
-- **Positioning: RESOLVED (2026-06-27) — repositioned to "Data scientist (economics PhD)".**
-  Mock recruiters plus a multi-source investigation found that **"Quantitative Analyst" is
-  finance-coded by default** (O\*NET "Financial Quantitative Analysts"; Wikipedia "Quantitative
-  analysis (finance)") and overclaimed for a profile with no markets/quant-finance background.
-  The site and CV were therefore repositioned to **Data Scientist** — one consistent identity
-  (see the **Language** term above and **ADR 0011**). "Quantitative Researcher" is kept as a
-  per-application CV variant only. Retained here as a pointer so the history is clear; do not
-  re-add the "quantitative analyst" headline. The CV PDF is generated from `cv/cv.typ` (ADR 0010).
+- **Positioning: RESOLVED (2026-06-27) — identity is "Data scientist (economics PhD)".**
+  A multi-source investigation found that **"Quantitative Analyst" is finance-coded by
+  default** (O\*NET "Financial Quantitative Analysts"; Wikipedia "Quantitative analysis
+  (finance)") and a poor fit for a profile with no markets/quant-finance background. The
+  site and CV therefore lead with **Data Scientist** — one consistent identity (see the
+  **Language** term above and **ADR 0011**). "Quantitative Researcher" is kept only as an
+  alternate CV variant. Retained here as a pointer so the history is clear; do not re-add
+  the "quantitative analyst" headline. The CV PDF is generated from `cv/cv.typ` (ADR 0010).
