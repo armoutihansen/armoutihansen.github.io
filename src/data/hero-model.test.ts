@@ -102,6 +102,7 @@ describe("todPanel", () => {
     const p = todPanel(flip);
     expect(p.sev).toEqual({ peak: "B", mult: "4.0×", exp: "0.0M" });
     expect(p.risk).toEqual({ peak: "C", mult: "10.0×", exp: "0.0M" });
+    expect(p.peakSevI).toBe(1);
     expect(p.peakRiskI).toBe(2);
     expect(p.maxH).toBe(40);
     expect(p.maxR).toBe(1.0);

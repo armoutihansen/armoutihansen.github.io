@@ -18,7 +18,7 @@ const dataJson = JSON.stringify(points);
 const todBins = tod.bins as TodBin[];
 // The data story (peaks, multipliers, readouts) lives in todPanel(); the rest
 // here is view-only SVG bar geometry.
-const { sev, risk, peakRiskI, maxH, maxR } = todPanel(todBins);
+const { sev, risk, peakSevI, peakRiskI, maxH, maxR } = todPanel(todBins);
 const RW = 360;
 const RH = 188;
 const rPadL = 10;
@@ -44,7 +44,7 @@ const todNotes = {
   sev: "Total NYPD crash severity by time of day — most crashes fall at midday.",
   risk: "Severity ÷ trip exposure, EB-smoothed — the per-trip risk an insurer would price on.",
 };
-const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes });
+const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes, peakSevI, peakRiskI });
 ---
 
 <section class="lede" aria-labelledby="lede-name">
@@ -154,9 +154,8 @@ const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes });
       <button class="deck__tab" type="button" data-go="0" role="tab" aria-selected="true">Model confidence</button>
       <button class="deck__tab" type="button" data-go="1" role="tab" aria-selected="false">Risk per trip</button>
     </div>
+    <script type="application/json" data-hero-points is:inline set:html={dataJson}></script>
   </div>
-
-  <script type="application/json" data-hero-points is:inline set:html={dataJson}></script>
 </section>
 
 <style>
@@ -476,284 +475,8 @@ const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes });
 </style>
 
 <script>
-  import { bandStats, type HeroPoint } from "../data/hero-model";
+  import { initHeroDeck } from "../scripts/hero-deck";
 
-  // ---------- Panel 1: model-confidence interaction ----------
-  const fig = document.querySelector(".predict");
-  const dataEl = document.querySelector("[data-hero-points]");
-  const canvas = fig?.querySelector(".predict__canvas") as HTMLCanvasElement | null;
-  const ctx = canvas?.getContext("2d") ?? null;
-  const handle = fig?.querySelector("[data-handle]") as HTMLElement | null;
-
-  if (fig && dataEl && canvas && ctx && handle) {
-    const points: HeroPoint[] = JSON.parse(dataEl.textContent || "[]");
-    const out = {
-      auto: fig.querySelector('[data-k="auto"]'),
-      review: fig.querySelector('[data-k="review"]'),
-      acc: fig.querySelector('[data-k="acc"]'),
-    };
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const HI_MIN = 0.52;
-    const HI_MAX = 0.97;
-    const INSET = { l: 12, r: 12, t: 16, b: 26 };
-    let hi = 0.75;
-    let W = 0;
-    let H = 0;
-    let L: any = null;
-
-    function palette() {
-      const s = getComputedStyle(document.documentElement);
-      const g = (n: string, f: string) => s.getPropertyValue(n).trim() || f;
-      return {
-        pos: g("--accent", "#edb24e"),
-        neg: g("--viz-neg", "#7f8da6"),
-        band: g("--viz-band", "rgba(127,127,127,0.07)"),
-        axis: g("--line-strong", "#4a4434"),
-        text: g("--faint", "#8a8370"),
-      };
-    }
-    let COL = palette();
-
-    const px = (p: number) => L.x0 + p * L.plotW;
-
-    function computeLayout() {
-      const rect = canvas!.getBoundingClientRect();
-      W = rect.width;
-      H = rect.height;
-      if (W < 2 || H < 2) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas!.width = Math.round(W * dpr);
-      canvas!.height = Math.round(H * dpr);
-      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      const x0 = INSET.l;
-      const x1 = W - INSET.r;
-      const plotW = x1 - x0;
-      const baseY = H - INSET.b;
-      const topY = INSET.t;
-      const availH = baseY - topY;
-
-      const nbins = Math.max(22, Math.min(64, Math.floor(plotW / 9)));
-      const bins: HeroPoint[][] = Array.from({ length: nbins }, () => []);
-      for (const pt of points) {
-        let b = Math.floor(pt.p * nbins);
-        if (b < 0) b = 0;
-        if (b >= nbins) b = nbins - 1;
-        bins[b].push(pt);
-      }
-      let maxCount = 1;
-      for (const b of bins) maxCount = Math.max(maxCount, b.length);
-      const gap = Math.min(8, availH / maxCount);
-      const r = Math.max(1.5, Math.min(3.3, gap * 0.44));
-
-      const placed: { x: number; y: number; p: number; cls: number }[] = [];
-      for (let b = 0; b < nbins; b++) {
-        const cx = x0 + ((b + 0.5) / nbins) * plotW;
-        const col = bins[b];
-        for (let k = 0; k < col.length; k++) {
-          placed.push({ x: cx, y: baseY - (k + 0.5) * gap, p: col[k].p, cls: col[k].y });
-        }
-      }
-      L = { x0, x1, plotW, baseY, topY, r, placed };
-    }
-
-    function draw(progress: number) {
-      if (!L) return;
-      const lo = 1 - hi;
-      ctx!.clearRect(0, 0, W, H);
-
-      const bx0 = px(lo);
-      const bx1 = px(hi);
-      ctx!.fillStyle = COL.band;
-      ctx!.fillRect(bx0, L.topY - 6, bx1 - bx0, L.baseY - L.topY + 6);
-      ctx!.strokeStyle = COL.pos;
-      ctx!.globalAlpha = 0.55;
-      ctx!.lineWidth = 1;
-      ctx!.beginPath();
-      ctx!.moveTo(Math.round(bx0) + 0.5, L.topY - 6);
-      ctx!.lineTo(Math.round(bx0) + 0.5, L.baseY);
-      ctx!.moveTo(Math.round(bx1) + 0.5, L.topY - 6);
-      ctx!.lineTo(Math.round(bx1) + 0.5, L.baseY);
-      ctx!.stroke();
-      ctx!.globalAlpha = 1;
-
-      ctx!.strokeStyle = COL.axis;
-      ctx!.beginPath();
-      ctx!.moveTo(L.x0, L.baseY + 0.5);
-      ctx!.lineTo(L.x1, L.baseY + 0.5);
-      ctx!.stroke();
-      ctx!.fillStyle = COL.text;
-      ctx!.font = '600 10px "JetBrains Mono Variable", ui-monospace, monospace';
-      ctx!.textBaseline = "top";
-      const ticks: [string, number, CanvasTextAlign][] = [
-        ["0", 0, "left"],
-        ["0.5", 0.5, "center"],
-        ["1", 1, "right"],
-      ];
-      for (const [lab, p, align] of ticks) {
-        const xx = px(p);
-        ctx!.fillRect(xx - 0.5, L.baseY, 1, 3);
-        ctx!.textAlign = align;
-        ctx!.fillText(lab, xx, L.baseY + 5);
-      }
-
-      const reveal = L.x0 + progress * (L.plotW + 2);
-      for (const d of L.placed) {
-        if (d.x > reveal) continue;
-        const inReview = d.p > lo && d.p < hi;
-        ctx!.globalAlpha = inReview ? 0.2 : 0.92;
-        ctx!.fillStyle = d.cls ? COL.pos : COL.neg;
-        ctx!.beginPath();
-        ctx!.arc(d.x, d.y, L.r, 0, Math.PI * 2);
-        ctx!.fill();
-      }
-      ctx!.globalAlpha = 1;
-    }
-
-    function syncUI() {
-      const s = bandStats(points, hi);
-      if (out.auto) out.auto.textContent = s.autoPct + "%";
-      if (out.review) out.review.textContent = s.reviewPct + "%";
-      if (out.acc) out.acc.textContent = s.autoAcc + "%";
-      if (L) handle!.style.left = px(hi) + "px";
-      handle!.setAttribute("aria-valuenow", String(Math.round(hi * 100)));
-      handle!.setAttribute("aria-valuetext", s.reviewPct + "% of cases sent to review");
-    }
-
-    function setHiFromClientX(clientX: number) {
-      const rect = canvas!.getBoundingClientRect();
-      let p = (clientX - rect.left - L.x0) / L.plotW;
-      if (p < 0.5) p = 1 - p;
-      hi = Math.max(HI_MIN, Math.min(HI_MAX, p));
-      draw(1);
-      syncUI();
-    }
-
-    let dragging = false;
-    const startDrag = (e: PointerEvent, el: HTMLElement) => {
-      dragging = true;
-      el.setPointerCapture(e.pointerId);
-      setHiFromClientX(e.clientX);
-      e.preventDefault();
-    };
-    const moveDrag = (e: PointerEvent) => {
-      if (dragging) setHiFromClientX(e.clientX);
-    };
-    const endDrag = () => {
-      dragging = false;
-    };
-
-    canvas.addEventListener("pointerdown", (e) => startDrag(e, canvas));
-    canvas.addEventListener("pointermove", moveDrag);
-    canvas.addEventListener("pointerup", endDrag);
-    canvas.addEventListener("pointercancel", endDrag);
-    handle.addEventListener("pointerdown", (e) => startDrag(e, handle));
-    handle.addEventListener("pointermove", moveDrag);
-    handle.addEventListener("pointerup", endDrag);
-    handle.addEventListener("keydown", (e) => {
-      const step = e.shiftKey ? 0.05 : 0.01;
-      if (e.key === "ArrowLeft" || e.key === "ArrowDown") hi = Math.max(HI_MIN, hi - step);
-      else if (e.key === "ArrowRight" || e.key === "ArrowUp") hi = Math.min(HI_MAX, hi + step);
-      else return;
-      e.preventDefault();
-      draw(1);
-      syncUI();
-    });
-
-    let first = true;
-    let raf = 0;
-    const ro = new ResizeObserver(() => {
-      if (first) {
-        first = false;
-        return;
-      }
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        COL = palette();
-        computeLayout();
-        draw(1);
-        syncUI();
-      });
-    });
-    ro.observe(canvas);
-
-    const mo = new MutationObserver(() => {
-      COL = palette();
-      draw(1);
-    });
-    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
-
-    computeLayout();
-    syncUI();
-    if (reduce) {
-      draw(1);
-    } else {
-      const dur = 850;
-      let start: number | null = null;
-      const stepFn = (ts: number) => {
-        if (start === null) start = ts;
-        const t = Math.min(1, (ts - start) / dur);
-        draw(1 - Math.pow(1 - t, 3));
-        if (t < 1) requestAnimationFrame(stepFn);
-      };
-      requestAnimationFrame(stepFn);
-    }
-  }
-
-  // ---------- Panel 2: total severity ⇄ risk per trip toggle ----------
-  const todPanel = document.querySelector("[data-tod]");
-  if (todPanel) {
-    const tBars = Array.from(todPanel.querySelectorAll<SVGRectElement>(".rbar__rect"));
-    const tNote = todPanel.querySelector<HTMLElement>("[data-tod-note]");
-    const tBtns = Array.from(todPanel.querySelectorAll<HTMLButtonElement>("[data-tod-go]"));
-    const dataEl = todPanel.querySelector("[data-tod-readouts]");
-    const { readouts, notes } = JSON.parse(dataEl?.textContent || "{}");
-    const out = {
-      peak: todPanel.querySelector('[data-k="peak"]'),
-      mult: todPanel.querySelector('[data-k="mult"]'),
-      exp: todPanel.querySelector('[data-k="exp"]'),
-    };
-    const peakOf = (key: "sev" | "risk") =>
-      tBars.reduce((m, b, i) => (+(b.dataset[key] || 0) > +(tBars[m].dataset[key] || 0) ? i : m), 0);
-    const peak = { sev: peakOf("sev"), risk: peakOf("risk") };
-
-    const setTod = (state: "sev" | "risk") => {
-      tBars.forEach((b, i) => {
-        b.style.transform = `scaleY(${b.dataset[state] || "0"})`;
-        b.classList.toggle("is-peak", i === peak[state]);
-      });
-      const r = readouts?.[state];
-      if (r) {
-        if (out.peak) out.peak.textContent = r.peak;
-        if (out.mult) out.mult.textContent = r.mult;
-        if (out.exp) out.exp.textContent = r.exp;
-      }
-      if (tNote && notes) tNote.textContent = notes[state];
-      tBtns.forEach((btn) => btn.setAttribute("aria-pressed", String(btn.dataset.todGo === state)));
-    };
-    tBtns.forEach((btn) => btn.addEventListener("click", () => setTod(btn.dataset.todGo as "sev" | "risk")));
-  }
-
-  // ---------- Deck: scroll/tab navigation between the two panels ----------
-  const deck = document.querySelector("[data-deck]");
-  const track = deck?.querySelector("[data-deck-track]") as HTMLElement | null;
-  const tabs = deck ? Array.from(deck.querySelectorAll<HTMLButtonElement>(".deck__tab")) : [];
-
-  if (track && tabs.length) {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const setActive = (i: number) => tabs.forEach((t, j) => t.setAttribute("aria-selected", String(j === i)));
-    tabs.forEach((t) => {
-      t.addEventListener("click", () => {
-        const i = Number(t.dataset.go);
-        track.scrollTo({ left: i * track.clientWidth, behavior: prefersReducedMotion ? "auto" : "smooth" });
-        setActive(i);
-      });
-    });
-    let st: number | undefined;
-    track.addEventListener("scroll", () => {
-      window.clearTimeout(st);
-      st = window.setTimeout(() => setActive(Math.round(track.scrollLeft / track.clientWidth)), 60);
-    });
-  }
+  const root = document.querySelector<HTMLElement>("[data-deck]");
+  if (root) initHeroDeck(root);
 </script>

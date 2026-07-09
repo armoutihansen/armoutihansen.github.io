@@ -66,6 +66,8 @@ export type TodPanel = {
   sev: TodReadout;
   /** Readouts for the per-trip-risk view (peaks at night). */
   risk: TodReadout;
+  /** Index of the peak-severity bin — the bar flagged in the severity view. */
+  peakSevI: number;
   /** Index of the peak-risk bin — the bar the panel flags. */
   peakRiskI: number;
   /** Max hazard / max risk — the normalisers the bar heights scale against. */
@@ -93,6 +95,7 @@ export function todPanel(bins: readonly TodBin[]): TodPanel {
   return {
     sev: { peak: bins[peakSevI].label, mult: (maxH / minH).toFixed(1) + "×", exp: fmtM(bins[peakSevI].E) },
     risk: { peak: bins[peakRiskI].label, mult: (maxR / minR).toFixed(1) + "×", exp: fmtM(bins[peakRiskI].E) },
+    peakSevI,
     peakRiskI,
     maxH,
     maxR

@@ -50,13 +50,39 @@ for (const theme of themes) {
       if (v.name === "desktop" && slug === "home") {
         const deckEl = await page.$(".deck");
         if (deckEl) {
+          const handle = page.locator("[data-handle]");
+          if ((await handle.count()) === 1) {
+            const before = Number(await handle.getAttribute("aria-valuenow"));
+            await handle.press("ArrowRight");
+            const after = Number(await handle.getAttribute("aria-valuenow"));
+            if (!Number.isFinite(before) || !Number.isFinite(after) || after <= before) {
+              throw new Error(`hero confidence keyboard interaction failed: ${before} -> ${after}`);
+            }
+          }
+
           await deckEl.scrollIntoViewIfNeeded();
           await deckEl.screenshot({ path: `${OUT}/deck1-${theme}.png` });
           const tab2 = await page.$('.deck__tab[data-go="1"]');
           if (tab2) {
             await tab2.click();
             await page.waitForTimeout(500);
+            if ((await tab2.getAttribute("aria-selected")) !== "true") {
+              throw new Error("hero deck tab interaction failed: risk tab is not selected");
+            }
             await deckEl.screenshot({ path: `${OUT}/deck2-${theme}.png` });
+          }
+          const severity = await page.$('[data-tod-go="sev"]');
+          const risk = await page.$('[data-tod-go="risk"]');
+          const peak = await page.$('[data-k="peak"]');
+          if (severity && risk && peak) {
+            await severity.click();
+            if ((await peak.textContent())?.trim() !== "Midday") {
+              throw new Error("hero risk interaction failed: severity peak is not Midday");
+            }
+            await risk.click();
+            if ((await peak.textContent())?.trim() !== "Night") {
+              throw new Error("hero risk interaction failed: risk peak is not Night");
+            }
           }
           const tab1 = await page.$('.deck__tab[data-go="0"]');
           if (tab1) await tab1.click();
