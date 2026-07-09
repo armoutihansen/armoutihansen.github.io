@@ -35,22 +35,3 @@ const isCurrent = (href: string) => path === href.replace(/\/$/, "").toLowerCase
     </button>
   </div>
 </header>
-
-<script>
-  const toggle = document.querySelector("[data-theme-toggle]");
-
-  function syncToggle(theme: string) {
-    toggle?.setAttribute("aria-pressed", String(theme === "dark"));
-    toggle?.setAttribute("aria-label", theme === "dark" ? "Switch to light theme" : "Switch to dark theme");
-  }
-
-  syncToggle(document.documentElement.dataset.theme || "light");
-
-  toggle?.addEventListener("click", () => {
-    const current = document.documentElement.dataset.theme === "dark" ? "dark" : "light";
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem("theme", next);
-    syncToggle(next);
-  });
-</script>

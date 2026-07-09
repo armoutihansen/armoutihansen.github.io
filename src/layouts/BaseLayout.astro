@@ -30,20 +30,7 @@ const pageTitle =
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <script is:inline>
-      const root = document.documentElement;
-      const stored = localStorage.getItem("theme");
-      const theme = stored || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-      root.dataset.theme = theme;
-      // Keep the browser-UI theme-color in sync with the active theme (incl. toggle overrides).
-      const THEME_COLORS = { light: "#f3efe4", dark: "#15130e" };
-      const syncThemeColor = () => {
-        const meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute("content", THEME_COLORS[root.dataset.theme] || THEME_COLORS.dark);
-      };
-      syncThemeColor();
-      new MutationObserver(syncThemeColor).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
-    </script>
+    <script is:inline src="/theme.js"></script>
     <title>{pageTitle}</title>
   </head>
   <body>
