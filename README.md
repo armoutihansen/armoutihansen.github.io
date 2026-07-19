@@ -56,6 +56,8 @@ Important files:
 - `src/data/publications.ts`: publications, working papers, and research projects.
 - `src/data/professional-record.json`: canonical Professional record facts.
 - `src/data/professional-record.ts`: strict Professional record validation.
+- `src/data/github.json`: precomputed GitHub activity data (professional-link facts stay in
+  the Professional record).
 - `src/data/experience.ts`: website experience selection, bullets, logos, and formatting.
 - `cv/cv.typ`: CV selection, bullets, date formatting, and layout.
 - `cv/cv-baseline.json`: expected experience text and two-page render topology.

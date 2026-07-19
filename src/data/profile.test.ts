@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { profile, resolveProfileLinks } from "./profile";
+import { profile, profileLink, resolveProfileLinks } from "./profile";
 
 describe("website identity adapter", () => {
   it("preserves the approved website identity and professional-link presentation", () => {
@@ -49,5 +49,13 @@ describe("website identity adapter", () => {
     expect(() =>
       resolveProfileLinks([{ id: "unknown-profile", label: "Unknown" }])
     ).toThrow(/Unknown Professional record link id: unknown-profile/);
+  });
+
+  it("resolves the canonical website URL for site metadata", () => {
+    expect(profileLink("website")).toEqual({
+      id: "website",
+      label: "Website",
+      href: "https://armoutihansen.xyz"
+    });
   });
 });

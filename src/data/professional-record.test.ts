@@ -3,19 +3,13 @@ import { parseProfessionalRecord, professionalRecord } from "./professional-reco
 
 const validRecord = {
   identity: {
-    name: "Jesper Armouti-Hansen",
-    email: "jesper@armoutihansen.xyz",
-    location: "Cologne, Germany",
-    phone: "+49 176 4278 7630",
+    name: "Ada Example",
+    email: "ada@example.test",
+    location: "Example City",
+    phone: "+1 555 0100",
     links: [
-      { id: "website", url: "https://armoutihansen.xyz" },
-      { id: "linkedin", url: "https://www.linkedin.com/in/jesper-a-h/" },
-      { id: "github", url: "https://github.com/armoutihansen" },
-      {
-        id: "google-scholar",
-        url: "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"
-      },
-      { id: "orcid", url: "https://orcid.org/0000-0001-7776-8016" }
+      { id: "portfolio", url: "https://example.test" },
+      { id: "code-profile", url: "https://code.example.test/ada" }
     ]
   },
   experience: [
@@ -31,7 +25,22 @@ const validRecord = {
 
 describe("parseProfessionalRecord", () => {
   it("parses the approved core identity and contact facts from the canonical record", () => {
-    expect(professionalRecord.identity).toEqual(validRecord.identity);
+    expect(professionalRecord.identity).toEqual({
+      name: "Jesper Armouti-Hansen",
+      email: "jesper@armoutihansen.xyz",
+      location: "Cologne, Germany",
+      phone: "+49 176 4278 7630",
+      links: [
+        { id: "website", url: "https://armoutihansen.xyz" },
+        { id: "linkedin", url: "https://www.linkedin.com/in/jesper-a-h/" },
+        { id: "github", url: "https://github.com/armoutihansen" },
+        {
+          id: "google-scholar",
+          url: "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"
+        },
+        { id: "orcid", url: "https://orcid.org/0000-0001-7776-8016" }
+      ]
+    });
   });
 
   it("parses the four current experience facts from the canonical record", () => {
@@ -83,12 +92,12 @@ describe("parseProfessionalRecord", () => {
   it("rejects duplicate professional-link identifiers at the duplicate path", () => {
     const duplicate = structuredClone(validRecord);
     duplicate.identity.links.push({
-      id: "linkedin",
+      id: "portfolio",
       url: "https://example.com/duplicate"
     });
 
     expect(() => parseProfessionalRecord(duplicate)).toThrow(
-      /Duplicate professional link id.*identity\.links\[5\]\.id/s
+      /Duplicate professional link id.*identity\.links\[2\]\.id/s
     );
   });
 

@@ -24,12 +24,21 @@ export function resolveProfileLinks(
   });
 }
 
-const profileLinkPresentation: ProfileLinkPresentation[] = [
+const professionalLinkPresentation: ProfileLinkPresentation[] = [
+  { id: "website", label: "Website" },
   { id: "linkedin", label: "LinkedIn" },
   { id: "github", label: "GitHub" },
   { id: "google-scholar", label: "Google Scholar" },
   { id: "orcid", label: "ORCID" }
 ];
+
+const professionalLinks = resolveProfileLinks(professionalLinkPresentation);
+const visibleProfileLinkIds = new Set([
+  "linkedin",
+  "github",
+  "google-scholar",
+  "orcid"
+]);
 
 export const profile = {
   name: professionalRecord.identity.name,
@@ -40,11 +49,11 @@ export const profile = {
     "Data scientist with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data, and assess when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
-  links: resolveProfileLinks(profileLinkPresentation)
+  links: professionalLinks.filter((link) => visibleProfileLinkIds.has(link.id))
 };
 
 export function profileLink(id: string): ProfileLink {
-  const link = profile.links.find((candidate) => candidate.id === id);
+  const link = professionalLinks.find((candidate) => candidate.id === id);
   if (!link) {
     throw new Error(`Unknown website profile link id: ${id}`);
   }

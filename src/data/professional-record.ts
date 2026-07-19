@@ -9,6 +9,22 @@ const stableIdSchema = z
   .string()
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "must be lowercase kebab-case");
 
+function requireUniqueIds(domain: string) {
+  return (entries: { id: string }[], context: z.core.$RefinementCtx) => {
+    const seen = new Set<string>();
+    entries.forEach((entry, index) => {
+      if (seen.has(entry.id)) {
+        context.addIssue({
+          code: "custom",
+          message: `Duplicate ${domain} id: ${entry.id}`,
+          path: [index, "id"]
+        });
+      }
+      seen.add(entry.id);
+    });
+  };
+}
+
 const professionalLinksSchema = z
   .array(
     z.strictObject({
@@ -16,19 +32,7 @@ const professionalLinksSchema = z
       url: z.url().refine((url) => /^https?:\/\//.test(url), "must be an HTTP(S) URL")
     })
   )
-  .superRefine((links, context) => {
-    const seen = new Set<string>();
-    links.forEach((link, index) => {
-      if (seen.has(link.id)) {
-        context.addIssue({
-          code: "custom",
-          message: `Duplicate professional link id: ${link.id}`,
-          path: [index, "id"]
-        });
-      }
-      seen.add(link.id);
-    });
-  });
+  .superRefine(requireUniqueIds("professional link"));
 
 const identitySchema = z.strictObject({
   name: z.string().min(1),
@@ -41,9 +45,7 @@ const identitySchema = z.strictObject({
 const experienceSchema = z
   .array(
     z.strictObject({
-      id: z
-        .string()
-        .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "must be lowercase kebab-case"),
+      id: stableIdSchema,
       role: z.string().min(1),
       organization: z.string().min(1),
       location: z.string().min(1),
@@ -53,19 +55,7 @@ const experienceSchema = z
       })
     })
   )
-  .superRefine((experience, context) => {
-    const seen = new Set<string>();
-    experience.forEach((entry, index) => {
-      if (seen.has(entry.id)) {
-        context.addIssue({
-          code: "custom",
-          message: `Duplicate experience id: ${entry.id}`,
-          path: [index, "id"]
-        });
-      }
-      seen.add(entry.id);
-    });
-  });
+  .superRefine(requireUniqueIds("experience"));
 
 const professionalRecordSchema = z.strictObject({
   identity: identitySchema,
