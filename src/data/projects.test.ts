@@ -1,13 +1,18 @@
 import { describe, it, expect } from "vitest";
 import {
   projects,
+  projectPresentation,
   selectedWork,
   featuredProjects,
   projectGroups,
   checkInvariants,
+  resolveSelectedWork,
+  selectProjects,
   type Project,
+  type ProjectPresentation,
   type ProjectGroupTitle
 } from "./projects";
+import { professionalRecord } from "./professional-record";
 // Committed figure sources imported as raw strings (Vite's ?raw), so the
 // embed-channel marker assertions run without Node's fs types — keeping
 // `astro check` clean (no @types/node).
@@ -15,6 +20,61 @@ import choicekitFigure from "../../static/figures/choicekit-sklearn.html?raw";
 import econFigureHtml from "../../static/figures/econ-theories-completeness.html?raw";
 import efficiencyWagesFigureHtml from "../../static/figures/efficiency-wages-effort.html?raw";
 import frequencyFigureHtml from "../../static/figures/frequency-rules-winshare.html?raw";
+
+describe("Professional record Selected work adapter", () => {
+  it("rejects a broken website presentation reference", () => {
+    const presentation: ProjectPresentation[] = [
+      {
+        id: "unknown-project",
+        primaryGroup: "Also on GitHub",
+        summary: "Local summary",
+        toolIds: []
+      }
+    ];
+
+    expect(() => resolveSelectedWork(professionalRecord, presentation)).toThrow(
+      /Unknown Selected work presentation id: unknown-project/
+    );
+  });
+
+  it("rejects duplicate and missing website presentation identifiers", () => {
+    const first = professionalRecord.selectedWork[0];
+    const local = { id: first.id, primaryGroup: "Also on GitHub" as const, summary: "Local", toolIds: [] };
+    expect(() => resolveSelectedWork(professionalRecord, [local, local])).toThrow(
+      /Duplicate Selected work presentation id/
+    );
+    expect(() => resolveSelectedWork(professionalRecord, [local])).toThrow(
+      /Missing Selected work presentation id/
+    );
+  });
+
+  it("rejects a broken website tool selection reference", () => {
+    const presentation = projectPresentation.map((entry) => ({ ...entry }));
+    presentation[0] = { ...presentation[0], toolIds: ["unknown-tool"] };
+    expect(() => resolveSelectedWork(professionalRecord, presentation)).toThrow(
+      /Unknown Selected work tool id "unknown-tool"/
+    );
+  });
+
+  it("rejects a duplicate website tool selection identifier", () => {
+    const presentation = projectPresentation.map((entry) => ({ ...entry }));
+    presentation[0] = { ...presentation[0], toolIds: ["python", "python"] };
+    expect(() => resolveSelectedWork(professionalRecord, presentation)).toThrow(
+      /Duplicate Selected work tool selection id "python"/
+    );
+  });
+});
+
+describe("stable-id project selection", () => {
+  it("rejects unknown and duplicate selected identifiers", () => {
+    expect(() => selectProjects(["unknown-project"])).toThrow(
+      /Unknown project selection id: unknown-project/
+    );
+    expect(() => selectProjects([projects[0].id, projects[0].id])).toThrow(
+      /Duplicate project selection id/
+    );
+  });
+});
 // Every committed figure source under static/figures/, keyed by its served
 // "/figures/<name>" path. Glob (eager) is type-clean without @types/node and
 // lets the embed-asset-existence test assert a file is actually committed.
@@ -42,6 +102,7 @@ function byTitle(title: string): Project {
 // without corrupting the real data.
 function validProject(overrides: Partial<Project> = {}): Project {
   return {
+    id: "a-project",
     title: "A Project",
     primaryGroup: APPLIED,
     category: "Analysis",
@@ -381,9 +442,9 @@ describe("checkInvariants", () => {
     expect(() => checkInvariants(bad, projectGroups)).toThrow(/Unknown project groups/);
   });
 
-  it("throws when a featured title is not in the project list", () => {
-    // The real featured set references real titles; an empty array drops them all.
-    expect(() => checkInvariants([], projectGroups)).toThrow(/Featured titles not found/);
+  it("throws when a featured id is not in the project list", () => {
+    // The real featured set references real ids; an empty array drops them all.
+    expect(() => checkInvariants([], projectGroups)).toThrow(/Featured project ids not found/);
   });
 
   it("throws when a substantive (non-link-group) project has no embed or image", () => {
@@ -404,7 +465,7 @@ describe("checkInvariants", () => {
   });
 });
 
-// Helper: append a fixture to the real projects so the featured-titles rule is
+// Helper: append a fixture to the real projects so the featured-id rule is
 // satisfied while we isolate the figure-coverage rule under test.
 function realProjectsWith(extra: Project): Project[] {
   return [...projects, { ...extra, title: `${extra.title} (fixture)` }];

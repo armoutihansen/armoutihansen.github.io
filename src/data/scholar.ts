@@ -1,5 +1,5 @@
 import scholarData from "./scholar.json";
-import { profile } from "./profile";
+import { profileLink } from "./profile";
 
 // The Research page's one non-generated figure: the Google Scholar citation
 // count. `scholar.json` is maintained BY HAND from the public Scholar profile
@@ -35,11 +35,7 @@ export const scholar: Scholar = scholarData;
 
 // The public Google Scholar profile, sourced from the single profile link list
 // rather than re-typed here.
-const scholarLink = profile.links.find((l) => l.label === "Google Scholar");
-if (!scholarLink) {
-  throw new Error('profile.links is missing the "Google Scholar" entry that the Research strip links to');
-}
-export const scholarUrl: string = scholarLink.href;
+export const scholarUrl: string = profileLink("google-scholar").href;
 
 const MONTHS = [
   "January", "February", "March", "April", "May", "June",

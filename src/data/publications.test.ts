@@ -1,128 +1,95 @@
-import { describe, it, expect } from "vitest";
-import { profile } from "./profile";
+import { describe, expect, it } from "vitest";
+import { professionalRecord } from "./professional-record";
 import {
-  publications,
+  featuredPublications,
   journalPublications,
   otherWork,
-  featuredPublications,
-  resolveLinks,
-  checkInvariants,
-  type Publication
+  publicationPresentation,
+  publications,
+  resolveResearch,
+  selectPublications
 } from "./publications";
 
-// A minimal well-formed entry to mutate per failure-mode test, so we exercise
-// checkInvariants against supplied arrays without corrupting the real data.
-function validPub(overrides: Partial<Publication> = {}): Publication {
-  return {
-    title: "A Paper",
-    authors: `${profile.name} and Someone Else`,
-    venue: "Some Journal",
-    year: "2024",
-    details: "",
-    href: "https://example.com/paper",
-    type: "Publication",
-    abstract: "An abstract.",
-    ...overrides
-  };
-}
-
-describe("journalPublications / otherWork partition", () => {
-  it("together cover every publication with no omission", () => {
-    const combined = journalPublications().length + otherWork().length;
-    expect(combined).toBe(publications.length);
+describe("resolved Research interface", () => {
+  it("combines canonical facts with website-owned presentation without output drift", () => {
+    expect(publications).toHaveLength(7);
+    expect(publications[0]).toMatchObject({
+      id: "efficiency-wages-motivated-agents",
+      title: "Efficiency Wages with Motivated Agents",
+      authors: "Jesper Armouti-Hansen, Lea Cassar, Anna Dereky, and Florian Engl",
+      venue: "Games and Economic Behavior",
+      year: "2024",
+      details: "145, pp. 66–83",
+      href: "https://www.sciencedirect.com/science/article/pii/S0899825624000307",
+      links: [
+        {
+          label: "Paper",
+          href: "https://www.sciencedirect.com/science/article/pii/S0899825624000307"
+        },
+        {
+          label: "Code",
+          href: "https://github.com/armoutihansen/efficiency-wages"
+        }
+      ],
+      type: "Publication",
+      cover: "/images/journals/games-economic-behavior.gif"
+    });
   });
 
-  it("do not overlap (titles are disjoint)", () => {
-    const journalTitles = new Set(journalPublications().map((p) => p.title));
-    const otherTitles = otherWork().map((p) => p.title);
-    const overlap = otherTitles.filter((t) => journalTitles.has(t));
-    expect(overlap).toEqual([]);
-  });
-
-  it("journalPublications are exactly the type === 'Publication' entries, in order", () => {
-    const expected = publications.filter((p) => p.type === "Publication").map((p) => p.title);
-    expect(journalPublications().map((p) => p.title)).toEqual(expected);
-  });
-
-  it("otherWork is exactly the complement, in order", () => {
-    const expected = publications.filter((p) => p.type !== "Publication").map((p) => p.title);
-    expect(otherWork().map((p) => p.title)).toEqual(expected);
-  });
-});
-
-describe("featuredPublications", () => {
-  it("returns the first n journal publications in order", () => {
-    const journals = journalPublications().map((p) => p.title);
-    expect(featuredPublications(2).map((p) => p.title)).toEqual(journals.slice(0, 2));
-    expect(featuredPublications(3).map((p) => p.title)).toEqual(journals.slice(0, 3));
-  });
-
-  it("respects n, never exceeding the available journal publications", () => {
-    expect(featuredPublications(0)).toHaveLength(0);
-    expect(featuredPublications(1)).toHaveLength(1);
-    const all = journalPublications().length;
-    expect(featuredPublications(all + 5)).toHaveLength(all);
-  });
-
-  it("draws only from journal publications", () => {
-    for (const pub of featuredPublications(10)) {
-      expect(pub.type).toBe("Publication");
+  it("preserves ADR-0007 first-page covers paired with manuscript links", () => {
+    for (const publication of otherWork()) {
+      expect(publication.cover).toMatch(/^\/images\/publications\//);
+      expect(publication.links).toContainEqual(
+        expect.objectContaining({ label: "Manuscript", href: expect.stringMatching(/^\/papers\//) })
+      );
+      expect(publication.abstract.length).toBeGreaterThan(0);
     }
   });
-});
 
-describe("link normalisation", () => {
-  it("passes through an explicit links array unchanged", () => {
-    const links = [
-      { label: "Paper", href: "https://example.com/p" },
-      { label: "Code", href: "https://example.com/c" }
-    ];
-    expect(resolveLinks(validPub({ links }))).toEqual(links);
+  it("partitions all resolved entries and derives the journal count", () => {
+    expect(journalPublications()).toHaveLength(4);
+    expect(otherWork()).toHaveLength(3);
+    expect(journalPublications().length + otherWork().length).toBe(publications.length);
   });
 
-  it("synthesises a single 'Link' entry from a bare href", () => {
-    const pub = validPub({ links: undefined, href: "https://example.com/only" });
-    expect(resolveLinks(pub)).toEqual([{ label: "Link", href: "https://example.com/only" }]);
+  it("rejects presentation entries that reference an unknown publication", () => {
+    const broken = structuredClone(publicationPresentation);
+    broken[0].id = "unknown-publication";
+    expect(() => resolveResearch(professionalRecord, broken)).toThrow(
+      /Unknown Research presentation publication id: unknown-publication/
+    );
   });
 
-  it("resolves to an empty array when there is neither links nor href", () => {
-    expect(resolveLinks(validPub({ links: undefined, href: "" }))).toEqual([]);
-  });
+  it("rejects missing presentation coverage and unknown factual-link selections", () => {
+    expect(() =>
+      resolveResearch(professionalRecord, publicationPresentation.slice(1))
+    ).toThrow(/Missing Research presentation publication id: efficiency-wages-motivated-agents/);
 
-  it("gives every rendered journal/other entry a guaranteed non-empty links array", () => {
-    for (const pub of [...journalPublications(), ...otherWork()]) {
-      if (pub.type === "Publication") {
-        expect(pub.links.length).toBeGreaterThan(0);
-      }
-      // `links` is always present on the resolved shape (possibly empty for
-      // link-less working papers / research projects).
-      expect(Array.isArray(pub.links)).toBe(true);
-    }
+    const brokenLink = structuredClone(publicationPresentation);
+    brokenLink[0].links[0].id = "unknown-link";
+    expect(() => resolveResearch(professionalRecord, brokenLink)).toThrow(
+      /Unknown publication link id "unknown-link".*efficiency-wages-motivated-agents/
+    );
   });
 });
 
-describe("checkInvariants", () => {
-  it("passes on the real data", () => {
-    expect(() => checkInvariants(publications, profile.name)).not.toThrow();
+describe("stable publication selections", () => {
+  it("resolves the local featured set in its declared order", () => {
+    expect(featuredPublications(2).map((publication) => publication.id)).toEqual([
+      "efficiency-wages-motivated-agents",
+      "managing-anticipation-reference-dependent-choice"
+    ]);
   });
 
-  it("throws on an unknown type", () => {
-    const bad = [validPub({ type: "Preprint" as Publication["type"] })];
-    expect(() => checkInvariants(bad, profile.name)).toThrow(/Unknown publication types/);
-  });
-
-  it("throws when an author string is missing the owner name", () => {
-    const bad = [validPub({ authors: "Someone Else and Another Person" })];
-    expect(() => checkInvariants(bad, profile.name)).toThrow(/missing owner name/);
-  });
-
-  it("throws when a journal publication resolves to zero links", () => {
-    const bad = [validPub({ links: undefined, href: "" })];
-    expect(() => checkInvariants(bad, profile.name)).toThrow(/zero links/);
-  });
-
-  it("allows a non-journal entry with zero links", () => {
-    const ok = [validPub({ type: "Research project", links: undefined, href: "" })];
-    expect(() => checkInvariants(ok, profile.name)).not.toThrow();
+  it("rejects unknown and duplicate publication selections", () => {
+    expect(() => selectPublications(["unknown-publication"])).toThrow(
+      /Unknown publication selection id: unknown-publication/
+    );
+    expect(() =>
+      selectPublications([
+        "efficiency-wages-motivated-agents",
+        "efficiency-wages-motivated-agents"
+      ])
+    ).toThrow(/Duplicate publication selection id: efficiency-wages-motivated-agents/);
   });
 });

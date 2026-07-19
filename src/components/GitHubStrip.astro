@@ -1,8 +1,12 @@
 ---
 import gh from "../data/github.json";
 import { lastMonths, type Contributions } from "../data/github-calendar";
+import { profileLink } from "../data/profile";
 
 const c = gh.contributions as Contributions;
+const github = profileLink("github");
+const githubUrl = new URL(github.href);
+const githubDisplay = `${githubUrl.host}${githubUrl.pathname}`.replace(/\/$/, "");
 
 // Mobile keeps the full last-12-months calendar; desktop narrows to the trailing
 // 9 months to free a column for the languages panel. Both come from the same
@@ -37,7 +41,7 @@ const languages = gh.languages.map((l) => ({
   <div class="ghstrip__main">
     <div class="ghstrip__top">
       <span class="ghstrip__label">Open source</span>
-      <a class="ghstrip__link" href={gh.url} rel="me noreferrer">github.com/{gh.user} &rarr;</a>
+      <a class="ghstrip__link" href={github.href} rel="me noreferrer">{githubDisplay} &rarr;</a>
     </div>
 
     <div class="ghstrip__calcol">

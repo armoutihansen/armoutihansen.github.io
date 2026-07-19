@@ -4,8 +4,21 @@
 //   node scripts/gen_github_data.mjs
 import { writeFileSync } from "node:fs";
 import { LANG_ALIASES, EXCLUDED_LANGS, rankLanguages } from "./lib/languages.mjs";
+import professionalRecord from "../src/data/professional-record.json" with { type: "json" };
 
-const USER = "armoutihansen";
+function professionalLinkUrl(id) {
+  const matches = professionalRecord.identity.links.filter((link) => link.id === id);
+  if (matches.length !== 1) {
+    throw new Error(`Expected exactly one Professional record link id: ${id}`);
+  }
+  return new URL(matches[0].url);
+}
+
+const githubUrl = professionalLinkUrl("github");
+if (githubUrl.hostname !== "github.com" || githubUrl.pathname.split("/").filter(Boolean).length !== 1) {
+  throw new Error("Professional record GitHub link must identify one github.com user");
+}
+const USER = githubUrl.pathname.split("/").filter(Boolean)[0];
 
 async function api(path) {
   const res = await fetch(`https://api.github.com${path}`, {
@@ -77,8 +90,6 @@ const languages = rankLanguages(byteTotals, {
 });
 
 const out = {
-  user: USER,
-  url: user.html_url,
   publicRepos: user.public_repos,
   ownedRepos: owned.length,
   lastPush: owned[0]?.pushed_at ?? user.updated_at,

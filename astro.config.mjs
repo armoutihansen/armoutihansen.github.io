@@ -1,7 +1,8 @@
 import { defineConfig } from "astro/config";
+import { profileLink } from "./src/data/profile.ts";
 
 export default defineConfig({
-  site: "https://armoutihansen.xyz",
+  site: profileLink("website").href,
   output: "static",
   publicDir: "./static",
   build: {

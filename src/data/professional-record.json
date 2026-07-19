@@ -1,0 +1,378 @@
+{
+  "identity": {
+    "name": "Jesper Armouti-Hansen",
+    "email": "jesper@armoutihansen.xyz",
+    "location": "Cologne, Germany",
+    "phone": "+49 176 4278 7630",
+    "links": [
+      { "id": "website", "url": "https://armoutihansen.xyz" },
+      { "id": "linkedin", "url": "https://www.linkedin.com/in/jesper-a-h/" },
+      { "id": "github", "url": "https://github.com/armoutihansen" },
+      {
+        "id": "google-scholar",
+        "url": "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"
+      },
+      { "id": "orcid", "url": "https://orcid.org/0000-0001-7776-8016" }
+    ]
+  },
+  "experience": [
+    {
+      "id": "axa-data-scientist",
+      "role": "Data Scientist",
+      "organization": "AXA Konzern AG",
+      "location": "Cologne, Germany",
+      "dates": { "start": "2026-04", "end": null }
+    },
+    {
+      "id": "bonn-postdoctoral-researcher",
+      "role": "Postdoctoral Researcher in Economics",
+      "organization": "University of Bonn",
+      "location": "Bonn, Germany",
+      "dates": { "start": "2022-01", "end": "2026-03" }
+    },
+    {
+      "id": "cologne-research-assistant",
+      "role": "Research Assistant in Economics",
+      "organization": "University of Cologne",
+      "location": "Cologne, Germany",
+      "dates": { "start": "2015-12", "end": "2021-12" }
+    },
+    {
+      "id": "airplus-intern",
+      "role": "Intern",
+      "organization": "AirPlus International",
+      "location": "Neu Isenburg, Germany",
+      "dates": { "start": "2014-12", "end": "2015-05" }
+    }
+  ],
+  "education": [
+    {
+      "id": "cologne-economics-phd",
+      "degree": "PhD in Economics (Dr. rer. pol.)",
+      "institution": "University of Cologne",
+      "location": "Cologne, Germany",
+      "distinctions": ["Summa cum laude"],
+      "dates": { "start": "2015", "end": "2021" }
+    },
+    {
+      "id": "mainz-international-economics-msc",
+      "degree": "MSc International Economics and Public Policy",
+      "institution": "University of Mainz",
+      "location": "Mainz, Germany",
+      "distinctions": ["GPA 1.6"],
+      "dates": { "start": "2012", "end": "2014" }
+    },
+    {
+      "id": "copenhagen-financial-management-ba",
+      "degree": "BA Financial Management and Services",
+      "institution": "Copenhagen Business Academy",
+      "location": "Copenhagen, Denmark",
+      "distinctions": [],
+      "dates": { "start": "2008", "end": "2012" }
+    },
+    {
+      "id": "cyprus-exchange-semester",
+      "degree": "Exchange semester",
+      "institution": "European University of Cyprus",
+      "location": "Nicosia, Cyprus",
+      "distinctions": [],
+      "dates": { "start": "2010", "end": "2010" }
+    }
+  ],
+  "teaching": {
+    "supervision": {
+      "minimumTheses": 60,
+      "degreeLevels": ["bachelor", "master"]
+    },
+    "courses": [
+      {
+        "id": "current-topics-microeconomics",
+        "title": "Seminar on Current Topics in Microeconomics",
+        "level": "undergraduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2025", "end": null }]
+      },
+      {
+        "id": "applied-microeconomics-management-research-module",
+        "title": "Research Module on Applied Microeconomics and Management",
+        "level": "graduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2022", "end": "2025" }]
+      },
+      {
+        "id": "empirical-evaluation-management-practices",
+        "title": "Empirical Evaluation of Management Practices",
+        "level": "graduate",
+        "roles": ["lecturer", "tutor"],
+        "dateSpans": [{ "start": "2019", "end": "2022" }]
+      },
+      {
+        "id": "economics-incentives-organisations",
+        "title": "Economics of Incentives in Organisations",
+        "level": "graduate",
+        "roles": ["tutor"],
+        "dateSpans": [
+          { "start": "2016", "end": "2016" },
+          { "start": "2020", "end": "2022" }
+        ]
+      },
+      {
+        "id": "behavioral-management-science",
+        "title": "Behavioral Management Science",
+        "level": "undergraduate",
+        "roles": ["lecturer", "tutor"],
+        "dateSpans": [{ "start": "2017", "end": "2020" }]
+      },
+      {
+        "id": "strategic-human-resource-management",
+        "title": "Strategic Human Resource Management",
+        "level": "graduate",
+        "roles": ["tutor"],
+        "dateSpans": [{ "start": "2016", "end": "2019" }]
+      },
+      {
+        "id": "human-resource-management-seminar",
+        "title": "Seminar on Human Resource Management",
+        "level": "graduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2017", "end": "2018" }]
+      }
+    ]
+  },
+  "skills": {
+    "categories": [
+      { "id": "programming-language", "name": "Programming language" },
+      { "id": "python-stack", "name": "Python stack" },
+      { "id": "method", "name": "Method" },
+      { "id": "tool", "name": "Tool" }
+    ],
+    "items": [
+      { "id": "python", "name": "Python", "categoryId": "programming-language" },
+      { "id": "r", "name": "R", "categoryId": "programming-language" },
+      { "id": "sql", "name": "SQL", "categoryId": "programming-language" },
+      { "id": "stata", "name": "Stata", "categoryId": "programming-language" },
+      { "id": "typescript", "name": "TypeScript", "categoryId": "programming-language" },
+      { "id": "numpy", "name": "NumPy", "categoryId": "python-stack" },
+      { "id": "pandas", "name": "pandas", "categoryId": "python-stack" },
+      { "id": "scipy", "name": "SciPy", "categoryId": "python-stack" },
+      { "id": "scikit-learn", "name": "scikit-learn", "categoryId": "python-stack" },
+      { "id": "statsmodels", "name": "statsmodels", "categoryId": "python-stack" },
+      { "id": "pytorch", "name": "PyTorch", "categoryId": "python-stack" },
+      { "id": "xgboost-lightgbm", "name": "XGBoost / LightGBM", "categoryId": "python-stack" },
+      { "id": "geopandas", "name": "GeoPandas", "categoryId": "python-stack" },
+      { "id": "statistical-modeling", "name": "Statistical modeling", "categoryId": "method" },
+      { "id": "econometrics", "name": "Econometrics", "categoryId": "method" },
+      { "id": "machine-learning", "name": "Machine learning", "categoryId": "method" },
+      { "id": "model-evaluation-calibration", "name": "Model evaluation & calibration", "categoryId": "method" },
+      { "id": "forecasting", "name": "Forecasting", "categoryId": "method" },
+      { "id": "experiment-ab-analysis", "name": "Experiment & A/B analysis", "categoryId": "method" },
+      { "id": "simulation", "name": "Simulation", "categoryId": "method" },
+      { "id": "fine-tuning", "name": "Fine-tuning", "categoryId": "method" },
+      { "id": "retrieval-rag", "name": "Retrieval / RAG", "categoryId": "method" },
+      { "id": "git", "name": "Git", "categoryId": "tool" },
+      { "id": "github-actions", "name": "GitHub Actions", "categoryId": "tool" },
+      { "id": "docker", "name": "Docker", "categoryId": "tool" },
+      { "id": "pytest", "name": "pytest", "categoryId": "tool" },
+      { "id": "uv", "name": "uv", "categoryId": "tool" },
+      { "id": "pixi", "name": "pixi", "categoryId": "tool" },
+      { "id": "jupyterlab", "name": "JupyterLab", "categoryId": "tool" },
+      { "id": "linux", "name": "Linux", "categoryId": "tool" },
+      { "id": "latex", "name": "LaTeX", "categoryId": "tool" }
+    ]
+  },
+  "spokenLanguages": [
+    { "id": "english", "name": "English", "proficiency": "C2" },
+    { "id": "german", "name": "German", "proficiency": "C1/C2" },
+    { "id": "danish", "name": "Danish", "proficiency": "native" }
+  ],
+  "people": [
+    { "id": "jesper-armouti-hansen", "fullName": "Jesper Armouti-Hansen" },
+    { "id": "lea-cassar", "fullName": "Lea Cassar" },
+    { "id": "anna-dereky", "fullName": "Anna Dereky" },
+    { "id": "florian-engl", "fullName": "Florian Engl" },
+    { "id": "christopher-kops", "fullName": "Christopher Kops" },
+    { "id": "matthias-kraekel", "fullName": "Matthias Kraekel" }
+  ],
+  "publications": [
+    {
+      "id": "efficiency-wages-motivated-agents",
+      "title": "Efficiency Wages with Motivated Agents",
+      "authorIds": ["jesper-armouti-hansen", "lea-cassar", "anna-dereky", "florian-engl"],
+      "venue": "Games and Economic Behavior",
+      "year": "2024",
+      "details": "145, pp. 66–83",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://www.sciencedirect.com/science/article/pii/S0899825624000307" },
+        { "id": "code", "url": "https://github.com/armoutihansen/efficiency-wages" }
+      ]
+    },
+    {
+      "id": "managing-anticipation-reference-dependent-choice",
+      "title": "Managing Anticipation and Reference-Dependent Choice",
+      "authorIds": ["jesper-armouti-hansen", "christopher-kops"],
+      "venue": "Journal of Mathematical Economics",
+      "year": "2024",
+      "details": "112, 102988",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://www.sciencedirect.com/science/article/pii/S0304406824000508" }
+      ]
+    },
+    {
+      "id": "optimal-contracting-endogenous-project-mission",
+      "title": "Optimal Contracting with Endogenous Project Mission",
+      "authorIds": ["jesper-armouti-hansen", "lea-cassar"],
+      "venue": "Journal of the European Economic Association",
+      "year": "2020",
+      "details": "18(5), pp. 2647–2676",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://scholar.google.com/scholar?oi=bibs&cluster=9361077569797977679&btnI=1&hl=en" }
+      ]
+    },
+    {
+      "id": "sequential-rationalization-indecisive-choice",
+      "title": "This or That? Sequential Rationalization of Indecisive Choice Behavior",
+      "authorIds": ["jesper-armouti-hansen", "christopher-kops"],
+      "venue": "Theory and Decision",
+      "year": "2018",
+      "details": "84(4), pp. 507–524",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://scholar.google.com/scholar?oi=bibs&cluster=935449046387275988&btnI=1&hl=en" }
+      ]
+    },
+    {
+      "id": "optimal-selling-uncertain-consumption-quality",
+      "title": "On the Optimal Mode of Selling Goods with Uncertain Consumption Quality",
+      "authorIds": ["jesper-armouti-hansen", "matthias-kraekel"],
+      "venue": "Working paper",
+      "year": null,
+      "details": null,
+      "type": "working-paper",
+      "links": [{ "id": "manuscript", "url": "/papers/optimal-selling.pdf" }]
+    },
+    {
+      "id": "predictive-completeness-social-preference-theories",
+      "title": "Predictive Completeness of Social Preference Theories",
+      "authorIds": ["jesper-armouti-hansen"],
+      "venue": "Work in progress",
+      "year": null,
+      "details": "A machine learning benchmark approach",
+      "type": "research-project",
+      "links": [{ "id": "manuscript", "url": "/papers/predictive-completeness.pdf" }]
+    },
+    {
+      "id": "informativeness-frequency-report-scoring-rules",
+      "title": "The Informativeness of Frequency-Report Scoring Rules",
+      "authorIds": ["jesper-armouti-hansen"],
+      "venue": "Working paper",
+      "year": "2026",
+      "details": "Manuscript complete; replication package finalised",
+      "type": "research-project",
+      "links": [
+        { "id": "manuscript", "url": "/papers/frequency-beliefs.pdf" },
+        { "id": "replication-package", "url": "https://github.com/armoutihansen/frequency-beliefs" }
+      ]
+    }
+  ],
+  "selectedWork": [
+    {
+      "id": "citibike-demand-risk-net-flow",
+      "title": "CitiBike Demand, Risk, and Net Flow",
+      "category": "Operational analysis",
+      "status": "Case study",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "pandas", "name": "pandas" }, { "id": "geopandas", "name": "GeoPandas" }, { "id": "feature-engineering", "name": "feature engineering" }, { "id": "risk-analysis", "name": "risk analysis" }, { "id": "prediction", "name": "prediction" }],
+      "href": "/DSC/"
+    },
+    {
+      "id": "rag-search-engine",
+      "title": "RAG Search Engine",
+      "category": "Retrieval system",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "rag", "name": "RAG" }, { "id": "bm25", "name": "BM25" }, { "id": "embeddings", "name": "embeddings" }, { "id": "clip", "name": "CLIP" }, { "id": "evaluation", "name": "evaluation" }],
+      "href": "https://github.com/armoutihansen/rag-search-engine"
+    },
+    {
+      "id": "minimal-coding-agent",
+      "title": "Minimal Coding Agent",
+      "category": "AI tooling",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "tool-calling", "name": "tool-calling" }, { "id": "gemini-api", "name": "Gemini API" }, { "id": "cli", "name": "CLI" }],
+      "href": "https://github.com/armoutihansen/build-ai-agent"
+    },
+    {
+      "id": "choicekit",
+      "title": "choicekit",
+      "category": "Python package",
+      "status": "In development",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "scikit-learn", "name": "scikit-learn" }, { "id": "discrete-choice", "name": "discrete choice" }, { "id": "conditional-logit", "name": "conditional logit" }],
+      "href": "https://github.com/armoutihansen/choicekit"
+    },
+    {
+      "id": "efficiency-wages-motivated-agents",
+      "title": { "publicationId": "efficiency-wages-motivated-agents" },
+      "category": "Replication package",
+      "status": "Published · GEB 2024",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "stata", "name": "Stata" }, { "id": "experimental-data", "name": "experimental data" }, { "id": "replication", "name": "replication" }],
+      "href": { "publicationId": "efficiency-wages-motivated-agents", "linkId": "code" }
+    },
+    {
+      "id": "informativeness-frequency-report-scoring-rules",
+      "title": { "publicationId": "informativeness-frequency-report-scoring-rules" },
+      "category": "Inference & simulation",
+      "status": "Manuscript + replication package",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "simulation", "name": "simulation" }, { "id": "pytest", "name": "pytest" }, { "id": "scoring-rules", "name": "scoring rules" }],
+      "href": { "publicationId": "informativeness-frequency-report-scoring-rules", "linkId": "replication-package" }
+    },
+    {
+      "id": "economic-theories-machine-learning",
+      "title": "Economic Theories and Machine Learning",
+      "category": "Model comparison",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "scikit-learn", "name": "scikit-learn" }, { "id": "machine-learning", "name": "machine learning" }, { "id": "model-evaluation", "name": "model evaluation" }],
+      "href": "https://github.com/armoutihansen/econ-theories-ml"
+    },
+    {
+      "id": "personal-knowledge-system",
+      "title": "Personal Knowledge System",
+      "category": "Knowledge base",
+      "status": "Live",
+      "tools": [{ "id": "typescript", "name": "TypeScript" }, { "id": "quartz", "name": "Quartz" }, { "id": "obsidian", "name": "Obsidian" }],
+      "href": "https://notes.armoutihansen.xyz/"
+    },
+    {
+      "id": "static-site-generator",
+      "title": "Static Site Generator",
+      "category": "Software",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "markdown", "name": "Markdown" }, { "id": "unit-testing", "name": "unit testing" }],
+      "href": "https://github.com/armoutihansen/static-site-generator"
+    },
+    {
+      "id": "bookbot",
+      "title": "BookBot",
+      "category": "CLI tool",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "text-processing", "name": "text processing" }],
+      "href": "https://github.com/armoutihansen/bookbot"
+    },
+    {
+      "id": "asteroids",
+      "title": "Asteroids",
+      "category": "Game",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "pygame", "name": "Pygame" }],
+      "href": "https://github.com/armoutihansen/asteroids"
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Solver",
+      "category": "Algorithms",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "algorithms", "name": "algorithms" }, { "id": "tkinter", "name": "tkinter" }],
+      "href": "https://github.com/armoutihansen/maze-solver"
+    }
+  ]
+}

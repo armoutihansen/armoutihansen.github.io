@@ -2,18 +2,21 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ExperienceEntry from "../components/ExperienceEntry.astro";
+import { education } from "../data/education";
 import { experience } from "../data/experience";
-import { capabilities, education, profile, skillGroups } from "../data/profile";
+import { capabilities, profile, profileLink, skillGroups } from "../data/profile";
 import { teaching } from "../data/teaching";
+
+const linkedIn = profileLink("linkedin");
 ---
 
-<BaseLayout title="CV" description="CV for Jesper Armouti-Hansen — data scientist with an economics PhD, working in statistical modeling, machine learning, and model evaluation.">
+<BaseLayout title="CV" description={`CV for ${profile.name} — data scientist with an economics PhD, working in statistical modeling, machine learning, and model evaluation.`}>
   <header class="page-hero cv-hero">
     <div class="cv-hero__main">
       <img
         class="cv-portrait"
         src="/images/avatar3.webp"
-        alt="Pixel-art portrait of Jesper Armouti-Hansen"
+        alt={`Pixel-art portrait of ${profile.name}`}
         width="400"
         height="400"
         loading="eager"
@@ -21,14 +24,14 @@ import { teaching } from "../data/teaching";
       />
       <div class="cv-hero__text">
         <p class="eyebrow">Curriculum vitae</p>
-        <h1>Jesper Armouti-Hansen</h1>
+        <h1>{profile.name}</h1>
         <p class="lead">{profile.summary}</p>
       </div>
     </div>
     <div class="actions">
       <a class="btn btn--primary" href="/CV_JAH.pdf">Download PDF</a>
       <a class="btn" href={`mailto:${profile.email}`}>Email</a>
-      <a class="btn" href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a>
+      <a class="btn" href={linkedIn.href} rel="me noreferrer">{linkedIn.label}</a>
     </div>
   </header>
 

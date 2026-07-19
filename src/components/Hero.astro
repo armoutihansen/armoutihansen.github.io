@@ -1,11 +1,14 @@
 ---
 import model from "../data/hero-model.json";
 import tod from "../../scripts/data/citibike_tod_risk.json";
-import { profile } from "../data/profile";
+import { profile, profileLink } from "../data/profile";
 import { bandStats, todPanel, type HeroPoint, type TodBin } from "../data/hero-model";
 
 const points = model.points as HeroPoint[];
 const DEFAULT_HI = 0.75;
+const linkedIn = profileLink("linkedin");
+const [givenName, ...remainingName] = profile.name.split(" ");
+const familyName = remainingName.join(" ");
 
 const d0 = bandStats(points, DEFAULT_HI);
 const dataJson = JSON.stringify(points);
@@ -50,13 +53,13 @@ const todData = JSON.stringify({ readouts: todReadouts, notes: todNotes, peakSev
 <section class="lede" aria-labelledby="lede-name">
   <div class="lede__intro">
     <p class="eyebrow reveal reveal-1">{profile.title}</p>
-    <h1 id="lede-name" class="hero__name reveal reveal-1">Jesper <br />Armouti-Hansen</h1>
+    <h1 id="lede-name" class="hero__name reveal reveal-1">{givenName} <br />{familyName}</h1>
     <p class="hero__lead reveal reveal-2">{profile.summary}</p>
-    <p class="lede__facts reveal reveal-2">Cologne, Germany · Python · machine learning · econometrics</p>
+    <p class="lede__facts reveal reveal-2">{profile.location} · Python · machine learning · econometrics</p>
     <div class="actions reveal reveal-3">
       <a class="btn btn--primary" href="/CV_JAH.pdf">Download CV</a>
       <a class="btn" href={`mailto:${profile.email}`}>Email</a>
-      <a class="btn" href="https://www.linkedin.com/in/jesper-a-h/" rel="me noreferrer">LinkedIn</a>
+      <a class="btn" href={linkedIn.href} rel="me noreferrer">{linkedIn.label}</a>
     </div>
   </div>
 

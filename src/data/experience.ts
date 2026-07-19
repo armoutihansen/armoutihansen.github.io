@@ -1,3 +1,8 @@
+import {
+  professionalRecord,
+  type ProfessionalExperience
+} from "./professional-record";
+
 export interface ExperienceItem {
   role: string;
   organization: string;
@@ -7,13 +12,16 @@ export interface ExperienceItem {
   bullets: string[];
 }
 
-export const experience: ExperienceItem[] = [
+interface ExperiencePresentation {
+  id: string;
+  logo?: string;
+  bullets: string[];
+}
+
+const presentation: ExperiencePresentation[] = [
   {
-    role: "Data Scientist",
-    organization: "AXA Konzern AG",
+    id: "axa-data-scientist",
     logo: "/images/logos/axa.svg",
-    period: "Apr. 2026 – present",
-    location: "Cologne, Germany",
     bullets: [
       "Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.",
       "Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.",
@@ -21,11 +29,8 @@ export const experience: ExperienceItem[] = [
     ]
   },
   {
-    role: "Postdoctoral Researcher in Economics",
-    organization: "University of Bonn",
+    id: "bonn-postdoctoral-researcher",
     logo: "/images/logos/university-of-bonn.svg",
-    period: "Jan. 2022 – Mar. 2026",
-    location: "Bonn, Germany",
     bullets: [
       "Ran empirical and computational economics research — statistical and econometric modeling, machine-learning benchmarking, and partial-identification with simulation.",
       "Developed theoretical models and built reproducible analysis pipelines in Python and R; benchmarked economic theories against machine-learning models to quantify how much predictable variation each captures.",
@@ -33,23 +38,60 @@ export const experience: ExperienceItem[] = [
     ]
   },
   {
-    role: "Research Assistant in Economics",
-    organization: "University of Cologne",
+    id: "cologne-research-assistant",
     logo: "/images/logos/university-of-cologne-wordmark.jpg",
-    period: "Dec. 2015 – Dec. 2021",
-    location: "Cologne, Germany",
     bullets: [
       "Conducted PhD research in microeconomic theory and experimental economics — decision-theory and contract-theory modeling, with empirical analysis of experimental data."
     ]
   },
   {
-    role: "Intern",
-    organization: "AirPlus International",
+    id: "airplus-intern",
     logo: "/images/logos/airplus.svg",
-    period: "Dec. 2014 – May 2015",
-    location: "Neu Isenburg, Germany",
-    bullets: [
-      "Built VBA tools for data management and process automation."
-    ]
+    bullets: ["Built VBA tools for data management and process automation."]
   }
 ];
+
+const months = [
+  "Jan.",
+  "Feb.",
+  "Mar.",
+  "Apr.",
+  "May",
+  "Jun.",
+  "Jul.",
+  "Aug.",
+  "Sep.",
+  "Oct.",
+  "Nov.",
+  "Dec."
+];
+
+function formatPartialDate(date: string): string {
+  const [year, month] = date.split("-");
+  return month ? `${months[Number(month) - 1]} ${year}` : year;
+}
+
+function formatPeriod(dates: ProfessionalExperience["dates"]): string {
+  return `${formatPartialDate(dates.start)} – ${dates.end ? formatPartialDate(dates.end) : "present"}`;
+}
+
+export function resolveExperience(
+  selected: ExperiencePresentation[]
+): ExperienceItem[] {
+  const byId = new Map(professionalRecord.experience.map((entry) => [entry.id, entry]));
+  return selected.map(({ id, ...display }) => {
+    const fact = byId.get(id);
+    if (!fact) {
+      throw new Error(`Unknown Professional record experience id: ${id}`);
+    }
+    return {
+      role: fact.role,
+      organization: fact.organization,
+      ...display,
+      period: formatPeriod(fact.dates),
+      location: fact.location
+    };
+  });
+}
+
+export const experience = resolveExperience(presentation);

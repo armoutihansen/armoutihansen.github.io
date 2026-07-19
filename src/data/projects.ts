@@ -1,3 +1,5 @@
+import { professionalRecord, type ProfessionalRecord } from "./professional-record";
+
 export const projectGroups = [
   {
     title: "Applied analysis & modeling",
@@ -19,6 +21,7 @@ export type ProjectGroup = (typeof projectGroups)[number];
 export type ProjectGroupTitle = ProjectGroup["title"];
 
 export interface Project {
+  id: string;
   title: string;
   primaryGroup: ProjectGroupTitle;
   category: string;
@@ -38,20 +41,83 @@ export interface Project {
   controls?: { key: string; label: string }[];
 }
 
-export const projects: Project[] = [
+export interface ProjectPresentation {
+  id: string;
+  primaryGroup: ProjectGroupTitle;
+  summary: string;
+  toolIds: string[];
+  problem?: string;
+  approach?: string;
+  result?: string;
+  embed?: string;
+  image?: string;
+  imageAlt?: string;
+  figureTitle?: string;
+  figureNote?: string;
+  legend?: { label: string; color: string }[];
+  controls?: { key: string; label: string }[];
+}
+
+export function resolveSelectedWork(
+  record: Pick<ProfessionalRecord, "selectedWork" | "publications">,
+  presentation: ProjectPresentation[]
+): Project[] {
+  const factsById = new Map(record.selectedWork.map((fact) => [fact.id, fact]));
+  const presentationIds = new Set<string>();
+  const resolved = presentation.map((local) => {
+    if (presentationIds.has(local.id)) {
+      throw new Error(`Duplicate Selected work presentation id: ${local.id}`);
+    }
+    presentationIds.add(local.id);
+    const fact = factsById.get(local.id);
+    if (!fact) throw new Error(`Unknown Selected work presentation id: ${local.id}`);
+    const titleFact = fact.title;
+    const title =
+      typeof titleFact === "string"
+        ? titleFact
+        : record.publications.find(
+            (publication) => publication.id === titleFact.publicationId
+          )!.title;
+    const hrefFact = fact.href;
+    const href =
+      typeof hrefFact === "string"
+        ? hrefFact
+        : record.publications
+            .find((publication) => publication.id === hrefFact.publicationId)!
+            .links.find((link) => link.id === hrefFact.linkId)!.url;
+    const toolsById = new Map(fact.tools.map((tool) => [tool.id, tool.name]));
+    const selectedToolIds = new Set<string>();
+    const tools = local.toolIds.map((id) => {
+      if (selectedToolIds.has(id)) {
+        throw new Error(`Duplicate Selected work tool selection id "${id}" for ${fact.id}`);
+      }
+      selectedToolIds.add(id);
+      const name = toolsById.get(id);
+      if (!name) throw new Error(`Unknown Selected work tool id "${id}" for ${fact.id}`);
+      return name;
+    });
+    const { toolIds: _toolIds, ...editorial } = local;
+    return { ...fact, title, href, tools, ...editorial };
+  });
+  for (const fact of record.selectedWork) {
+    if (!presentationIds.has(fact.id)) {
+      throw new Error(`Missing Selected work presentation id: ${fact.id}`);
+    }
+  }
+  return resolved;
+}
+
+export const projectPresentation: ProjectPresentation[] = [
   {
-    title: "CitiBike Demand, Risk, and Net Flow",
+    id: "citibike-demand-risk-net-flow",
     primaryGroup: "Applied analysis & modeling",
-    category: "Operational analysis",
-    status: "Case study",
+    toolIds: ["python", "pandas", "feature-engineering", "risk-analysis", "prediction"],
     summary:
       "Station- and trip-level analysis of demand, net flow, and collision-adjusted risk across New York's bike-share network.",
     problem: "What can CitiBike trip data and NYPD crash records, together, tell an operator and an insurer?",
     approach:
       "Three analyses on 2023–2025 trips: demand and usage patterns; a per-trip crash-risk measure by station and time (NYPD crashes over trip exposure, empirical-Bayes smoothed); and a net-flow imbalance classifier for rebalancing.",
     result: "An interpretable per-trip risk measure an insurer could use as a rating input, demand patterns showing seasonality and per-station stagnation, and stable net-flow patterns a classifier predicts to guide rebalancing.",
-    tools: ["Python", "pandas", "feature engineering", "risk analysis", "prediction"],
-    href: "/DSC/",
     embed: "/figures/citibike-station-risk.html",
     figureTitle: "Station-level crash risk",
     figureNote: "Each dot is a station; amber flags the highest exposure-adjusted per-trip risk.",
@@ -62,18 +128,15 @@ export const projects: Project[] = [
     imageAlt: "Map of New York with 2,567 CitiBike stations as dots, the highest exposure-adjusted per-trip crash-risk stations in amber"
   },
   {
-    title: "RAG Search Engine",
+    id: "rag-search-engine",
     primaryGroup: "Applied analysis & modeling",
-    category: "Retrieval system",
-    status: "GitHub project",
+    toolIds: ["python", "rag", "bm25", "embeddings", "clip", "evaluation"],
     summary:
       "A hybrid movie-search engine combining lexical and semantic retrieval, reranking, image search, and RAG answers.",
     problem: "Plain search fails when a query is vague, visual, or more description than title.",
     approach:
       "Combined BM25, embeddings, reciprocal rank fusion, CLIP, reranking, and caching, with a debug trace through the pipeline.",
     result: "An evaluated pipeline: RRF search scored on precision, recall, and F1 against a golden set, with a debug mode that traces a query through each stage.",
-    tools: ["Python", "RAG", "BM25", "embeddings", "CLIP", "evaluation"],
-    href: "https://github.com/armoutihansen/rag-search-engine",
     embed: "/figures/rag-architecture.html",
     figureTitle: "Search pipeline",
     figureNote: "Hybrid retrieval, fused and reranked, then answered with citations.",
@@ -81,16 +144,13 @@ export const projects: Project[] = [
       "Diagram of the hybrid search pipeline: query and image inputs through BM25, embeddings and CLIP retrieval, RRF fusion, reranking, and a RAG answer"
   },
   {
-    title: "Minimal Coding Agent",
+    id: "minimal-coding-agent",
     primaryGroup: "Applied analysis & modeling",
-    category: "AI tooling",
-    status: "GitHub project",
+    toolIds: ["python", "tool-calling", "gemini-api", "cli"],
     summary: "A small Gemini-powered coding agent that reads files, runs scripts, and edits code through explicit tools.",
     problem: "How much can a coding agent do with only a few explicit tools and no framework?",
     approach: "Implemented file inspection, script execution, and edits behind explicit, inspectable tool calls.",
     result: "A working agent that reads, runs, and edits code in a loop, with every tool call explicit.",
-    tools: ["Python", "tool-calling", "Gemini API", "CLI"],
-    href: "https://github.com/armoutihansen/build-ai-agent",
     embed: "/figures/coding-agent-trace.html",
     figureTitle: "Agent run",
     figureNote: "An example run — the agent finds a failing test and fixes it.",
@@ -98,10 +158,9 @@ export const projects: Project[] = [
       "Terminal trace of an example coding-agent run: list files, run tests, read the source, patch the bug, and re-run the tests"
   },
   {
-    title: "choicekit",
+    id: "choicekit",
     primaryGroup: "Applied analysis & modeling",
-    category: "Python package",
-    status: "In development",
+    toolIds: ["python", "scikit-learn", "discrete-choice", "conditional-logit"],
     summary:
       "A scikit-learn-compatible package for discrete choice modeling on wide-form data, in development.",
     problem:
@@ -110,8 +169,6 @@ export const projects: Project[] = [
       "Estimators inherit from scikit-learn's BaseEstimator and read wide-form X, y — one row per choice situation, {alt}_{feature} columns — so they drop straight into GridSearchCV, cross-validation, and pipelines.",
     result:
       "Intended interface: a ConditionalLogitClassifier you tune with GridSearchCV like any sklearn model. Early-stage and not yet released.",
-    tools: ["Python", "scikit-learn", "discrete choice", "conditional logit"],
-    href: "https://github.com/armoutihansen/choicekit",
     embed: "/figures/choicekit-sklearn.html",
     figureTitle: "sklearn-native usage",
     figureNote:
@@ -120,16 +177,13 @@ export const projects: Project[] = [
       "Code panel: a wide-form choice table feeding a choicekit ConditionalLogitClassifier passed to scikit-learn's GridSearchCV and fit on X, y"
   },
   {
-    title: "Efficiency Wages with Motivated Agents",
+    id: "efficiency-wages-motivated-agents",
     primaryGroup: "Research & replication",
-    category: "Replication package",
-    status: "Published · GEB 2024",
+    toolIds: ["python", "stata", "experimental-data", "replication"],
     summary: "Replication data and code for a published paper on wages, motivation, and effort.",
     problem: "Do wage incentives and prosocial motivation reinforce each other, or work through separate channels?",
     approach: "Built reproducible analyses around experimental data and documented the paper's online appendix.",
     result: "A peer-reviewed empirical project with a complete replication package.",
-    tools: ["Python", "Stata", "experimental data", "replication"],
-    href: "https://github.com/armoutihansen/efficiency-wages",
     embed: "/figures/efficiency-wages-effort.html",
     figureTitle: "Chosen effort by wage",
     figureNote: "Mean chosen effort by offered wage, with 95% confidence bands.",
@@ -137,17 +191,14 @@ export const projects: Project[] = [
       "Interactive chart of mean chosen effort by offered wage, Prosocial versus GE treatments"
   },
   {
-    title: "The Informativeness of Frequency-Report Scoring Rules",
+    id: "informativeness-frequency-report-scoring-rules",
     primaryGroup: "Research & replication",
-    category: "Inference & simulation",
-    status: "Manuscript + replication package",
+    toolIds: ["python", "simulation", "pytest", "scoring-rules"],
     summary: "Manuscript, simulations, and replication code for belief elicitation from frequency reports.",
     problem: "A count report is observable; the belief behind it is not. How much does the report actually pin down?",
     approach:
       "Characterized the identified set of beliefs behind each report under three scoring rules, then checked the bounds with simulation.",
     result: "No rule dominates: squared-distance gives the sharpest bounds when beliefs concentrate on a few categories, frequency-guessing when they're spread out, and Manhattan distance rarely wins but holds up across regimes.",
-    tools: ["Python", "simulation", "pytest", "scoring rules"],
-    href: "https://github.com/armoutihansen/frequency-beliefs",
     embed: "/figures/frequency-rules-winshare.html",
     figureTitle: "Sharpest-bound win share",
     controls: [
@@ -160,17 +211,14 @@ export const projects: Project[] = [
       "Interactive chart of the win share of three scoring rules versus belief concentration alpha"
   },
   {
-    title: "Economic Theories and Machine Learning",
+    id: "economic-theories-machine-learning",
     primaryGroup: "Research & replication",
-    category: "Model comparison",
-    status: "GitHub project",
+    toolIds: ["python", "machine-learning", "model-evaluation"],
     summary: "Code comparing economic theories against machine-learning benchmarks on behavioral data.",
     problem: "When a theory predicts behavior, how much of the predictable variation does it actually capture?",
     approach:
       "Benchmarked theory-based specifications against machine-learning models and examined the remaining predictive gap.",
     result: "Theory specifications scored on out-of-sample prediction and compared against the machine-learning benchmark.",
-    tools: ["Python", "machine learning", "model evaluation"],
-    href: "https://github.com/armoutihansen/econ-theories-ml",
     embed: "/figures/econ-theories-completeness.html",
     figureTitle: "Completeness by model heterogeneity",
     figureNote:
@@ -179,61 +227,48 @@ export const projects: Project[] = [
       "Line chart of completeness rising from about 38% to 92% as the model moves from a single agent through more latent types to the full heterogeneity structure"
   },
   {
-    title: "Personal Knowledge System",
+    id: "personal-knowledge-system",
     primaryGroup: "Also on GitHub",
-    category: "Knowledge base",
-    status: "Live",
+    toolIds: ["typescript", "quartz", "obsidian"],
     summary: "A public notes site for ML, AI, and software-engineering references, built on Obsidian and Quartz.",
-    tools: ["TypeScript", "Quartz", "Obsidian"],
-    href: "https://notes.armoutihansen.xyz/"
   },
   {
-    title: "Static Site Generator",
+    id: "static-site-generator",
     primaryGroup: "Also on GitHub",
-    category: "Software",
-    status: "GitHub project",
+    toolIds: ["python", "markdown", "unit-testing"],
     summary: "A small Python static-site generator that turns Markdown into templated HTML.",
-    tools: ["Python", "Markdown", "unit testing"],
-    href: "https://github.com/armoutihansen/static-site-generator"
   },
   {
-    title: "BookBot",
+    id: "bookbot",
     primaryGroup: "Also on GitHub",
-    category: "CLI tool",
-    status: "GitHub project",
+    toolIds: ["python", "text-processing"],
     summary: "A command-line tool that analyzes books and reports word and character frequencies.",
-    tools: ["Python", "text processing"],
-    href: "https://github.com/armoutihansen/bookbot"
   },
   {
-    title: "Asteroids",
+    id: "asteroids",
     primaryGroup: "Also on GitHub",
-    category: "Game",
-    status: "GitHub project",
+    toolIds: ["python", "pygame"],
     summary: "An Asteroids clone in Python and Pygame — movement, shooting, collisions, and asteroid splitting.",
-    tools: ["Python", "Pygame"],
-    href: "https://github.com/armoutihansen/asteroids"
   },
   {
-    title: "Maze Solver",
+    id: "maze-solver",
     primaryGroup: "Also on GitHub",
-    category: "Algorithms",
-    status: "GitHub project",
+    toolIds: ["python", "algorithms", "tkinter"],
     summary: "A maze generator and visual solver using recursive backtracking and depth-first search.",
-    tools: ["Python", "algorithms", "tkinter"],
-    href: "https://github.com/armoutihansen/maze-solver"
   }
 ];
+
+export const projects = resolveSelectedWork(professionalRecord, projectPresentation);
 
 const LINK_GROUP: ProjectGroupTitle = "Also on GitHub";
 
 // The home's Selected work grid: four featured projects, in order. With a
 // column-first 2x2 grid the left column reads 01->02, the right 03->04.
-const featuredTitles = [
-  "RAG Search Engine",
-  "CitiBike Demand, Risk, and Net Flow",
-  "Economic Theories and Machine Learning",
-  "The Informativeness of Frequency-Report Scoring Rules"
+const featuredIds = [
+  "rag-search-engine",
+  "citibike-demand-risk-net-flow",
+  "economic-theories-machine-learning",
+  "informativeness-frequency-report-scoring-rules"
 ] as const;
 
 // Domain invariants for single-group project data (see CONTEXT.md), checkable
@@ -254,10 +289,10 @@ export function checkInvariants(
   if (unknown.length > 0) {
     throw new Error(`Unknown project groups: ${[...new Set(unknown)].join(", ")}`);
   }
-  const titleSet = new Set(titles);
-  const missingFeatured = featuredTitles.filter((t) => !titleSet.has(t));
+  const idSet = new Set(projectList.map((project) => project.id));
+  const missingFeatured = featuredIds.filter((id) => !idSet.has(id));
   if (missingFeatured.length > 0) {
-    throw new Error(`Featured titles not found in projects: ${missingFeatured.join(", ")}`);
+    throw new Error(`Featured project ids not found: ${missingFeatured.join(", ")}`);
   }
   // Every substantive project (any group other than the "Also on GitHub" link
   // group) is illustrated: it must carry an `embed` or `image`. Link-group
@@ -309,9 +344,17 @@ export function selectedWork(): DisplayGroup[] {
 
 // The home's ordered featured set.
 export function featuredProjects(): Project[] {
-  return featuredTitles.map((title) => {
-    const project = projects.find((p) => p.title === title);
-    if (!project) throw new Error(`Featured project not found: ${title}`);
+  return selectProjects([...featuredIds]);
+}
+
+export function selectProjects(ids: string[], source: Project[] = projects): Project[] {
+  const byId = new Map(source.map((project) => [project.id, project]));
+  const seen = new Set<string>();
+  return ids.map((id) => {
+    if (seen.has(id)) throw new Error(`Duplicate project selection id: ${id}`);
+    seen.add(id);
+    const project = byId.get(id);
+    if (!project) throw new Error(`Unknown project selection id: ${id}`);
     return project;
   });
 }

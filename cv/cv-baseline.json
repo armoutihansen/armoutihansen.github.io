@@ -1,0 +1,55 @@
+{
+  "pages": 2,
+  "pageSize": "A4",
+  "pdfSha256": "e9c58529a2885dff1c2a7d9bf9d9f21fe2bef2acb9444c91037841cf2d3b5777",
+  "experiencePage": 1,
+  "educationPage": 1,
+  "teachingPage": 2,
+  "skillsPage": 2,
+  "page1RequiredText": "BA Financial Management & Services",
+  "page2RequiredText": "CitiBike Demand, Risk & Net Flow",
+  "experienceText": [
+    "Data Scientist, AXA Konzern AG Apr. 2026 – present",
+    "Cologne, Germany",
+    "Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.",
+    "Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.",
+    "Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-4B) to replace the existing two-stage BERT+CLIP and RNN stack.",
+    "Postdoctoral Researcher in Economics, University of Bonn Jan. 2022 – Mar. 2026",
+    "Bonn, Germany",
+    "Ran empirical and computational economics research — statistical and econometric modeling, machine-learning benchmarking, and partial-identification with simulation.",
+    "Developed theoretical models and built reproducible analysis pipelines in Python and R; benchmarked economic theories against machine-learning models to quantify how much predictable variation each captures.",
+    "Published peer-reviewed research and presented at international conferences.",
+    "Research Assistant in Economics, University of Cologne Dec. 2015 – Dec. 2021",
+    "Cologne, Germany",
+    "Conducted PhD research in microeconomic theory and experimental economics — decision-theory and contract-theory modeling, with empirical analysis of experimental data.",
+    "Intern, AirPlus International Dec. 2014 – May 2015",
+    "Neu Isenburg, Germany",
+    "Built VBA tools for data management and process automation."
+  ],
+  "educationText": [
+    "PhD in Economics (Dr. rer. pol.) 2015 – 2021",
+    "University of Cologne — Summa cum laude",
+    "MSc International Economics & Public Policy 2012 – 2014",
+    "University of Mainz — GPA 1.6",
+    "BA Financial Management & Services 2008 – 2012",
+    "Copenhagen Business Academy"
+  ],
+  "teachingText": [
+    "University lecturer and tutor in applied, behavioral, and organizational economics; supervised 60+ bachelor’s and master’s theses.",
+    "Seminar on Current Topics in Microeconomics 2025 – present",
+    "Undergraduate lecturer",
+    "Research Module on Applied Microeconomics & Management 2022 – 2025",
+    "Graduate lecturer",
+    "Empirical Evaluation of Management Practices 2019 – 2022",
+    "Graduate lecturer",
+    "Behavioral Management Science 2017 – 2020",
+    "Undergraduate lecturer"
+  ],
+  "skillsText": [
+    "Programming Python · R · SQL · Stata · TypeScript",
+    "Python stack NumPy · pandas · SciPy · scikit-learn · statsmodels · PyTorch · XGBoost / LightGBM · GeoPandas",
+    "Methods Statistical modeling · Econometrics · Machine learning · Model evaluation & calibration · Forecasting · Experiment & A/B analysis · Simulation · Fine-tuning · Retrieval / RAG",
+    "Tools Git · GitHub Actions · Docker · pytest · uv · JupyterLab · Linux · LaTeX",
+    "Languages English (C2) · German (C1/C2) · Danish (native)"
+  ]
+}

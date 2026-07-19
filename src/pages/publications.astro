@@ -4,6 +4,7 @@ import PublicationItem from "../components/PublicationItem.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ResearchStrip from "../components/ResearchStrip.astro";
 import { journalPublications, otherWork } from "../data/publications";
+import { profile } from "../data/profile";
 
 const journals = journalPublications();
 const other = otherWork();
@@ -11,7 +12,7 @@ const other = otherWork();
 
 <BaseLayout
   title="Research"
-  description="Research background, publications, working papers, and replication packages by Jesper Armouti-Hansen."
+  description={`Research background, publications, working papers, and replication packages by ${profile.name}.`}
 >
   <header class="page-hero">
     <p class="eyebrow">Publications &amp; working papers</p>

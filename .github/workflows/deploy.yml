@@ -33,11 +33,21 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Setup Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-versions-file: cv/typst-versions.json
+      - name: Install PDF verification tools
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
         run: npm ci
+      - name: Verify Professional record and CV PDF
+        run: npm run cv:verify
+      - name: Run tests
+        run: npm test
       - name: Type-check with Astro
         run: npm run check
       - name: Refresh GitHub stats

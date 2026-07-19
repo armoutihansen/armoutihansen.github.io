@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted.
+Accepted; amended 2026-07-19.
 
 ## Context
 
@@ -52,6 +52,46 @@ and CV share DNA — same type system — without the CV copying the site's busy
 layout (warm ivory, amber, chips, atmosphere), which was tried first and rejected.
 All three font TTFs are vendored in `cv/fonts/`.
 
+### 2026-07-19 amendment — the website owns the Professional record
+
+The original decision treated the Typst CV as both the rendering source and the
+ground truth for site claims. That ownership created two factual implementations:
+Astro data for the primary website and Typst arrays for the downstream CV. They
+already differ in teaching coverage, language proficiency, and other record details.
+
+The **website is the primary product** and owns the complete **Professional record**
+defined in `CONTEXT.md`. Its canonical representation is strict, validated JSON under
+`src/data/`. Typst remains the source for CV selection, ordering, editorial prose,
+layout, and PDF rendering, but reads identity, contact, experience, education,
+teaching, skills, publication, and selected-work facts from the Professional record.
+The CV may intentionally present a subset and may use derived short labels; it may not
+override record facts.
+
+The verified CV build validates the same record interface used by the website before
+Typst runs. Production deployment rebuilds `static/CV_JAH.pdf` and fails if the
+committed, byte-deterministic PDF is stale. Migration proceeds category by category,
+starting with experience as a behavior-preserving tracer bullet; each category moves
+both outputs and deletes its duplicate facts in one cutover.
+
+The migration is complete across identity/contact, experience, education, teaching,
+skills/languages, publications, and selected work. For selected work, the record owns the
+complete 12-project website set and the union of factual project tools under stable project
+and tool identifiers. Astro and Typst each select their approved tool subset and order by
+identifier; the CV selects its current four projects by identifier and retains its derived
+short titles, summaries, and layout. Website grouping, evidence-dossier prose, featured
+order, tool presentation, and illustration metadata remain website presentation concerns.
+
+For the experience tracer bullet, behavior preservation is measured against the
+pre-migration Typst source at `ddf5d4a`, not blindly against the then-committed PDF.
+That PDF was already stale: its final AXA bullet said `Qwen3.5-VL 4B`, while `cv/cv.typ`
+said `Qwen3.5-4B`. The migration deliberately corrected the artifact once by rebuilding
+from the current source. `cv/cv-baseline.json` now fixes the approved deterministic PDF
+SHA-256, experience text, and two-page topology; the verified build also extracts the text
+and raster-renders both pages so later drift cannot pass silently. The build never updates
+the approved hash. An intentional content or visual change requires rendering and visually
+reviewing a candidate, then explicitly updating the baseline before rebuilding the served
+artifact.
+
 ## Considered alternatives
 
 - **LaTeX.** Rejected as primary despite zero ramp: for a document re-edited for
@@ -67,6 +107,9 @@ All three font TTFs are vendored in `cv/fonts/`.
 
 ## Consequences
 
-- `typst` becomes a build dependency for refreshing the PDF (installed via
-  `brew install typst`); it is not needed for the site build itself.
+- `typst` becomes a production build dependency because every deployment rebuilds and
+  verifies the committed PDF.
+- Invalid Professional record data blocks both the website and CV builds.
+- The factual source moves from Typst arrays to the website-owned Professional record;
+  Typst continues to own the CV's editorial and visual implementation.
 - The vendored TTFs add a `cv/fonts/` directory to the repo.
