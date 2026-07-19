@@ -44,5 +44,39 @@
       "location": "Neu Isenburg, Germany",
       "dates": { "start": "2014-12", "end": "2015-05" }
     }
+  ],
+  "education": [
+    {
+      "id": "cologne-economics-phd",
+      "degree": "PhD in Economics (Dr. rer. pol.)",
+      "institution": "University of Cologne",
+      "location": "Cologne, Germany",
+      "distinctions": ["Summa cum laude"],
+      "dates": { "start": "2015", "end": "2021" }
+    },
+    {
+      "id": "mainz-international-economics-msc",
+      "degree": "MSc International Economics and Public Policy",
+      "institution": "University of Mainz",
+      "location": "Mainz, Germany",
+      "distinctions": ["GPA 1.6"],
+      "dates": { "start": "2012", "end": "2014" }
+    },
+    {
+      "id": "copenhagen-financial-management-ba",
+      "degree": "BA Financial Management and Services",
+      "institution": "Copenhagen Business Academy",
+      "location": "Copenhagen, Denmark",
+      "distinctions": [],
+      "dates": { "start": "2008", "end": "2012" }
+    },
+    {
+      "id": "cyprus-exchange-semester",
+      "degree": "Exchange semester",
+      "institution": "European University of Cyprus",
+      "location": "Nicosia, Cyprus",
+      "distinctions": [],
+      "dates": { "start": "2010", "end": "2010" }
+    }
   ]
 }

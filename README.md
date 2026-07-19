@@ -59,8 +59,9 @@ Important files:
 - `src/data/github.json`: precomputed GitHub activity data (professional-link facts stay in
   the Professional record).
 - `src/data/experience.ts`: website experience selection, bullets, logos, and formatting.
+- `src/data/education.ts`: website education selection, detail prose, logos, and formatting.
 - `cv/cv.typ`: CV selection, bullets, date formatting, and layout.
-- `cv/cv-baseline.json`: expected experience text and two-page render topology.
+- `cv/cv-baseline.json`: expected experience/education text and two-page render topology.
 - `src/styles/global.css`: visual design, responsive layout, and light/dark themes.
 - `src/pages/index.astro`: homepage composition.
 
@@ -94,7 +95,7 @@ npm run cv:build
 ```
 
 Verify that the Professional record is valid and the committed PDF matches a
-deterministic rebuild, the approved experience text, and the two-page rendered layout:
+deterministic rebuild, the approved experience/education text, and the two-page rendered layout:
 
 ```bash
 npm run cv:verify
@@ -150,7 +151,12 @@ Most content updates should be made in `src/data/`:
   `src/data/professional-record.json`.
 - Update website-only experience bullets, logos, selection, or ordering in
   `src/data/experience.ts`.
-- Update CV-only bullets, selection, ordering, date presentation, or layout in `cv/cv.typ`,
+- Update shared education facts (degree, institution, location, distinctions, and structured
+  dates) in `src/data/professional-record.json`.
+- Update website-only education detail prose, logos, selection, ordering, or formatting in
+  `src/data/education.ts`.
+- Update CV-only bullets, compact education wording, selection, ordering, date presentation,
+  or layout in `cv/cv.typ`,
   then follow the explicit baseline-approval workflow above.
 
 For page-level copy, edit the relevant file in `src/pages/`.

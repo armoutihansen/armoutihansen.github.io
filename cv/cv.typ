@@ -93,6 +93,7 @@
 
 // ========================================================== CONTENT ==========
 #let experience-facts = professional-record.experience
+#let education-facts = professional-record.education
 
 #let professional-link-fact(id) = {
   let matches = identity-facts.links.filter(link => link.id == id)
@@ -107,6 +108,12 @@
 #let experience-fact(id) = {
   let matches = experience-facts.filter(entry => entry.id == id)
   assert(matches.len() == 1, message: "Unknown Professional record experience id: " + id)
+  matches.first()
+}
+
+#let education-fact(id) = {
+  let matches = education-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record education id: " + id)
   matches.first()
 }
 
@@ -180,11 +187,25 @@
    tools: ("Python", "embeddings", "CLIP", "evaluation")),
 )
 
-#let education = (
-  ([PhD in Economics (Dr. rer. pol.)], "2015 – 2021", [University of Cologne — Summa cum laude]),
-  ([MSc International Economics & Public Policy], "2012 – 2014", [University of Mainz — GPA 1.6]),
-  ([BA Financial Management & Services], "2008 – 2012", [Copenhagen Business Academy]),
+#let education-selection = (
+  "cologne-economics-phd",
+  "mainz-international-economics-msc",
+  "copenhagen-financial-management-ba",
 )
+
+#let education = education-selection.map(id => {
+  let fact = education-fact(id)
+  let where = if fact.distinctions.len() == 0 {
+    fact.institution
+  } else {
+    fact.institution + " — " + fact.distinctions.join(", ")
+  }
+  (
+    fact.degree.replace(" and ", " & "),
+    date-span-label(fact.dates),
+    where,
+  )
+})
 
 #let teaching_lead = [University lecturer and tutor in applied, behavioral, and organizational economics; supervised 60+ bachelor's and master's theses.]
 #let teaching = (

@@ -3,6 +3,7 @@
   "pageSize": "A4",
   "pdfSha256": "e9c58529a2885dff1c2a7d9bf9d9f21fe2bef2acb9444c91037841cf2d3b5777",
   "experiencePage": 1,
+  "educationPage": 1,
   "page1RequiredText": "BA Financial Management & Services",
   "page2RequiredText": "CitiBike Demand, Risk & Net Flow",
   "experienceText": [
@@ -22,5 +23,13 @@
     "Intern, AirPlus International Dec. 2014 – May 2015",
     "Neu Isenburg, Germany",
     "Built VBA tools for data management and process automation."
+  ],
+  "educationText": [
+    "PhD in Economics (Dr. rer. pol.) 2015 – 2021",
+    "University of Cologne — Summa cum laude",
+    "MSc International Economics & Public Policy 2012 – 2014",
+    "University of Mainz — GPA 1.6",
+    "BA Financial Management & Services 2008 – 2012",
+    "Copenhagen Business Academy"
   ]
 }

@@ -31,9 +31,11 @@ interface CvBaseline {
   pageSize: string;
   pdfSha256: string;
   experiencePage: number;
+  educationPage: number;
   page1RequiredText: string;
   page2RequiredText: string;
   experienceText: string[];
+  educationText: string[];
 }
 
 const cvBaseline = JSON.parse(
@@ -69,14 +71,14 @@ function assertTypstVersion(): void {
   }
 }
 
-export function renderCv(output: string): void {
+export function renderCv(output: string, cvSource = source): void {
   // Importing this value parses the same strict record interface Astro consumes.
   void professionalRecord;
   assertTypstVersion();
 
   const result = spawnSync(
     "typst",
-    ["compile", "--root", repositoryRoot, "--font-path", fontPath, source, output],
+    ["compile", "--root", repositoryRoot, "--font-path", fontPath, cvSource, output],
     {
       cwd: repositoryRoot,
       encoding: "utf8",
@@ -125,6 +127,15 @@ export function inspectCvBaseline(pdf: string): {
     const next = experiencePage.indexOf(expected, position);
     if (next < 0) {
       throw new Error(`CV experience baseline drifted at: ${expected}`);
+    }
+    position = next + expected.length;
+  }
+  const educationPage = extractedPages[cvBaseline.educationPage - 1];
+  position = 0;
+  for (const expected of cvBaseline.educationText.map(normalized)) {
+    const next = educationPage.indexOf(expected, position);
+    if (next < 0) {
+      throw new Error(`CV education baseline drifted at: ${expected}`);
     }
     position = next + expected.length;
   }

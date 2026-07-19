@@ -11,7 +11,11 @@ import { join } from "node:path";
 import { assertCurrentCv, inspectCvBaseline, renderCv, TYPST_VERSION } from "./cv";
 
 const testDirectory = mkdtempSync(join(tmpdir(), "professional-record-cv-test-"));
-afterAll(() => rmSync(testDirectory, { recursive: true }));
+const brokenEducationSource = `cv/.education-selection-test-${process.pid}.typ`;
+afterAll(() => {
+  rmSync(testDirectory, { recursive: true });
+  rmSync(join(process.cwd(), brokenEducationSource), { force: true });
+});
 
 describe("verified CV build", () => {
   it("uses one machine-readable Typst version source", () => {
@@ -40,7 +44,7 @@ describe("verified CV build", () => {
     expect(readFileSync(first)).toEqual(readFileSync(second));
   });
 
-  it("preserves the approved experience text and two-page rendered layout", () => {
+  it("preserves the approved experience and education text and two-page rendered layout", () => {
     const output = join(testDirectory, "baseline.pdf");
     renderCv(output);
 
@@ -64,5 +68,19 @@ describe("verified CV build", () => {
     writeFileSync(stale, "not the generated CV");
 
     expect(() => assertCurrentCv(stale)).toThrow(/stale/i);
+  });
+
+  it("rejects an unknown selected education identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace(
+      '"cologne-economics-phd",',
+      '"unknown-education",'
+    );
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenEducationSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "broken-education.pdf"), brokenEducationSource)
+    ).toThrow(/Unknown Professional record education id: unknown-education/);
   });
 });

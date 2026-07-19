@@ -20,6 +20,16 @@ const validRecord = {
       location: "Cologne, Germany",
       dates: { start: "2026-04", end: null }
     }
+  ],
+  education: [
+    {
+      id: "cologne-economics-phd",
+      degree: "PhD in Economics (Dr. rer. pol.)",
+      institution: "University of Cologne",
+      location: "Cologne, Germany",
+      distinctions: ["Summa cum laude"],
+      dates: { start: "2015", end: "2021" }
+    }
   ]
 };
 
@@ -74,6 +84,86 @@ describe("parseProfessionalRecord", () => {
         dates: { start: "2014-12", end: "2015-05" }
       }
     ]);
+  });
+
+  it("parses the complete four-entry education record including the exchange semester", () => {
+    expect(professionalRecord.education).toEqual([
+      {
+        id: "cologne-economics-phd",
+        degree: "PhD in Economics (Dr. rer. pol.)",
+        institution: "University of Cologne",
+        location: "Cologne, Germany",
+        distinctions: ["Summa cum laude"],
+        dates: { start: "2015", end: "2021" }
+      },
+      {
+        id: "mainz-international-economics-msc",
+        degree: "MSc International Economics and Public Policy",
+        institution: "University of Mainz",
+        location: "Mainz, Germany",
+        distinctions: ["GPA 1.6"],
+        dates: { start: "2012", end: "2014" }
+      },
+      {
+        id: "copenhagen-financial-management-ba",
+        degree: "BA Financial Management and Services",
+        institution: "Copenhagen Business Academy",
+        location: "Copenhagen, Denmark",
+        distinctions: [],
+        dates: { start: "2008", end: "2012" }
+      },
+      {
+        id: "cyprus-exchange-semester",
+        degree: "Exchange semester",
+        institution: "European University of Cyprus",
+        location: "Nicosia, Cyprus",
+        distinctions: [],
+        dates: { start: "2010", end: "2010" }
+      }
+    ]);
+  });
+
+  it.each(["2021-00", "2021-13", "Summer 2021", "2021-06-01"])(
+    "rejects malformed education partial date %s with its record path",
+    (end) => {
+      const invalid = structuredClone(validRecord);
+      invalid.education[0].dates.end = end;
+
+      expect(() => parseProfessionalRecord(invalid)).toThrow(
+        /YYYY or YYYY-MM.*education\[0\]\.dates\.end/s
+      );
+    }
+  );
+
+  it("rejects duplicate education identifiers at the duplicate path", () => {
+    const duplicate = structuredClone(validRecord);
+    duplicate.education.push(structuredClone(duplicate.education[0]));
+
+    expect(() => parseProfessionalRecord(duplicate)).toThrow(
+      /Duplicate education id.*education\[1\]\.id/s
+    );
+  });
+
+  it("rejects missing required education facts with their path", () => {
+    const missing = structuredClone(validRecord) as {
+      education: Array<Record<string, unknown>>;
+    };
+    delete missing.education[0].institution;
+
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected string.*education\[0\]\.institution/s
+    );
+  });
+
+  it("rejects unknown education fields with their path", () => {
+    const unknown = structuredClone(validRecord) as {
+      education: Array<Record<string, unknown>>;
+    };
+    unknown.education[0].logo = "/images/logos/university.svg";
+
+    expect(() => parseProfessionalRecord(unknown)).toThrow(
+      /Unrecognized key.*education\[0\]/s
+    );
   });
 
   it("accepts a strict experience record with a structured partial-date span", () => {

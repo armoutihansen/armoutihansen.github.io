@@ -57,15 +57,33 @@ const experienceSchema = z
   )
   .superRefine(requireUniqueIds("experience"));
 
+const educationSchema = z
+  .array(
+    z.strictObject({
+      id: stableIdSchema,
+      degree: z.string().min(1),
+      institution: z.string().min(1),
+      location: z.string().min(1),
+      distinctions: z.array(z.string().min(1)),
+      dates: z.strictObject({
+        start: partialDateSchema,
+        end: partialDateSchema
+      })
+    })
+  )
+  .superRefine(requireUniqueIds("education"));
+
 const professionalRecordSchema = z.strictObject({
   identity: identitySchema,
-  experience: experienceSchema
+  experience: experienceSchema,
+  education: educationSchema
 });
 
 export type ProfessionalRecord = z.infer<typeof professionalRecordSchema>;
 export type ProfessionalIdentity = ProfessionalRecord["identity"];
 export type ProfessionalLink = ProfessionalIdentity["links"][number];
 export type ProfessionalExperience = ProfessionalRecord["experience"][number];
+export type ProfessionalEducation = ProfessionalRecord["education"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {
   const result = professionalRecordSchema.safeParse(input);
