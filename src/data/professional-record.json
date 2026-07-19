@@ -1,4 +1,20 @@
 {
+  "identity": {
+    "name": "Jesper Armouti-Hansen",
+    "email": "jesper@armoutihansen.xyz",
+    "location": "Cologne, Germany",
+    "phone": "+49 176 4278 7630",
+    "links": [
+      { "id": "website", "url": "https://armoutihansen.xyz" },
+      { "id": "linkedin", "url": "https://www.linkedin.com/in/jesper-a-h/" },
+      { "id": "github", "url": "https://github.com/armoutihansen" },
+      {
+        "id": "google-scholar",
+        "url": "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"
+      },
+      { "id": "orcid", "url": "https://orcid.org/0000-0001-7776-8016" }
+    ]
+  },
   "experience": [
     {
       "id": "axa-data-scientist",

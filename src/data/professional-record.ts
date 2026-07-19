@@ -5,6 +5,39 @@ const partialDateSchema = z
   .string()
   .regex(/^\d{4}(?:-(?:0[1-9]|1[0-2]))?$/, "must be YYYY or YYYY-MM");
 
+const stableIdSchema = z
+  .string()
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "must be lowercase kebab-case");
+
+const professionalLinksSchema = z
+  .array(
+    z.strictObject({
+      id: stableIdSchema,
+      url: z.url().refine((url) => /^https?:\/\//.test(url), "must be an HTTP(S) URL")
+    })
+  )
+  .superRefine((links, context) => {
+    const seen = new Set<string>();
+    links.forEach((link, index) => {
+      if (seen.has(link.id)) {
+        context.addIssue({
+          code: "custom",
+          message: `Duplicate professional link id: ${link.id}`,
+          path: [index, "id"]
+        });
+      }
+      seen.add(link.id);
+    });
+  });
+
+const identitySchema = z.strictObject({
+  name: z.string().min(1),
+  email: z.email(),
+  location: z.string().min(1),
+  phone: z.string().min(1),
+  links: professionalLinksSchema
+});
+
 const experienceSchema = z
   .array(
     z.strictObject({
@@ -35,10 +68,13 @@ const experienceSchema = z
   });
 
 const professionalRecordSchema = z.strictObject({
+  identity: identitySchema,
   experience: experienceSchema
 });
 
 export type ProfessionalRecord = z.infer<typeof professionalRecordSchema>;
+export type ProfessionalIdentity = ProfessionalRecord["identity"];
+export type ProfessionalLink = ProfessionalIdentity["links"][number];
 export type ProfessionalExperience = ProfessionalRecord["experience"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {

@@ -51,7 +51,7 @@ cv/
 
 Important files:
 
-- `src/data/profile.ts`: name, headline, summary, social links, and skill groups.
+- `src/data/profile.ts`: website identity/link selection, headline, summary, and skill groups.
 - `src/data/projects.ts`: project cards shown on the homepage and Projects page.
 - `src/data/publications.ts`: publications, working papers, and research projects.
 - `src/data/professional-record.json`: canonical Professional record facts.
@@ -140,7 +140,10 @@ Most content updates should be made in `src/data/`:
 
 - Add or edit projects in `src/data/projects.ts`.
 - Add or edit publications in `src/data/publications.ts`.
-- Update profile links or skills in `src/data/profile.ts`.
+- Update shared name, email, location, phone, or professional-link URLs in
+  `src/data/professional-record.json`.
+- Update website-only identity positioning, prose, link labels, visibility, ordering, or
+  skills in `src/data/profile.ts`.
 - Update shared experience facts (role, organization, location, and structured dates) in
   `src/data/professional-record.json`.
 - Update website-only experience bullets, logos, selection, or ordering in

@@ -1,22 +1,55 @@
+import { professionalRecord } from "./professional-record";
+
+interface ProfileLinkPresentation {
+  id: string;
+  label: string;
+}
+
+export interface ProfileLink extends ProfileLinkPresentation {
+  href: string;
+}
+
+export function resolveProfileLinks(
+  selected: ProfileLinkPresentation[]
+): ProfileLink[] {
+  const byId = new Map(
+    professionalRecord.identity.links.map((link) => [link.id, link])
+  );
+  return selected.map((selection) => {
+    const fact = byId.get(selection.id);
+    if (!fact) {
+      throw new Error(`Unknown Professional record link id: ${selection.id}`);
+    }
+    return { ...selection, href: fact.url };
+  });
+}
+
+const profileLinkPresentation: ProfileLinkPresentation[] = [
+  { id: "linkedin", label: "LinkedIn" },
+  { id: "github", label: "GitHub" },
+  { id: "google-scholar", label: "Google Scholar" },
+  { id: "orcid", label: "ORCID" }
+];
+
 export const profile = {
-  name: "Jesper Armouti-Hansen",
+  name: professionalRecord.identity.name,
   title: "Data Scientist · Economics PhD",
-  email: "jesper@armoutihansen.xyz",
-  location: "Cologne, Germany",
+  email: professionalRecord.identity.email,
+  location: professionalRecord.identity.location,
   summary:
     "Data scientist with an economics PhD and a decade of applied data work. I build statistical and machine-learning models on structured data, and assess when their output is reliable enough to act on.",
   tagline:
     "A decade in academic economics, now a data scientist at AXA — applying statistical and machine-learning methods and checking where their output is reliable enough to act on.",
-  links: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/jesper-a-h/" },
-    { label: "GitHub", href: "https://github.com/armoutihansen" },
-    {
-      label: "Google Scholar",
-      href: "https://scholar.google.com/citations?user=j423pO8AAAAJ&hl=en&oi=ao"
-    },
-    { label: "ORCID", href: "https://orcid.org/0000-0001-7776-8016" }
-  ]
+  links: resolveProfileLinks(profileLinkPresentation)
 };
+
+export function profileLink(id: string): ProfileLink {
+  const link = profile.links.find((candidate) => candidate.id === id);
+  if (!link) {
+    throw new Error(`Unknown website profile link id: ${id}`);
+  }
+  return link;
+}
 
 export const capabilities = [
   {

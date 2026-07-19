@@ -37,6 +37,9 @@
 #let measure = 100%     // prose fills the content width — one unified right edge
                         // (line length is governed by the page margin instead)
 
+#let professional-record = json("../src/data/professional-record.json")
+#let identity-facts = professional-record.identity
+
 // ============================================================ page ===========
 #set page(
   paper: "a4",
@@ -47,7 +50,7 @@
     if pages > 1 {
       set text(font: mono, size: 7.5pt, fill: faint)
       grid(columns: (1fr, auto),
-        [Jesper Armouti-Hansen],
+        [#professional-record.identity.name],
         counter(page).display("1 / 1", both: true))
     }
   },
@@ -89,8 +92,17 @@
 #let bullets(items) = block(above: 0.8em, width: measure, text(size: fs-body, fill: ink)[#list(..items)])
 
 // ========================================================== CONTENT ==========
-#let professional-record = json("../src/data/professional-record.json")
 #let experience-facts = professional-record.experience
+
+#let professional-link-fact(id) = {
+  let matches = identity-facts.links.filter(link => link.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record link id: " + id)
+  matches.first()
+}
+
+#let website-link = professional-link-fact("website")
+#let linkedin-link = professional-link-fact("linkedin")
+#let github-link = professional-link-fact("github")
 
 #let experience-fact(id) = {
   let matches = experience-facts.filter(entry => entry.id == id)
@@ -192,13 +204,13 @@
 
 // ============================================================ HEADER ==========
 #align(center)[
-  #text(font: serif, size: fs-name, weight: 600, tracking: -0.01em)[Dr. Jesper Armouti-Hansen]
+  #text(font: serif, size: fs-name, weight: 600, tracking: -0.01em)[Dr. #identity-facts.name]
   #v(0.34em)
   #text(font: mono, size: 9pt, weight: "medium", tracking: 0.14em, fill: accent)[#upper("Data Scientist · Economics PhD")]
   #v(0.5em)
   #text(font: mono, size: fs-meta, fill: grey)[
-    #link("mailto:jesper@armoutihansen.xyz")[jesper\@armoutihansen.xyz] · +49 176 4278 7630 · Cologne, Germany #linebreak()
-    #link("https://armoutihansen.xyz")[armoutihansen.xyz] · #link("https://www.linkedin.com/in/jesper-a-h/")[linkedin.com/in/jesper-a-h] · #link("https://github.com/armoutihansen")[github.com/armoutihansen]
+    #link("mailto:" + identity-facts.email)[#identity-facts.email] · #identity-facts.phone · #identity-facts.location #linebreak()
+    #link(website-link.url)[armoutihansen.xyz] · #link(linkedin-link.url)[linkedin.com/in/jesper-a-h] · #link(github-link.url)[github.com/armoutihansen]
   ]
 ]
 #v(0.5em)

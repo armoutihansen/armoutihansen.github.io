@@ -4,13 +4,14 @@ import WorkItem from "../components/WorkItem.astro";
 import GitHubStrip from "../components/GitHubStrip.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import { selectedWork } from "../data/projects";
+import { profile } from "../data/profile";
 
 const grouped = selectedWork();
 ---
 
 <BaseLayout
   title="Work"
-  description="Selected data-science, modeling, and research-code work by Jesper Armouti-Hansen."
+  description={`Selected data-science, modeling, and research-code work by ${profile.name}.`}
 >
   <header class="page-hero projects-hero">
     <div class="projects-hero__intro">

@@ -35,7 +35,7 @@ export const scholar: Scholar = scholarData;
 
 // The public Google Scholar profile, sourced from the single profile link list
 // rather than re-typed here.
-const scholarLink = profile.links.find((l) => l.label === "Google Scholar");
+const scholarLink = profile.links.find((link) => link.id === "google-scholar");
 if (!scholarLink) {
   throw new Error('profile.links is missing the "Google Scholar" entry that the Research strip links to');
 }
