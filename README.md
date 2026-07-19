@@ -20,7 +20,7 @@ Four public pages (route names in parentheses):
 - Astro (static output)
 - TypeScript data files for structured content
 - A strict, validated Professional record in JSON for facts shared by the site and CV
-- Typst 0.15.1 for the downloadable PDF CV
+- A pinned Typst toolchain for the downloadable PDF CV
 - Plain CSS in `src/styles/global.css`, with self-hosted variable fonts: Hanken Grotesk (body + headings), JetBrains Mono (labels, tabular figures), Fraunces (name only)
 - GitHub Pages deployment via `.github/workflows/deploy.yml`
 
@@ -43,8 +43,10 @@ static/
   images/            Profile and site images
 
 cv/
+  cv-baseline.json   Approved CV experience text and page topology
   cv.typ             CV selection, prose, formatting, and layout
   fonts/             Vendored fonts for reproducible rendering
+  typst-versions.json  Canonical Typst version used locally and in production
 ```
 
 Important files:
@@ -56,6 +58,7 @@ Important files:
 - `src/data/professional-record.ts`: strict Professional record validation.
 - `src/data/experience.ts`: website experience selection, bullets, logos, and formatting.
 - `cv/cv.typ`: CV selection, bullets, date formatting, and layout.
+- `cv/cv-baseline.json`: expected experience text and two-page render topology.
 - `src/styles/global.css`: visual design, responsive layout, and light/dark themes.
 - `src/pages/index.astro`: homepage composition.
 
@@ -66,6 +69,9 @@ Install dependencies:
 ```bash
 npm install
 ```
+
+CV verification also requires the Typst version in `cv/typst-versions.json` and
+Poppler (`pdfinfo`, `pdftotext`, and `pdftoppm`).
 
 Start the development server:
 
@@ -86,7 +92,7 @@ npm run cv:build
 ```
 
 Verify that the Professional record is valid and the committed PDF matches a
-deterministic Typst 0.15.1 rebuild:
+deterministic rebuild, the approved experience text, and the two-page rendered layout:
 
 ```bash
 npm run cv:verify
@@ -106,7 +112,7 @@ The site deploys through GitHub Actions when changes are pushed to `master`.
 
 The workflow:
 
-1. Installs Node.js and Typst 0.15.1.
+1. Installs Node.js, the repository-pinned Typst version, and Poppler.
 2. Runs `npm ci`.
 3. Validates the Professional record, rebuilds the CV, and rejects a stale committed PDF.
 4. Runs tests and Astro checks.
@@ -127,6 +133,7 @@ Most content updates should be made in `src/data/`:
 - Update website-only experience bullets, logos, selection, or ordering in
   `src/data/experience.ts`.
 - Update CV-only bullets, selection, ordering, date presentation, or layout in `cv/cv.typ`,
-  then run `npm run cv:build`.
+  update `cv/cv-baseline.json` only when the approved text or page topology intentionally
+  changes, then run `npm run cv:build`.
 
 For page-level copy, edit the relevant file in `src/pages/`.

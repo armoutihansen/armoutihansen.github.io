@@ -1,0 +1,25 @@
+{
+  "pages": 2,
+  "pageSize": "A4",
+  "experiencePage": 1,
+  "page1LastEntry": "BA Financial Management & Services",
+  "page2FirstEntry": "CitiBike Demand, Risk & Net Flow",
+  "experienceText": [
+    "Data Scientist, AXA Konzern AG Apr. 2026 – present",
+    "Cologne, Germany",
+    "Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.",
+    "Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.",
+    "Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-4B) to replace the existing two-stage BERT+CLIP and RNN stack.",
+    "Postdoctoral Researcher in Economics, University of Bonn Jan. 2022 – Mar. 2026",
+    "Bonn, Germany",
+    "Ran empirical and computational economics research — statistical and econometric modeling, machine-learning benchmarking, and partial-identification with simulation.",
+    "Developed theoretical models and built reproducible analysis pipelines in Python and R; benchmarked economic theories against machine-learning models to quantify how much predictable variation each captures.",
+    "Published peer-reviewed research and presented at international conferences.",
+    "Research Assistant in Economics, University of Cologne Dec. 2015 – Dec. 2021",
+    "Cologne, Germany",
+    "Conducted PhD research in microeconomic theory and experimental economics — decision-theory and contract-theory modeling, with empirical analysis of experimental data.",
+    "Intern, AirPlus International Dec. 2014 – May 2015",
+    "Neu Isenburg, Germany",
+    "Built VBA tools for data management and process automation."
+  ]
+}
