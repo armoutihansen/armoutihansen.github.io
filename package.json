@@ -8,16 +8,20 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
     "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
     "check": "ASTRO_TELEMETRY_DISABLED=1 astro check",
-    "test": "vitest run"
+    "test": "vitest run",
+    "cv:build": "node --experimental-strip-types scripts/cv.ts --write",
+    "cv:verify": "node --experimental-strip-types scripts/cv.ts"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.9",
     "@fontsource-variable/hanken-grotesk": "^5.2.8",
     "@fontsource-variable/jetbrains-mono": "^5.2.8",
-    "astro": "^6.1.9"
+    "astro": "^6.1.9",
+    "zod": "4.3.6"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@types/node": "22.20.1",
     "playwright-core": "^1.60.0",
     "typescript": "^5.9.3",
     "vitest": "^4.1.9"

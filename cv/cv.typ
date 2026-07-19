@@ -1,12 +1,13 @@
 // Jesper Armouti-Hansen — CV
-// Build:  typst compile --font-path fonts cv.typ ../static/CV_JAH.pdf
+// Build:  npm run cv:build (from the repository root)
 // Design: clean, minimal, single-column data-science CV. Near-black on white, one
 //         restrained navy accent (subtitle eyebrow + section rules). The site's
 //         three fonts in STRICT single roles: Fraunces = name only, Hanken Grotesk
 //         = all reading text, JetBrains Mono = metadata only (dates, contact, tags,
 //         skill values; tabular figures). Tight size scale + one spacing scale.
 //         Single column, real text → ATS-safe.
-// Edit:   content lives in the data arrays under "CONTENT"; styling is the helpers.
+// Edit:   Professional facts live in src/data/professional-record.json. Selection,
+//         prose, and styling live here.
 
 // ============================================================ palette ========
 #let ink    = rgb("#1a1a1a")
@@ -88,24 +89,62 @@
 #let bullets(items) = block(above: 0.8em, width: measure, text(size: fs-body, fill: ink)[#list(..items)])
 
 // ========================================================== CONTENT ==========
-#let experience = (
-  (title: "Data Scientist, AXA Konzern AG", date: "Apr. 2026 – present", where: "Cologne, Germany", bullets: (
+#let professional-record = json("../src/data/professional-record.json")
+#let experience-facts = professional-record.experience
+
+#let experience-fact(id) = {
+  let matches = experience-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record experience id: " + id)
+  matches.first()
+}
+
+#let month-labels = (
+  "Jan.", "Feb.", "Mar.", "Apr.", "May", "Jun.",
+  "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec.",
+)
+
+#let partial-date-label(value) = {
+  let parts = value.split("-")
+  if parts.len() == 1 {
+    parts.first()
+  } else {
+    month-labels.at(int(parts.at(1)) - 1) + " " + parts.first()
+  }
+}
+
+#let date-span-label(span) = {
+  let end = if span.end == none { "present" } else { partial-date-label(span.end) }
+  partial-date-label(span.start) + " – " + end
+}
+
+#let experience-presentation = (
+  (id: "axa-data-scientist", bullets: (
     [Work on a production document-understanding pipeline that segments stacks of scanned pages into documents (boundary detection) and classifies each — hundreds of thousands of stacks per month — flagging low-confidence cases for human review.],
     [Built document-class-specific confidence thresholds that automate more documents while holding at least 95% precision per class, cutting manual review by around 30% in production.],
     [Researching pipeline upgrades: an LLM post-processing step for frequently-confused class pairs, and a single vision-language model (Qwen3.5-4B) to replace the existing two-stage BERT+CLIP and RNN stack.],
   )),
-  (title: "Postdoctoral Researcher in Economics, University of Bonn", date: "Jan. 2022 – Mar. 2026", where: "Bonn, Germany", bullets: (
+  (id: "bonn-postdoctoral-researcher", bullets: (
     [Ran empirical and computational economics research — statistical and econometric modeling, machine-learning benchmarking, and partial-identification with simulation.],
     [Developed theoretical models and built reproducible analysis pipelines in Python and R; benchmarked economic theories against machine-learning models to quantify how much predictable variation each captures.],
     [Published peer-reviewed research and presented at international conferences.],
   )),
-  (title: "Research Assistant in Economics, University of Cologne", date: "Dec. 2015 – Dec. 2021", where: "Cologne, Germany", bullets: (
+  (id: "cologne-research-assistant", bullets: (
     [Conducted PhD research in microeconomic theory and experimental economics — decision-theory and contract-theory modeling, with empirical analysis of experimental data.],
   )),
-  (title: "Intern, AirPlus International", date: "Dec. 2014 – May 2015", where: "Neu Isenburg, Germany", bullets: (
+  (id: "airplus-intern", bullets: (
     [Built VBA tools for data management and process automation.],
   )),
 )
+
+#let experience = experience-presentation.map(presentation => {
+  let fact = experience-fact(presentation.id)
+  (
+    title: fact.role + ", " + fact.organization,
+    date: date-span-label(fact.dates),
+    where: fact.location,
+    bullets: presentation.bullets,
+  )
+})
 
 #let publications = (
   ([Efficiency Wages with Motivated Agents], ("J. Armouti-Hansen", "L. Cassar", "A. Dereky", "F. Engl"), [Games and Economic Behavior], [145, 66–83], "2024"),

@@ -1,0 +1,32 @@
+{
+  "experience": [
+    {
+      "id": "axa-data-scientist",
+      "role": "Data Scientist",
+      "organization": "AXA Konzern AG",
+      "location": "Cologne, Germany",
+      "dates": { "start": "2026-04", "end": null }
+    },
+    {
+      "id": "bonn-postdoctoral-researcher",
+      "role": "Postdoctoral Researcher in Economics",
+      "organization": "University of Bonn",
+      "location": "Bonn, Germany",
+      "dates": { "start": "2022-01", "end": "2026-03" }
+    },
+    {
+      "id": "cologne-research-assistant",
+      "role": "Research Assistant in Economics",
+      "organization": "University of Cologne",
+      "location": "Cologne, Germany",
+      "dates": { "start": "2015-12", "end": "2021-12" }
+    },
+    {
+      "id": "airplus-intern",
+      "role": "Intern",
+      "organization": "AirPlus International",
+      "location": "Neu Isenburg, Germany",
+      "dates": { "start": "2014-12", "end": "2015-05" }
+    }
+  ]
+}

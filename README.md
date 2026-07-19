@@ -19,6 +19,8 @@ Four public pages (route names in parentheses):
 
 - Astro (static output)
 - TypeScript data files for structured content
+- A strict, validated Professional record in JSON for facts shared by the site and CV
+- Typst 0.15.1 for the downloadable PDF CV
 - Plain CSS in `src/styles/global.css`, with self-hosted variable fonts: Hanken Grotesk (body + headings), JetBrains Mono (labels, tabular figures), Fraunces (name only)
 - GitHub Pages deployment via `.github/workflows/deploy.yml`
 
@@ -39,6 +41,10 @@ static/
   CV_JAH.pdf         Downloadable CV
   DSC/               Preserved CitiBike case study
   images/            Profile and site images
+
+cv/
+  cv.typ             CV selection, prose, formatting, and layout
+  fonts/             Vendored fonts for reproducible rendering
 ```
 
 Important files:
@@ -46,7 +52,10 @@ Important files:
 - `src/data/profile.ts`: name, headline, summary, social links, and skill groups.
 - `src/data/projects.ts`: project cards shown on the homepage and Projects page.
 - `src/data/publications.ts`: publications, working papers, and research projects.
-- `src/data/experience.ts`: CV experience entries.
+- `src/data/professional-record.json`: canonical Professional record facts.
+- `src/data/professional-record.ts`: strict Professional record validation.
+- `src/data/experience.ts`: website experience selection, bullets, logos, and formatting.
+- `cv/cv.typ`: CV selection, bullets, date formatting, and layout.
 - `src/styles/global.css`: visual design, responsive layout, and light/dark themes.
 - `src/pages/index.astro`: homepage composition.
 
@@ -70,6 +79,19 @@ Build the production site:
 npm run build
 ```
 
+Build and commit an updated PDF after changing Professional record facts or CV prose:
+
+```bash
+npm run cv:build
+```
+
+Verify that the Professional record is valid and the committed PDF matches a
+deterministic Typst 0.15.1 rebuild:
+
+```bash
+npm run cv:verify
+```
+
 Preview the production build locally:
 
 ```bash
@@ -84,10 +106,12 @@ The site deploys through GitHub Actions when changes are pushed to `master`.
 
 The workflow:
 
-1. Installs Node.js.
+1. Installs Node.js and Typst 0.15.1.
 2. Runs `npm ci`.
-3. Builds the site with `npm run build`.
-4. Uploads the generated `dist/` directory to GitHub Pages.
+3. Validates the Professional record, rebuilds the CV, and rejects a stale committed PDF.
+4. Runs tests and Astro checks.
+5. Builds the site with `npm run build`.
+6. Uploads the generated `dist/` directory to GitHub Pages.
 
 The custom domain is provided by `static/CNAME`, which is copied into the build output.
 
@@ -98,6 +122,11 @@ Most content updates should be made in `src/data/`:
 - Add or edit projects in `src/data/projects.ts`.
 - Add or edit publications in `src/data/publications.ts`.
 - Update profile links or skills in `src/data/profile.ts`.
-- Update CV entries in `src/data/experience.ts`.
+- Update shared experience facts (role, organization, location, and structured dates) in
+  `src/data/professional-record.json`.
+- Update website-only experience bullets, logos, selection, or ordering in
+  `src/data/experience.ts`.
+- Update CV-only bullets, selection, ordering, date presentation, or layout in `cv/cv.typ`,
+  then run `npm run cv:build`.
 
 For page-level copy, edit the relevant file in `src/pages/`.

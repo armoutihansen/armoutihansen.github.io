@@ -38,6 +38,14 @@ capabilities, selected work, experience, research credibility, CV, contact. Scan
 inspect second.
 _Avoid_: marketing landing page, decorative portfolio grid, exhaustive academic archive.
 
+**Professional record**:
+The complete, canonical career and research facts shared by the public site and CV:
+core identity and contact details, experience, education, teaching, skills, publications,
+and selected work. The public site owns the record; the CV is a downstream presentation
+of an intentional subset. Output-specific positioning, summaries, and bullet wording are
+editorial framing, not part of the professional record.
+_Avoid_: CV content, profile data, one output's prose as the shared record.
+
 **Analyst signal**:
 Each important block makes at least one professional signal visible: problem framing,
 data handling, model choice, evaluation, uncertainty, or stakeholder communication.
