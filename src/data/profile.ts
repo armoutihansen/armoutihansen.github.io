@@ -83,43 +83,109 @@ export const capabilities = [
   }
 ];
 
-export const spokenLanguages: string[] = ["English", "German", "Danish"];
-
-export const skills = {
-  languages: ["Python", "R", "SQL", "Stata", "TypeScript"],
-  pythonStack: [
-    "NumPy",
-    "pandas",
-    "SciPy",
-    "scikit-learn",
-    "statsmodels",
-    "PyTorch",
-    "XGBoost / LightGBM",
-    "GeoPandas"
-  ],
-  methods: [
-    "Statistical modeling",
-    "Econometrics",
-    "Machine learning",
-    "Model evaluation & calibration",
-    "Forecasting",
-    "Experiment & A/B analysis",
-    "Simulation",
-    "Fine-tuning",
-    "Retrieval / RAG"
-  ],
-  tools: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "pixi", "JupyterLab", "Linux", "LaTeX"]
-};
-
 export interface SkillGroup {
   label: string;
   items: string[];
 }
 
+interface SkillGroupSelection {
+  label: string;
+  skillIds: string[];
+}
+
+export function resolveSkillGroups(
+  selected: SkillGroupSelection[]
+): SkillGroup[] {
+  const byId = new Map(
+    professionalRecord.skills.items.map((skill) => [skill.id, skill])
+  );
+  const selectedIds = new Set<string>();
+  return selected.map((group) => ({
+    label: group.label,
+    items: group.skillIds.map((id) => {
+      if (selectedIds.has(id)) {
+        throw new Error(`Duplicate website skill selection id: ${id}`);
+      }
+      selectedIds.add(id);
+      const fact = byId.get(id);
+      if (!fact) {
+        throw new Error(`Unknown Professional record skill id: ${id}`);
+      }
+      return fact.name;
+    })
+  }));
+}
+
+export function resolveSpokenLanguages(selectedIds: string[]): string[] {
+  const byId = new Map(
+    professionalRecord.spokenLanguages.map((language) => [language.id, language])
+  );
+  const seen = new Set<string>();
+  return selectedIds.map((id) => {
+    if (seen.has(id)) {
+      throw new Error(`Duplicate website spoken-language selection id: ${id}`);
+    }
+    seen.add(id);
+    const fact = byId.get(id);
+    if (!fact) {
+      throw new Error(`Unknown Professional record spoken language id: ${id}`);
+    }
+    return fact.name;
+  });
+}
+
+const websiteSkillPresentation: SkillGroupSelection[] = [
+  {
+    label: "Programming languages",
+    skillIds: ["python", "r", "sql", "stata", "typescript"]
+  },
+  {
+    label: "Python stack",
+    skillIds: [
+      "numpy",
+      "pandas",
+      "scipy",
+      "scikit-learn",
+      "statsmodels",
+      "pytorch",
+      "xgboost-lightgbm",
+      "geopandas"
+    ]
+  },
+  {
+    label: "Methods",
+    skillIds: [
+      "statistical-modeling",
+      "econometrics",
+      "machine-learning",
+      "model-evaluation-calibration",
+      "forecasting",
+      "experiment-ab-analysis",
+      "simulation",
+      "fine-tuning",
+      "retrieval-rag"
+    ]
+  },
+  {
+    label: "Tools & workflow",
+    skillIds: [
+      "git",
+      "github-actions",
+      "docker",
+      "pytest",
+      "uv",
+      "pixi",
+      "jupyterlab",
+      "linux",
+      "latex"
+    ]
+  }
+];
+
 export const skillGroups: SkillGroup[] = [
-  { label: "Programming languages", items: skills.languages },
-  { label: "Python stack", items: skills.pythonStack },
-  { label: "Methods", items: skills.methods },
-  { label: "Tools & workflow", items: skills.tools },
-  { label: "Languages", items: spokenLanguages }
+  ...resolveSkillGroups(websiteSkillPresentation),
+  {
+    label: "Languages",
+    items: resolveSpokenLanguages(["english", "german", "danish"])
+  }
 ];

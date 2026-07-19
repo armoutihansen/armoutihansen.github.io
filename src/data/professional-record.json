@@ -138,5 +138,51 @@
         "dateSpans": [{ "start": "2017", "end": "2018" }]
       }
     ]
-  }
+  },
+  "skills": {
+    "categories": [
+      { "id": "programming-language", "name": "Programming language" },
+      { "id": "python-stack", "name": "Python stack" },
+      { "id": "method", "name": "Method" },
+      { "id": "tool", "name": "Tool" }
+    ],
+    "items": [
+      { "id": "python", "name": "Python", "categoryId": "programming-language" },
+      { "id": "r", "name": "R", "categoryId": "programming-language" },
+      { "id": "sql", "name": "SQL", "categoryId": "programming-language" },
+      { "id": "stata", "name": "Stata", "categoryId": "programming-language" },
+      { "id": "typescript", "name": "TypeScript", "categoryId": "programming-language" },
+      { "id": "numpy", "name": "NumPy", "categoryId": "python-stack" },
+      { "id": "pandas", "name": "pandas", "categoryId": "python-stack" },
+      { "id": "scipy", "name": "SciPy", "categoryId": "python-stack" },
+      { "id": "scikit-learn", "name": "scikit-learn", "categoryId": "python-stack" },
+      { "id": "statsmodels", "name": "statsmodels", "categoryId": "python-stack" },
+      { "id": "pytorch", "name": "PyTorch", "categoryId": "python-stack" },
+      { "id": "xgboost-lightgbm", "name": "XGBoost / LightGBM", "categoryId": "python-stack" },
+      { "id": "geopandas", "name": "GeoPandas", "categoryId": "python-stack" },
+      { "id": "statistical-modeling", "name": "Statistical modeling", "categoryId": "method" },
+      { "id": "econometrics", "name": "Econometrics", "categoryId": "method" },
+      { "id": "machine-learning", "name": "Machine learning", "categoryId": "method" },
+      { "id": "model-evaluation-calibration", "name": "Model evaluation & calibration", "categoryId": "method" },
+      { "id": "forecasting", "name": "Forecasting", "categoryId": "method" },
+      { "id": "experiment-ab-analysis", "name": "Experiment & A/B analysis", "categoryId": "method" },
+      { "id": "simulation", "name": "Simulation", "categoryId": "method" },
+      { "id": "fine-tuning", "name": "Fine-tuning", "categoryId": "method" },
+      { "id": "retrieval-rag", "name": "Retrieval / RAG", "categoryId": "method" },
+      { "id": "git", "name": "Git", "categoryId": "tool" },
+      { "id": "github-actions", "name": "GitHub Actions", "categoryId": "tool" },
+      { "id": "docker", "name": "Docker", "categoryId": "tool" },
+      { "id": "pytest", "name": "pytest", "categoryId": "tool" },
+      { "id": "uv", "name": "uv", "categoryId": "tool" },
+      { "id": "pixi", "name": "pixi", "categoryId": "tool" },
+      { "id": "jupyterlab", "name": "JupyterLab", "categoryId": "tool" },
+      { "id": "linux", "name": "Linux", "categoryId": "tool" },
+      { "id": "latex", "name": "LaTeX", "categoryId": "tool" }
+    ]
+  },
+  "spokenLanguages": [
+    { "id": "english", "name": "English", "proficiency": "C2" },
+    { "id": "german", "name": "German", "proficiency": "C1/C2" },
+    { "id": "danish", "name": "Danish", "proficiency": "native" }
+  ]
 }

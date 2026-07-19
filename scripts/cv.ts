@@ -33,11 +33,13 @@ interface CvBaseline {
   experiencePage: number;
   educationPage: number;
   teachingPage: number;
+  skillsPage: number;
   page1RequiredText: string;
   page2RequiredText: string;
   experienceText: string[];
   educationText: string[];
   teachingText: string[];
+  skillsText: string[];
 }
 
 const cvBaseline = JSON.parse(
@@ -147,6 +149,15 @@ export function inspectCvBaseline(pdf: string): {
     const next = teachingPage.indexOf(expected, position);
     if (next < 0) {
       throw new Error(`CV teaching baseline drifted at: ${expected}`);
+    }
+    position = next + expected.length;
+  }
+  const skillsPage = extractedPages[cvBaseline.skillsPage - 1];
+  position = 0;
+  for (const expected of cvBaseline.skillsText.map(normalized)) {
+    const next = skillsPage.indexOf(expected, position);
+    if (next < 0) {
+      throw new Error(`CV skills baseline drifted at: ${expected}`);
     }
     position = next + expected.length;
   }

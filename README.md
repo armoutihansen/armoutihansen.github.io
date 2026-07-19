@@ -147,7 +147,7 @@ Most content updates should be made in `src/data/`:
 - Update shared name, email, location, phone, or professional-link URLs in
   `src/data/professional-record.json`.
 - Update website-only identity positioning, prose, link labels, visibility, ordering, or
-  skills in `src/data/profile.ts`.
+  skill/language presentation in `src/data/profile.ts`.
 - Update shared experience facts (role, organization, location, and structured dates) in
   `src/data/professional-record.json`.
 - Update website-only experience bullets, logos, selection, or ordering in
@@ -160,6 +160,11 @@ Most content updates should be made in `src/data/`:
   supervision totals) in `src/data/professional-record.json`.
 - Update website-only teaching summary prose, selection, ordering, or formatting in
   `src/data/teaching.ts`.
+- Update shared skill names, categories, and spoken-language proficiency in
+  `src/data/professional-record.json`.
+- Update website-only skill/language group labels, selection, and ordering in
+  `src/data/profile.ts`; update the CV's independent selection, labels, ordering, and
+  layout in `cv/cv.typ`.
 - Update CV-only bullets, compact education and teaching wording, selection, ordering, date
   presentation, or layout in `cv/cv.typ`,
   then follow the explicit baseline-approval workflow above.

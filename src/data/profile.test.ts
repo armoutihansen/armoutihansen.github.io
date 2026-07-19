@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { profile, profileLink, resolveProfileLinks } from "./profile";
+import {
+  profile,
+  profileLink,
+  resolveProfileLinks,
+  resolveSpokenLanguages,
+  resolveSkillGroups,
+  skillGroups
+} from "./profile";
 
 describe("website identity adapter", () => {
   it("preserves the approved website identity and professional-link presentation", () => {
@@ -57,5 +64,32 @@ describe("website identity adapter", () => {
       label: "Website",
       href: "https://armoutihansen.xyz"
     });
+  });
+
+  it("preserves the website skill and spoken-language inventory, labels, and order", () => {
+    expect(skillGroups).toEqual([
+      { label: "Programming languages", items: ["Python", "R", "SQL", "Stata", "TypeScript"] },
+      { label: "Python stack", items: ["NumPy", "pandas", "SciPy", "scikit-learn", "statsmodels", "PyTorch", "XGBoost / LightGBM", "GeoPandas"] },
+      { label: "Methods", items: ["Statistical modeling", "Econometrics", "Machine learning", "Model evaluation & calibration", "Forecasting", "Experiment & A/B analysis", "Simulation", "Fine-tuning", "Retrieval / RAG"] },
+      { label: "Tools & workflow", items: ["Git", "GitHub Actions", "Docker", "pytest", "uv", "pixi", "JupyterLab", "Linux", "LaTeX"] },
+      { label: "Languages", items: ["English", "German", "Danish"] }
+    ]);
+  });
+
+  it("rejects unknown and duplicate website skill selections", () => {
+    expect(() =>
+      resolveSkillGroups([{ label: "Tools", skillIds: ["unknown-skill"] }])
+    ).toThrow(/Unknown Professional record skill id: unknown-skill/);
+
+    expect(() =>
+      resolveSkillGroups([{ label: "Tools", skillIds: ["git", "git"] }])
+    ).toThrow(/Duplicate website skill selection id: git/);
+
+    expect(() => resolveSpokenLanguages(["unknown-language"])).toThrow(
+      /Unknown Professional record spoken language id: unknown-language/
+    );
+    expect(() => resolveSpokenLanguages(["english", "english"])).toThrow(
+      /Duplicate website spoken-language selection id: english/
+    );
   });
 });

@@ -14,11 +14,19 @@ const testDirectory = mkdtempSync(join(tmpdir(), "professional-record-cv-test-")
 const brokenEducationSource = `cv/.education-selection-test-${process.pid}.typ`;
 const brokenTeachingSource = `cv/.teaching-selection-test-${process.pid}.typ`;
 const duplicateTeachingSource = `cv/.teaching-duplicate-test-${process.pid}.typ`;
+const brokenSkillSource = `cv/.skill-selection-test-${process.pid}.typ`;
+const duplicateSkillSource = `cv/.skill-duplicate-test-${process.pid}.typ`;
+const brokenLanguageSource = `cv/.language-selection-test-${process.pid}.typ`;
+const duplicateLanguageSource = `cv/.language-duplicate-test-${process.pid}.typ`;
 afterAll(() => {
   rmSync(testDirectory, { recursive: true });
   rmSync(join(process.cwd(), brokenEducationSource), { force: true });
   rmSync(join(process.cwd(), brokenTeachingSource), { force: true });
   rmSync(join(process.cwd(), duplicateTeachingSource), { force: true });
+  rmSync(join(process.cwd(), brokenSkillSource), { force: true });
+  rmSync(join(process.cwd(), duplicateSkillSource), { force: true });
+  rmSync(join(process.cwd(), brokenLanguageSource), { force: true });
+  rmSync(join(process.cwd(), duplicateLanguageSource), { force: true });
 });
 
 describe("verified CV build", () => {
@@ -48,7 +56,7 @@ describe("verified CV build", () => {
     expect(readFileSync(first)).toEqual(readFileSync(second));
   });
 
-  it("preserves the approved experience, education, and teaching text and two-page rendered layout", () => {
+  it("preserves the approved record text and two-page rendered layout", () => {
     const output = join(testDirectory, "baseline.pdf");
     renderCv(output);
 
@@ -118,5 +126,49 @@ describe("verified CV build", () => {
     ).toThrow(
       /Duplicate CV teaching selection id/
     );
+  });
+
+  it("rejects an unknown selected skill identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"python",', '"unknown-skill",');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenSkillSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "broken-skill.pdf"), brokenSkillSource)
+    ).toThrow(/Unknown Professional record skill id: unknown-skill/);
+  });
+
+  it("rejects duplicate selected skill identifiers", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"r",', '"python",');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicateSkillSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-skill.pdf"), duplicateSkillSource)
+    ).toThrow(/Duplicate CV skill selection id/);
+  });
+
+  it("rejects an unknown selected spoken-language identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"english",', '"unknown-language",');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenLanguageSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "broken-language.pdf"), brokenLanguageSource)
+    ).toThrow(/Unknown Professional record spoken language id: unknown-language/);
+  });
+
+  it("rejects duplicate selected spoken-language identifiers", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"german",', '"english",');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicateLanguageSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-language.pdf"), duplicateLanguageSource)
+    ).toThrow(/Duplicate CV spoken-language selection id/);
   });
 });

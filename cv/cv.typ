@@ -95,6 +95,8 @@
 #let experience-facts = professional-record.experience
 #let education-facts = professional-record.education
 #let teaching-facts = professional-record.teaching.courses
+#let skill-facts = professional-record.skills.items
+#let spoken-language-facts = professional-record.spokenLanguages
 
 #let professional-link-fact(id) = {
   let matches = identity-facts.links.filter(link => link.id == id)
@@ -121,6 +123,18 @@
 #let teaching-fact(id) = {
   let matches = teaching-facts.filter(entry => entry.id == id)
   assert(matches.len() == 1, message: "Unknown Professional record teaching course id: " + id)
+  matches.first()
+}
+
+#let skill-fact(id) = {
+  let matches = skill-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record skill id: " + id)
+  matches.first()
+}
+
+#let spoken-language-fact(id) = {
+  let matches = spoken-language-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record spoken language id: " + id)
   matches.first()
 }
 
@@ -264,13 +278,33 @@
 #let supervision-levels = teaching-supervision.degreeLevels.map(level => level + "’s").join(" and ")
 #let teaching_lead = [University lecturer and tutor in applied, behavioral, and organizational economics; supervised #teaching-supervision.minimumTheses+ #supervision-levels theses.]
 
-#let skills = (
-  ("Programming", ("Python", "R", "SQL", "Stata", "TypeScript")),
-  ("Python stack", ("NumPy", "pandas", "SciPy", "scikit-learn", "statsmodels", "PyTorch", "XGBoost / LightGBM", "GeoPandas")),
-  ("Methods", ("Statistical modeling", "Econometrics", "Machine learning", "Model evaluation & calibration", "Forecasting", "Experiment & A/B analysis", "Simulation", "Fine-tuning", "Retrieval / RAG")),
-  ("Tools", ("Git", "GitHub Actions", "Docker", "pytest", "uv", "JupyterLab", "Linux", "LaTeX")),
-  ("Languages", ("English (C2)", "German (C1/C2)", "Danish (native)")),
+#let skill-presentation = (
+  (label: "Programming", ids: ("python", "r", "sql", "stata", "typescript")),
+  (label: "Python stack", ids: ("numpy", "pandas", "scipy", "scikit-learn", "statsmodels", "pytorch", "xgboost-lightgbm", "geopandas")),
+  (label: "Methods", ids: ("statistical-modeling", "econometrics", "machine-learning", "model-evaluation-calibration", "forecasting", "experiment-ab-analysis", "simulation", "fine-tuning", "retrieval-rag")),
+  (label: "Tools", ids: ("git", "github-actions", "docker", "pytest", "uv", "jupyterlab", "linux", "latex")),
 )
+#let cv-skill-ids = skill-presentation.fold((), (ids, group) => ids + group.ids)
+#assert(
+  cv-skill-ids.len() == cv-skill-ids.dedup().len(),
+  message: "Duplicate CV skill selection id",
+)
+#let skills = skill-presentation.map(group => (
+  group.label,
+  group.ids.map(id => skill-fact(id).name),
+))
+
+#let spoken-language-selection = ("english", "german", "danish")
+#assert(
+  spoken-language-selection.len() == spoken-language-selection.dedup().len(),
+  message: "Duplicate CV spoken-language selection id",
+)
+#let cv-spoken-languages = spoken-language-selection.map(id => {
+  let fact = spoken-language-fact(id)
+  assert("proficiency" in fact, message: "Missing Professional record spoken language proficiency: " + id)
+  fact.name + " (" + fact.proficiency + ")"
+})
+#let skills = skills + (("Languages", cv-spoken-languages),)
 
 // ============================================================ HEADER ==========
 #align(center)[

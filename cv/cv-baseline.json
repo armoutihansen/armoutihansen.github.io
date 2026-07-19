@@ -5,6 +5,7 @@
   "experiencePage": 1,
   "educationPage": 1,
   "teachingPage": 2,
+  "skillsPage": 2,
   "page1RequiredText": "BA Financial Management & Services",
   "page2RequiredText": "CitiBike Demand, Risk & Net Flow",
   "experienceText": [
@@ -43,5 +44,12 @@
     "Graduate lecturer",
     "Behavioral Management Science 2017 – 2020",
     "Undergraduate lecturer"
+  ],
+  "skillsText": [
+    "Programming Python · R · SQL · Stata · TypeScript",
+    "Python stack NumPy · pandas · SciPy · scikit-learn · statsmodels · PyTorch · XGBoost / LightGBM · GeoPandas",
+    "Methods Statistical modeling · Econometrics · Machine learning · Model evaluation & calibration · Forecasting · Experiment & A/B analysis · Simulation · Fine-tuning · Retrieval / RAG",
+    "Tools Git · GitHub Actions · Docker · pytest · uv · JupyterLab · Linux · LaTeX",
+    "Languages English (C2) · German (C1/C2) · Danish (native)"
   ]
 }

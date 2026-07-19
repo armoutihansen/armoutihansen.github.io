@@ -143,11 +143,56 @@ const teachingSchema = z.strictObject({
     .superRefine(requireUniqueIds("teaching course"))
 });
 
+const skillCategorySchema = z.strictObject({
+  id: stableIdSchema,
+  name: z.string().min(1)
+});
+
+const skillSchema = z.strictObject({
+  id: stableIdSchema,
+  name: z.string().min(1),
+  categoryId: stableIdSchema
+});
+
+const skillsSchema = z
+  .strictObject({
+    categories: z
+      .array(skillCategorySchema)
+      .min(1)
+      .superRefine(requireUniqueIds("skill category")),
+    items: z.array(skillSchema).min(1).superRefine(requireUniqueIds("skill"))
+  })
+  .superRefine((skills, context) => {
+    const categoryIds = new Set(skills.categories.map((category) => category.id));
+    skills.items.forEach((skill, index) => {
+      if (!categoryIds.has(skill.categoryId)) {
+        context.addIssue({
+          code: "custom",
+          message: `Unknown skill category id: ${skill.categoryId}`,
+          path: ["items", index, "categoryId"]
+        });
+      }
+    });
+  });
+
+const spokenLanguagesSchema = z
+  .array(
+    z.strictObject({
+      id: stableIdSchema,
+      name: z.string().min(1),
+      proficiency: z.string().min(1).optional()
+    })
+  )
+  .min(1)
+  .superRefine(requireUniqueIds("spoken language"));
+
 const professionalRecordSchema = z.strictObject({
   identity: identitySchema,
   experience: experienceSchema,
   education: educationSchema,
-  teaching: teachingSchema
+  teaching: teachingSchema,
+  skills: skillsSchema,
+  spokenLanguages: spokenLanguagesSchema
 });
 
 export type ProfessionalRecord = z.infer<typeof professionalRecordSchema>;
@@ -157,6 +202,9 @@ export type ProfessionalExperience = ProfessionalRecord["experience"][number];
 export type ProfessionalEducation = ProfessionalRecord["education"][number];
 export type ProfessionalTeaching = ProfessionalRecord["teaching"];
 export type ProfessionalTeachingCourse = ProfessionalTeaching["courses"][number];
+export type ProfessionalSkills = ProfessionalRecord["skills"];
+export type ProfessionalSkill = ProfessionalSkills["items"][number];
+export type ProfessionalSpokenLanguage = ProfessionalRecord["spokenLanguages"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {
   const result = professionalRecordSchema.safeParse(input);

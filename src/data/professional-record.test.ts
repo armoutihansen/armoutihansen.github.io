@@ -45,7 +45,12 @@ const validRecord = {
         dateSpans: [{ start: "2020", end: "2021" }]
       }
     ]
-  }
+  },
+  skills: {
+    categories: [{ id: "programming-language", name: "Programming language" }],
+    items: [{ id: "python", name: "Python", categoryId: "programming-language" }]
+  },
+  spokenLanguages: [{ id: "english", name: "English", proficiency: "C2" }]
 };
 
 describe("parseProfessionalRecord", () => {
@@ -199,6 +204,71 @@ describe("parseProfessionalRecord", () => {
         }
       ]
     });
+  });
+
+  it("captures the complete skill union and known spoken-language proficiency", () => {
+    expect(professionalRecord.skills.items).toHaveLength(31);
+    expect(professionalRecord.skills.items).toContainEqual({
+      id: "pixi",
+      name: "pixi",
+      categoryId: "tool"
+    });
+    expect(professionalRecord.spokenLanguages).toEqual([
+      { id: "english", name: "English", proficiency: "C2" },
+      { id: "german", name: "German", proficiency: "C1/C2" },
+      { id: "danish", name: "Danish", proficiency: "native" }
+    ]);
+  });
+
+  it("rejects a skill that references an unknown category", () => {
+    const invalid = structuredClone(validRecord);
+    invalid.skills.items[0].categoryId = "unknown-category";
+
+    expect(() => parseProfessionalRecord(invalid)).toThrow(
+      /Unknown skill category id: unknown-category.*skills\.items\[0\]\.categoryId/s
+    );
+  });
+
+  it("rejects duplicate skill, category, and spoken-language identifiers", () => {
+    const duplicateSkill = structuredClone(validRecord);
+    duplicateSkill.skills.items.push(structuredClone(duplicateSkill.skills.items[0]));
+    expect(() => parseProfessionalRecord(duplicateSkill)).toThrow(
+      /Duplicate skill id.*skills\.items\[1\]\.id/s
+    );
+
+    const duplicateCategory = structuredClone(validRecord);
+    duplicateCategory.skills.categories.push(
+      structuredClone(duplicateCategory.skills.categories[0])
+    );
+    expect(() => parseProfessionalRecord(duplicateCategory)).toThrow(
+      /Duplicate skill category id.*skills\.categories\[1\]\.id/s
+    );
+
+    const duplicateLanguage = structuredClone(validRecord);
+    duplicateLanguage.spokenLanguages.push(
+      structuredClone(duplicateLanguage.spokenLanguages[0])
+    );
+    expect(() => parseProfessionalRecord(duplicateLanguage)).toThrow(
+      /Duplicate spoken language id.*spokenLanguages\[1\]\.id/s
+    );
+  });
+
+  it("rejects missing and unknown skill or language facts", () => {
+    const missing = structuredClone(validRecord) as {
+      skills: { items: Array<Record<string, unknown>> };
+    };
+    delete missing.skills.items[0].name;
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected string.*skills\.items\[0\]\.name/s
+    );
+
+    const unknown = structuredClone(validRecord) as {
+      spokenLanguages: Array<Record<string, unknown>>;
+    };
+    unknown.spokenLanguages[0].display = "English (C2)";
+    expect(() => parseProfessionalRecord(unknown)).toThrow(
+      /Unrecognized key.*spokenLanguages\[0\]/s
+    );
   });
 
   it("rejects overlapping teaching date spans at the later span path", () => {
