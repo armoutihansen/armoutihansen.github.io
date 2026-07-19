@@ -98,6 +98,19 @@ deterministic rebuild, the approved experience text, and the two-page rendered l
 npm run cv:verify
 ```
 
+### Approving an intentional CV change
+
+`npm run cv:build` never updates the approved baseline hash. After intentionally changing
+CV content or layout:
+
+1. Render a candidate with the pinned toolchain:
+   `SOURCE_DATE_EPOCH=0 typst compile --root . --font-path cv/fonts cv/cv.typ /tmp/CV_JAH-candidate.pdf`.
+2. Extract its text and rasterize both pages with Poppler; visually review the page PNGs.
+3. Update the approved text/topology and `pdfSha256` in `cv/cv-baseline.json` explicitly.
+4. Run `npm run cv:build`, `npm run cv:verify`, and the full test suite.
+
+Changing the hash is an approval action, not a build side effect.
+
 Preview the production build locally:
 
 ```bash
@@ -133,7 +146,6 @@ Most content updates should be made in `src/data/`:
 - Update website-only experience bullets, logos, selection, or ordering in
   `src/data/experience.ts`.
 - Update CV-only bullets, selection, ordering, date presentation, or layout in `cv/cv.typ`,
-  update `cv/cv-baseline.json` only when the approved text or page topology intentionally
-  changes, then run `npm run cv:build`.
+  then follow the explicit baseline-approval workflow above.
 
 For page-level copy, edit the relevant file in `src/pages/`.

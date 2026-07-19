@@ -88,9 +88,10 @@ the unchanged website and the source-approved CV through their separate adapters
    order as before.
 4. Replace Typst's duplicated experience facts with stable-identifier selection from the
    JSON. Keep CV bullets, ordering, date style, and layout in Typst. Done when the rebuilt
-   PDF matches the explicit source-derived text and two-page render baseline. The baseline
-   keeps `Qwen3.5-4B` from `cv/cv.typ` at base `ddf5d4a`; the older committed PDF's
-   `Qwen3.5-VL 4B` was a stale artifact and is corrected once rather than preserved.
+   PDF matches the immutable approved SHA-256 plus the explicit source-derived text and
+   two-page render baseline. The baseline keeps `Qwen3.5-4B` from `cv/cv.typ` at base
+   `ddf5d4a`; the older committed PDF's `Qwen3.5-VL 4B` was a stale artifact and is
+   corrected once rather than preserved.
 5. Add the supported validation-and-compile command and a stale-PDF check. Done when a
    valid record produces deterministic bytes with the pinned Typst version, the generated
    PDF matches the newly committed artifact, and a deliberately stale copy fails.
@@ -105,8 +106,9 @@ the unchanged website and the source-approved CV through their separate adapters
 
 - Experience facts exist only in the Professional record.
 - Both adapters select experience through stable identifiers.
-- Website output is unchanged; the CV matches its source-derived text and two-page render
-  baseline; its newly committed PDF is byte-identical to a clean rebuild.
+- Website output is unchanged; the CV matches its approved deterministic SHA-256,
+  source-derived text, and two-page render baseline; its newly committed PDF is
+  byte-identical to a clean rebuild.
 - Invalid record data and a stale PDF fail the supported build paths.
 - Tests, Astro checks, Astro build, CV verification, and whitespace checks pass.
 

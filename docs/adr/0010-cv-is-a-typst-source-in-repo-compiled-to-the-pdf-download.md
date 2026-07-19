@@ -77,9 +77,12 @@ For the experience tracer bullet, behavior preservation is measured against the
 pre-migration Typst source at `ddf5d4a`, not blindly against the then-committed PDF.
 That PDF was already stale: its final AXA bullet said `Qwen3.5-VL 4B`, while `cv/cv.typ`
 said `Qwen3.5-4B`. The migration deliberately corrected the artifact once by rebuilding
-from the current source. `cv/cv-baseline.json` now fixes the approved experience text
-and two-page topology; the verified build also extracts the text and raster-renders both
-pages so later drift cannot pass silently.
+from the current source. `cv/cv-baseline.json` now fixes the approved deterministic PDF
+SHA-256, experience text, and two-page topology; the verified build also extracts the text
+and raster-renders both pages so later drift cannot pass silently. The build never updates
+the approved hash. An intentional content or visual change requires rendering and visually
+reviewing a candidate, then explicitly updating the baseline before rebuilding the served
+artifact.
 
 ## Considered alternatives
 

@@ -1,5 +1,11 @@
 import { afterAll, describe, expect, it } from "vitest";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  appendFileSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { assertCurrentCv, inspectCvBaseline, renderCv, TYPST_VERSION } from "./cv";
@@ -43,6 +49,14 @@ describe("verified CV build", () => {
       pageSize: "A4",
       renderedPages: 2
     });
+  });
+
+  it("rejects byte drift from the immutable approved PDF", () => {
+    const modified = join(testDirectory, "byte-drift.pdf");
+    renderCv(modified);
+    appendFileSync(modified, "\n");
+
+    expect(() => inspectCvBaseline(modified)).toThrow(/approved PDF SHA-256/);
   });
 
   it("rejects a stale committed PDF", () => {

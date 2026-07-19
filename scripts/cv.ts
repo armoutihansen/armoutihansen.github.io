@@ -1,4 +1,5 @@
 import { spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import {
   copyFileSync,
   existsSync,
@@ -28,9 +29,10 @@ export const TYPST_VERSION = versionSource.typst.version;
 interface CvBaseline {
   pages: number;
   pageSize: string;
+  pdfSha256: string;
   experiencePage: number;
-  page1LastEntry: string;
-  page2FirstEntry: string;
+  page1RequiredText: string;
+  page2RequiredText: string;
   experienceText: string[];
 }
 
@@ -91,6 +93,13 @@ export function inspectCvBaseline(pdf: string): {
   pageSize: string;
   renderedPages: number;
 } {
+  const sha256 = createHash("sha256").update(readFileSync(pdf)).digest("hex");
+  if (sha256 !== cvBaseline.pdfSha256) {
+    throw new Error(
+      `CV differs from the approved PDF SHA-256: expected ${cvBaseline.pdfSha256}, found ${sha256}`
+    );
+  }
+
   const info = commandOutput("pdfinfo", [pdf]);
   const pages = Number(info.match(/^Pages:\s+(\d+)$/m)?.[1]);
   const pageSize = info.match(/^Page size:.*\(([^)]+)\)$/m)?.[1] ?? "unknown";
@@ -119,11 +128,11 @@ export function inspectCvBaseline(pdf: string): {
     }
     position = next + expected.length;
   }
-  if (!extractedPages[0].includes(cvBaseline.page1LastEntry)) {
-    throw new Error(`CV page 1 no longer contains: ${cvBaseline.page1LastEntry}`);
+  if (!extractedPages[0].includes(cvBaseline.page1RequiredText)) {
+    throw new Error(`CV page 1 no longer contains: ${cvBaseline.page1RequiredText}`);
   }
-  if (!extractedPages[1].includes(cvBaseline.page2FirstEntry)) {
-    throw new Error(`CV page 2 no longer starts with: ${cvBaseline.page2FirstEntry}`);
+  if (!extractedPages[1].includes(cvBaseline.page2RequiredText)) {
+    throw new Error(`CV page 2 no longer contains: ${cvBaseline.page2RequiredText}`);
   }
 
   const renderDirectory = mkdtempSync(join(tmpdir(), "professional-record-cv-render-"));
