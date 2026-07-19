@@ -66,10 +66,82 @@ const validRecord = {
       type: "journal-publication" as const,
       links: [{ id: "paper", url: "https://example.test/paper" }]
     }
+  ],
+  selectedWork: [
+    {
+      id: "example-project",
+      title: "Example Project",
+      category: "Model evaluation",
+      status: "Complete",
+      tools: [
+        { id: "python", name: "Python" },
+        { id: "pytest", name: "pytest" }
+      ],
+      href: "https://example.test/project"
+    }
   ]
 };
 
 describe("parseProfessionalRecord", () => {
+  it("parses strict selected-work facts", () => {
+    expect(parseProfessionalRecord(validRecord).selectedWork).toEqual(
+      validRecord.selectedWork
+    );
+  });
+
+  it("contains every complete website project, including CV omissions", () => {
+    expect(professionalRecord.selectedWork).toHaveLength(12);
+    expect(professionalRecord.selectedWork.map((project) => project.id)).toContain(
+      "minimal-coding-agent"
+    );
+    expect(professionalRecord.selectedWork.map((project) => project.id)).toContain(
+      "maze-solver"
+    );
+  });
+
+  it("rejects duplicate, missing, and unknown selected-work facts", () => {
+    const duplicate = structuredClone(validRecord);
+    duplicate.selectedWork.push(structuredClone(duplicate.selectedWork[0]));
+    expect(() => parseProfessionalRecord(duplicate)).toThrow(/Duplicate selected work id/);
+
+    const duplicateTool = structuredClone(validRecord);
+    duplicateTool.selectedWork[0].tools.push(
+      structuredClone(duplicateTool.selectedWork[0].tools[0])
+    );
+    expect(() => parseProfessionalRecord(duplicateTool)).toThrow(
+      /Duplicate selected work tool id/
+    );
+
+    const missing = structuredClone(validRecord) as {
+      selectedWork: Array<Record<string, unknown>>;
+    };
+    delete missing.selectedWork[0].status;
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected string.*selectedWork\[0\]\.status/s
+    );
+
+    const unknown = structuredClone(validRecord) as {
+      selectedWork: Array<Record<string, unknown>>;
+    };
+    unknown.selectedWork[0].summary = "Presentation prose does not belong here";
+    expect(() => parseProfessionalRecord(unknown)).toThrow(
+      /Unrecognized key.*selectedWork\[0\]/s
+    );
+  });
+
+  it("rejects a broken selected-work publication-link reference", () => {
+    const broken = structuredClone(validRecord) as {
+      selectedWork: Array<{ href: unknown }>;
+    };
+    broken.selectedWork[0].href = {
+      publicationId: "unknown-publication",
+      linkId: "code"
+    };
+    expect(() => parseProfessionalRecord(broken)).toThrow(
+      /Unknown selected work publication id: unknown-publication/
+    );
+  });
+
   it("parses the approved core identity and contact facts from the canonical record", () => {
     expect(professionalRecord.identity).toEqual({
       name: "Jesper Armouti-Hansen",

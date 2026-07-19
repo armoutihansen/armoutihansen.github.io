@@ -6,7 +6,7 @@ The site is built with [Astro](https://astro.build/) and deployed as a static si
 
 ## Overview
 
-The design direction is **premium-dark** (ADR 0003): a quant-analyst portfolio anchored on one interactive hero — warm-charcoal paper with a single amber accent, light mode retained. See `CONTEXT.md` and `docs/adr/0003-premium-dark-interactive-hero.md` for the design rationale and the language it uses.
+The design direction is **premium-dark** (ADR 0003): a professional data-science dossier anchored on one interactive hero — warm-charcoal paper with a single amber accent, light mode retained. See `CONTEXT.md` and `docs/adr/0003-premium-dark-interactive-hero.md` for the design rationale and the language it uses.
 
 Four public pages (route names in parentheses):
 
@@ -52,7 +52,8 @@ cv/
 Important files:
 
 - `src/data/profile.ts`: website identity/link selection, headline, summary, and skill groups.
-- `src/data/projects.ts`: project cards shown on the homepage and Projects page.
+- `src/data/projects.ts`: website-only Selected work grouping, prose, curation, tool
+  presentation, and illustration metadata, resolved against the Professional record.
 - `src/data/publications.ts`: website Research presentation and resolved adapter.
 - `src/data/professional-record.json`: canonical Professional record facts.
 - `src/data/professional-record.ts`: strict Professional record validation.
@@ -142,7 +143,12 @@ The custom domain is provided by `static/CNAME`, which is copied into the build 
 
 Most content updates should be made in `src/data/`:
 
-- Add or edit projects in `src/data/projects.ts`.
+- Update shared Selected work identifiers, full titles, categories, statuses, factual URLs,
+  and canonical tool names in `src/data/professional-record.json`.
+- Update website-only Selected work grouping, summaries, Problem/Approach/Result prose,
+  featured order, tool selection/order, and illustration metadata in `src/data/projects.ts`;
+  update the CV's four-project selection, derived short titles, summaries, tool
+  selection/order, or layout in `cv/cv.typ`.
 - Update shared publication people, titles, structured authors, venues, years, details,
   types, and factual links in `src/data/professional-record.json`.
 - Update website-only Research abstracts, covers, link labels, featured selection, or
@@ -172,5 +178,9 @@ Most content updates should be made in `src/data/`:
 - Update CV-only bullets, compact education and teaching wording, selection, ordering, date
   presentation, or layout in `cv/cv.typ`,
   then follow the explicit baseline-approval workflow above.
+
+After any Professional record change, run `npm run cv:verify`. If the factual change is
+intended to alter the CV, follow the baseline-approval workflow before rebuilding the
+committed PDF.
 
 For page-level copy, edit the relevant file in `src/pages/`.

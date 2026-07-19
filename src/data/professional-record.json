@@ -276,5 +276,103 @@
         { "id": "replication-package", "url": "https://github.com/armoutihansen/frequency-beliefs" }
       ]
     }
+  ],
+  "selectedWork": [
+    {
+      "id": "citibike-demand-risk-net-flow",
+      "title": "CitiBike Demand, Risk, and Net Flow",
+      "category": "Operational analysis",
+      "status": "Case study",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "pandas", "name": "pandas" }, { "id": "geopandas", "name": "GeoPandas" }, { "id": "feature-engineering", "name": "feature engineering" }, { "id": "risk-analysis", "name": "risk analysis" }, { "id": "prediction", "name": "prediction" }],
+      "href": "/DSC/"
+    },
+    {
+      "id": "rag-search-engine",
+      "title": "RAG Search Engine",
+      "category": "Retrieval system",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "rag", "name": "RAG" }, { "id": "bm25", "name": "BM25" }, { "id": "embeddings", "name": "embeddings" }, { "id": "clip", "name": "CLIP" }, { "id": "evaluation", "name": "evaluation" }],
+      "href": "https://github.com/armoutihansen/rag-search-engine"
+    },
+    {
+      "id": "minimal-coding-agent",
+      "title": "Minimal Coding Agent",
+      "category": "AI tooling",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "tool-calling", "name": "tool-calling" }, { "id": "gemini-api", "name": "Gemini API" }, { "id": "cli", "name": "CLI" }],
+      "href": "https://github.com/armoutihansen/build-ai-agent"
+    },
+    {
+      "id": "choicekit",
+      "title": "choicekit",
+      "category": "Python package",
+      "status": "In development",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "scikit-learn", "name": "scikit-learn" }, { "id": "discrete-choice", "name": "discrete choice" }, { "id": "conditional-logit", "name": "conditional logit" }],
+      "href": "https://github.com/armoutihansen/choicekit"
+    },
+    {
+      "id": "efficiency-wages-motivated-agents",
+      "title": { "publicationId": "efficiency-wages-motivated-agents" },
+      "category": "Replication package",
+      "status": "Published · GEB 2024",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "stata", "name": "Stata" }, { "id": "experimental-data", "name": "experimental data" }, { "id": "replication", "name": "replication" }],
+      "href": { "publicationId": "efficiency-wages-motivated-agents", "linkId": "code" }
+    },
+    {
+      "id": "informativeness-frequency-report-scoring-rules",
+      "title": { "publicationId": "informativeness-frequency-report-scoring-rules" },
+      "category": "Inference & simulation",
+      "status": "Manuscript + replication package",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "simulation", "name": "simulation" }, { "id": "pytest", "name": "pytest" }, { "id": "scoring-rules", "name": "scoring rules" }],
+      "href": { "publicationId": "informativeness-frequency-report-scoring-rules", "linkId": "replication-package" }
+    },
+    {
+      "id": "economic-theories-machine-learning",
+      "title": "Economic Theories and Machine Learning",
+      "category": "Model comparison",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "scikit-learn", "name": "scikit-learn" }, { "id": "machine-learning", "name": "machine learning" }, { "id": "model-evaluation", "name": "model evaluation" }],
+      "href": "https://github.com/armoutihansen/econ-theories-ml"
+    },
+    {
+      "id": "personal-knowledge-system",
+      "title": "Personal Knowledge System",
+      "category": "Knowledge base",
+      "status": "Live",
+      "tools": [{ "id": "typescript", "name": "TypeScript" }, { "id": "quartz", "name": "Quartz" }, { "id": "obsidian", "name": "Obsidian" }],
+      "href": "https://notes.armoutihansen.xyz/"
+    },
+    {
+      "id": "static-site-generator",
+      "title": "Static Site Generator",
+      "category": "Software",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "markdown", "name": "Markdown" }, { "id": "unit-testing", "name": "unit testing" }],
+      "href": "https://github.com/armoutihansen/static-site-generator"
+    },
+    {
+      "id": "bookbot",
+      "title": "BookBot",
+      "category": "CLI tool",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "text-processing", "name": "text processing" }],
+      "href": "https://github.com/armoutihansen/bookbot"
+    },
+    {
+      "id": "asteroids",
+      "title": "Asteroids",
+      "category": "Game",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "pygame", "name": "Pygame" }],
+      "href": "https://github.com/armoutihansen/asteroids"
+    },
+    {
+      "id": "maze-solver",
+      "title": "Maze Solver",
+      "category": "Algorithms",
+      "status": "GitHub project",
+      "tools": [{ "id": "python", "name": "Python" }, { "id": "algorithms", "name": "algorithms" }, { "id": "tkinter", "name": "tkinter" }],
+      "href": "https://github.com/armoutihansen/maze-solver"
+    }
   ]
 }

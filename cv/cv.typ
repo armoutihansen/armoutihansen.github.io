@@ -99,6 +99,7 @@
 #let spoken-language-facts = professional-record.spokenLanguages
 #let people-facts = professional-record.people
 #let publication-facts = professional-record.publications
+#let selected-work-facts = professional-record.selectedWork
 
 #let professional-link-fact(id) = {
   let matches = identity-facts.links.filter(link => link.id == id)
@@ -150,6 +151,22 @@
   let matches = publication-facts.filter(entry => entry.id == id)
   assert(matches.len() == 1, message: "Unknown Professional record publication id: " + id)
   matches.first()
+}
+
+#let selected-work-fact(id) = {
+  let matches = selected-work-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record selected work id: " + id)
+  matches.first()
+}
+
+#let selected-work-tool-fact(project, id) = {
+  let matches = project.tools.filter(tool => tool.id == id)
+  assert(matches.len() == 1, message: "Unknown selected work tool id: " + id + " for " + project.id)
+  matches.first()
+}
+
+#let selected-work-title(project) = {
+  if type(project.title) == str { project.title } else { publication-fact(project.title.publicationId).title }
 }
 
 #let month-labels = (
@@ -227,20 +244,38 @@
   )
 })
 
-#let projects = (
-  (title: "CitiBike Demand, Risk & Net Flow", tag: "Operational analysis",
+#let project-presentation = (
+  (id: "citibike-demand-risk-net-flow", shortTitle: "CitiBike Demand, Risk & Net Flow",
    summary: [A per-trip crash-risk measure for a bike-share network — NYPD collisions over trip exposure, empirical-Bayes smoothed — usable as an insurer rating input, with demand patterns and a net-flow classifier for rebalancing.],
-   tools: ("Python", "pandas", "GeoPandas", "risk analysis")),
-  (title: "Frequency-Report Scoring Rules", tag: "Inference & simulation",
+   toolIds: ("python", "pandas", "geopandas", "risk-analysis")),
+  (id: "informativeness-frequency-report-scoring-rules", shortTitle: "Frequency-Report Scoring Rules",
    summary: [Belief elicitation recast as partial identification: characterized the identified set of beliefs behind each frequency report under three scoring rules and compared the sharpness of their bounds, validated by simulation.],
-   tools: ("Python", "simulation", "pytest")),
-  (title: "Economic Theories & Machine Learning", tag: "Model comparison",
+   toolIds: ("python", "simulation", "pytest")),
+  (id: "economic-theories-machine-learning", shortTitle: "Economic Theories & Machine Learning",
    summary: [Benchmarked theory-based behavioral specifications against machine-learning models to measure how much of the predictable variation in choice data each theory actually captures.],
-   tools: ("Python", "scikit-learn", "model evaluation")),
-  (title: "RAG Search Engine", tag: "Retrieval system",
+   toolIds: ("python", "scikit-learn", "model-evaluation")),
+  (id: "rag-search-engine",
    summary: [Hybrid search combining BM25, embeddings, CLIP, and reciprocal-rank fusion with reranking and RAG answers, evaluated on precision, recall, and F1 against a golden set.],
-   tools: ("Python", "embeddings", "CLIP", "evaluation")),
+   toolIds: ("python", "embeddings", "clip", "evaluation")),
 )
+#let project-selection-ids = project-presentation.map(presentation => presentation.id)
+#assert(
+  project-selection-ids.len() == project-selection-ids.dedup().len(),
+  message: "Duplicate CV selected work id",
+)
+#let projects = project-presentation.map(presentation => {
+  let fact = selected-work-fact(presentation.id)
+  assert(
+    presentation.toolIds.len() == presentation.toolIds.dedup().len(),
+    message: "Duplicate CV selected work tool id for " + presentation.id,
+  )
+  (
+    title: if "shortTitle" in presentation { presentation.shortTitle } else { selected-work-title(fact) },
+    tag: fact.category,
+    summary: presentation.summary,
+    tools: presentation.toolIds.map(id => selected-work-tool-fact(fact, id).name),
+  )
+})
 
 #let education-selection = (
   "cologne-economics-phd",

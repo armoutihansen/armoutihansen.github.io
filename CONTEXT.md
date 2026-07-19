@@ -205,22 +205,28 @@ predictably, and tap targets stay comfortable.
 - The **data-scientist (economics PhD)** identity determines content hierarchy.
 - The **evidence dossier** model determines page structure and component shape.
 - The **analyst signal** test determines which projects are featured and how they're written.
-- The **plain, concrete voice** governs all copy. Ground truth for every claim is his
-  CV (`static/CV_JAH.pdf`), research, and GitHub; his writing voice is sampled from his
+- The **plain, concrete voice** governs all copy. Canonical public career facts live in the
+  Professional record; their evidence comes from his CV, research, and GitHub. His writing
+  voice is sampled from his
   own repos (`~/repos/frequency-beliefs`, `~/repos/efficiency-wages`). No claim should
   exceed those sources.
-- Single-group project data prevents duplicate project rendering across the work page.
-  The **Selected work** module (`src/data/projects.ts`) owns the project list, the group
-  taxonomy, the ordered featured set, and the invariants — enforced at import via
+- Single-group project presentation prevents duplicate rendering across the Work page.
+  The Professional record owns stable project identifiers, full titles, categories,
+  statuses, factual URLs, and the union of canonical tool identifiers/names for all 12
+  complete website entries, including entries omitted from the CV. The **Selected work**
+  adapter (`src/data/projects.ts`) selects those facts by identifier and owns the group
+  taxonomy, summaries, Problem/Approach/Result prose, ordered featured set, per-output tool
+  selection/order, illustration metadata, and invariants — enforced at import via
   `assertInvariants()`, which calls the exported, fixture-testable
   `checkInvariants(projects, groups)` (mirroring the publications module). The rules:
-  unique titles, all groups known, every featured title exists, and **figure coverage** —
+  unique titles, all groups known, every featured identifier exists, and **figure coverage** —
   every substantive project (any group other than the "Also on GitHub" link group) must
   carry an `embed` or `image`, so the uniform side-by-side illustrated rhythm holds at the
   data layer. A figureless substantive project is demoted to "Also on GitHub" rather than
   rendered text-only (see ADR 0005). Any consumer and the build are protected. Pages read
   `selectedWork()` and `featuredProjects()` rather than re-deriving grouping or hardcoding
-  which projects are featured.
+  which projects are featured. Typst independently selects four record projects by stable
+  identifier and owns only its derived short titles, summaries, tool subset/order, and layout.
 - The hero's two analyses and the Work page's open-source strip run on **committed,
   precomputed data** (`scripts/gen_hero_data.py` → `hero-model.json`; Panel 2's time-of-day
   bins `scripts/gen_citibike_tod.py` → `scripts/data/citibike_tod_risk.json`, recomputed from

@@ -1,5 +1,8 @@
 # Professional Record Migration Plan
 
+**Status:** Complete (2026-07-19). The seven slices are implemented; the final verification
+commands and ownership rules below remain the maintenance gate.
+
 ## Overview
 
 Make the website-owned Professional record the one factual source for the public site

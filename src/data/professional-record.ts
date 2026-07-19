@@ -239,6 +239,37 @@ const publicationsSchema = z
   .min(1)
   .superRefine(requireUniqueIds("publication"));
 
+const selectedWorkHrefSchema = z.union([
+  z.url().refine((url) => /^https?:\/\//.test(url), "must be an HTTP(S) URL"),
+  z.string().regex(/^\/(?!\/)\S+$/, "must be a root-relative URL"),
+  z.strictObject({
+    publicationId: stableIdSchema,
+    linkId: stableIdSchema
+  })
+]);
+
+const selectedWorkTitleSchema = z.union([
+  z.string().min(1),
+  z.strictObject({ publicationId: stableIdSchema })
+]);
+
+const selectedWorkSchema = z
+  .array(
+    z.strictObject({
+      id: stableIdSchema,
+      title: selectedWorkTitleSchema,
+      category: z.string().min(1),
+      status: z.string().min(1),
+      tools: z
+        .array(z.strictObject({ id: stableIdSchema, name: z.string().min(1) }))
+        .min(1)
+        .superRefine(requireUniqueIds("selected work tool")),
+      href: selectedWorkHrefSchema
+    })
+  )
+  .min(1)
+  .superRefine(requireUniqueIds("selected work"));
+
 const professionalRecordSchema = z
   .strictObject({
     identity: identitySchema,
@@ -248,7 +279,8 @@ const professionalRecordSchema = z
     skills: skillsSchema,
     spokenLanguages: spokenLanguagesSchema,
     people: peopleSchema,
-    publications: publicationsSchema
+    publications: publicationsSchema,
+    selectedWork: selectedWorkSchema
   })
   .superRefine((record, context) => {
     const personIds = new Set(record.people.map((person) => person.id));
@@ -262,6 +294,37 @@ const professionalRecordSchema = z
           });
         }
       });
+    });
+    const publicationsById = new Map(
+      record.publications.map((publication) => [publication.id, publication])
+    );
+    record.selectedWork.forEach((project, projectIndex) => {
+      const title = project.title;
+      if (typeof title !== "string" && !publicationsById.has(title.publicationId)) {
+        context.addIssue({
+          code: "custom",
+          message: `Unknown selected work title publication id: ${title.publicationId}`,
+          path: ["selectedWork", projectIndex, "title", "publicationId"]
+        });
+      }
+      const href = project.href;
+      if (typeof href === "string") return;
+      const publication = publicationsById.get(href.publicationId);
+      if (!publication) {
+        context.addIssue({
+          code: "custom",
+          message: `Unknown selected work publication id: ${href.publicationId}`,
+          path: ["selectedWork", projectIndex, "href", "publicationId"]
+        });
+        return;
+      }
+      if (!publication.links.some((link) => link.id === href.linkId)) {
+        context.addIssue({
+          code: "custom",
+          message: `Unknown selected work publication link id: ${href.linkId}`,
+          path: ["selectedWork", projectIndex, "href", "linkId"]
+        });
+      }
     });
   });
 
@@ -277,6 +340,7 @@ export type ProfessionalSkill = ProfessionalSkills["items"][number];
 export type ProfessionalSpokenLanguage = ProfessionalRecord["spokenLanguages"][number];
 export type ProfessionalPerson = ProfessionalRecord["people"][number];
 export type ProfessionalPublication = ProfessionalRecord["publications"][number];
+export type ProfessionalSelectedWork = ProfessionalRecord["selectedWork"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {
   const result = professionalRecordSchema.safeParse(input);

@@ -73,6 +73,14 @@ committed, byte-deterministic PDF is stale. Migration proceeds category by categ
 starting with experience as a behavior-preserving tracer bullet; each category moves
 both outputs and deletes its duplicate facts in one cutover.
 
+The migration is complete across identity/contact, experience, education, teaching,
+skills/languages, publications, and selected work. For selected work, the record owns the
+complete 12-project website set and the union of factual project tools under stable project
+and tool identifiers. Astro and Typst each select their approved tool subset and order by
+identifier; the CV selects its current four projects by identifier and retains its derived
+short titles, summaries, and layout. Website grouping, evidence-dossier prose, featured
+order, tool presentation, and illustration metadata remain website presentation concerns.
+
 For the experience tracer bullet, behavior preservation is measured against the
 pre-migration Typst source at `ddf5d4a`, not blindly against the then-committed PDF.
 That PDF was already stale: its final AXA bullet said `Qwen3.5-VL 4B`, while `cv/cv.typ`

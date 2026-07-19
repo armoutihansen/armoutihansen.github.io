@@ -20,6 +20,10 @@ const brokenLanguageSource = `cv/.language-selection-test-${process.pid}.typ`;
 const duplicateLanguageSource = `cv/.language-duplicate-test-${process.pid}.typ`;
 const brokenPublicationSource = `cv/.publication-selection-test-${process.pid}.typ`;
 const duplicatePublicationSource = `cv/.publication-duplicate-test-${process.pid}.typ`;
+const brokenProjectSource = `cv/.project-selection-test-${process.pid}.typ`;
+const duplicateProjectSource = `cv/.project-duplicate-test-${process.pid}.typ`;
+const brokenProjectToolSource = `cv/.project-tool-test-${process.pid}.typ`;
+const duplicateProjectToolSource = `cv/.project-tool-duplicate-test-${process.pid}.typ`;
 afterAll(() => {
   rmSync(testDirectory, { recursive: true });
   rmSync(join(process.cwd(), brokenEducationSource), { force: true });
@@ -31,6 +35,10 @@ afterAll(() => {
   rmSync(join(process.cwd(), duplicateLanguageSource), { force: true });
   rmSync(join(process.cwd(), brokenPublicationSource), { force: true });
   rmSync(join(process.cwd(), duplicatePublicationSource), { force: true });
+  rmSync(join(process.cwd(), brokenProjectSource), { force: true });
+  rmSync(join(process.cwd(), duplicateProjectSource), { force: true });
+  rmSync(join(process.cwd(), brokenProjectToolSource), { force: true });
+  rmSync(join(process.cwd(), duplicateProjectToolSource), { force: true });
 });
 
 describe("verified CV build", () => {
@@ -134,7 +142,10 @@ describe("verified CV build", () => {
 
   it("rejects an unknown selected skill identifier", () => {
     const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
-    const broken = source.replace('"python",', '"unknown-skill",');
+    const broken = source.replace(
+      'ids: ("python", "r", "sql", "stata", "typescript")',
+      'ids: ("unknown-skill", "r", "sql", "stata", "typescript")'
+    );
     expect(broken).not.toBe(source);
     writeFileSync(join(process.cwd(), brokenSkillSource), broken);
 
@@ -209,5 +220,56 @@ describe("verified CV build", () => {
     expect(() =>
       renderCv(join(testDirectory, "duplicate-publication.pdf"), duplicatePublicationSource)
     ).toThrow(/Duplicate CV publication selection id/);
+  });
+
+  it("selects projects by stable identifier without owning record facts", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    expect(source).toContain('id: "citibike-demand-risk-net-flow"');
+    expect(source).toContain('id: "rag-search-engine"');
+    expect(source).not.toContain('tag: "Operational analysis"');
+    expect(source).not.toContain('title: "RAG Search Engine"');
+  });
+
+  it("rejects unknown and duplicate selected project identifiers", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const unknown = source.replace(
+      'id: "citibike-demand-risk-net-flow"',
+      'id: "unknown-project"'
+    );
+    expect(unknown).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenProjectSource), unknown);
+    expect(() =>
+      renderCv(join(testDirectory, "broken-project.pdf"), brokenProjectSource)
+    ).toThrow(/Unknown Professional record selected work id: unknown-project/);
+
+    const duplicate = source.replace(
+      'id: "informativeness-frequency-report-scoring-rules"',
+      'id: "citibike-demand-risk-net-flow"'
+    );
+    expect(duplicate).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicateProjectSource), duplicate);
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-project.pdf"), duplicateProjectSource)
+    ).toThrow(/Duplicate CV selected work id/);
+  });
+
+  it("rejects an unknown selected project tool identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"pandas", "geopandas"', '"unknown-tool", "geopandas"');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenProjectToolSource), broken);
+    expect(() =>
+      renderCv(join(testDirectory, "broken-project-tool.pdf"), brokenProjectToolSource)
+    ).toThrow(/Unknown selected work tool id: unknown-tool/);
+  });
+
+  it("rejects a duplicate selected project tool identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace('"python", "pandas", "geopandas"', '"python", "python", "geopandas"');
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicateProjectToolSource), broken);
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-project-tool.pdf"), duplicateProjectToolSource)
+    ).toThrow(/Duplicate CV selected work tool id/);
   });
 });
