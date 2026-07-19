@@ -4,6 +4,7 @@
   "pdfSha256": "e9c58529a2885dff1c2a7d9bf9d9f21fe2bef2acb9444c91037841cf2d3b5777",
   "experiencePage": 1,
   "educationPage": 1,
+  "teachingPage": 2,
   "page1RequiredText": "BA Financial Management & Services",
   "page2RequiredText": "CitiBike Demand, Risk & Net Flow",
   "experienceText": [
@@ -31,5 +32,16 @@
     "University of Mainz — GPA 1.6",
     "BA Financial Management & Services 2008 – 2012",
     "Copenhagen Business Academy"
+  ],
+  "teachingText": [
+    "University lecturer and tutor in applied, behavioral, and organizational economics; supervised 60+ bachelor’s and master’s theses.",
+    "Seminar on Current Topics in Microeconomics 2025 – present",
+    "Undergraduate lecturer",
+    "Research Module on Applied Microeconomics & Management 2022 – 2025",
+    "Graduate lecturer",
+    "Empirical Evaluation of Management Practices 2019 – 2022",
+    "Graduate lecturer",
+    "Behavioral Management Science 2017 – 2020",
+    "Undergraduate lecturer"
   ]
 }

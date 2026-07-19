@@ -78,5 +78,65 @@
       "distinctions": [],
       "dates": { "start": "2010", "end": "2010" }
     }
-  ]
+  ],
+  "teaching": {
+    "supervision": {
+      "minimumTheses": 60,
+      "degreeLevels": ["bachelor", "master"]
+    },
+    "courses": [
+      {
+        "id": "current-topics-microeconomics",
+        "title": "Seminar on Current Topics in Microeconomics",
+        "level": "undergraduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2025", "end": null }]
+      },
+      {
+        "id": "applied-microeconomics-management-research-module",
+        "title": "Research Module on Applied Microeconomics and Management",
+        "level": "graduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2022", "end": "2025" }]
+      },
+      {
+        "id": "empirical-evaluation-management-practices",
+        "title": "Empirical Evaluation of Management Practices",
+        "level": "graduate",
+        "roles": ["lecturer", "tutor"],
+        "dateSpans": [{ "start": "2019", "end": "2022" }]
+      },
+      {
+        "id": "economics-incentives-organisations",
+        "title": "Economics of Incentives in Organisations",
+        "level": "graduate",
+        "roles": ["tutor"],
+        "dateSpans": [
+          { "start": "2016", "end": "2016" },
+          { "start": "2020", "end": "2022" }
+        ]
+      },
+      {
+        "id": "behavioral-management-science",
+        "title": "Behavioral Management Science",
+        "level": "undergraduate",
+        "roles": ["lecturer", "tutor"],
+        "dateSpans": [{ "start": "2017", "end": "2020" }]
+      },
+      {
+        "id": "strategic-human-resource-management",
+        "title": "Strategic Human Resource Management",
+        "level": "graduate",
+        "roles": ["tutor"],
+        "dateSpans": [{ "start": "2016", "end": "2019" }]
+      },
+      {
+        "id": "human-resource-management-seminar",
+        "title": "Seminar on Human Resource Management",
+        "level": "graduate",
+        "roles": ["lecturer"],
+        "dateSpans": [{ "start": "2017", "end": "2018" }]
+      }
+    ]
+  }
 }

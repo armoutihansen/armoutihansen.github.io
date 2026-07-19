@@ -32,10 +32,12 @@ interface CvBaseline {
   pdfSha256: string;
   experiencePage: number;
   educationPage: number;
+  teachingPage: number;
   page1RequiredText: string;
   page2RequiredText: string;
   experienceText: string[];
   educationText: string[];
+  teachingText: string[];
 }
 
 const cvBaseline = JSON.parse(
@@ -136,6 +138,15 @@ export function inspectCvBaseline(pdf: string): {
     const next = educationPage.indexOf(expected, position);
     if (next < 0) {
       throw new Error(`CV education baseline drifted at: ${expected}`);
+    }
+    position = next + expected.length;
+  }
+  const teachingPage = extractedPages[cvBaseline.teachingPage - 1];
+  position = 0;
+  for (const expected of cvBaseline.teachingText.map(normalized)) {
+    const next = teachingPage.indexOf(expected, position);
+    if (next < 0) {
+      throw new Error(`CV teaching baseline drifted at: ${expected}`);
     }
     position = next + expected.length;
   }

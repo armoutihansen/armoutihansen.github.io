@@ -30,7 +30,22 @@ const validRecord = {
       distinctions: ["Summa cum laude"],
       dates: { start: "2015", end: "2021" }
     }
-  ]
+  ],
+  teaching: {
+    supervision: {
+      minimumTheses: 1,
+      degreeLevels: ["bachelor" as const]
+    },
+    courses: [
+      {
+        id: "example-course",
+        title: "Example Course",
+        level: "graduate" as const,
+        roles: ["lecturer" as const],
+        dateSpans: [{ start: "2020", end: "2021" }]
+      }
+    ]
+  }
 };
 
 describe("parseProfessionalRecord", () => {
@@ -121,6 +136,153 @@ describe("parseProfessionalRecord", () => {
         dates: { start: "2010", end: "2010" }
       }
     ]);
+  });
+
+  it("parses the complete seven-entry teaching record and supervision facts", () => {
+    expect(professionalRecord.teaching).toEqual({
+      supervision: {
+        minimumTheses: 60,
+        degreeLevels: ["bachelor", "master"]
+      },
+      courses: [
+        {
+          id: "current-topics-microeconomics",
+          title: "Seminar on Current Topics in Microeconomics",
+          level: "undergraduate",
+          roles: ["lecturer"],
+          dateSpans: [{ start: "2025", end: null }]
+        },
+        {
+          id: "applied-microeconomics-management-research-module",
+          title: "Research Module on Applied Microeconomics and Management",
+          level: "graduate",
+          roles: ["lecturer"],
+          dateSpans: [{ start: "2022", end: "2025" }]
+        },
+        {
+          id: "empirical-evaluation-management-practices",
+          title: "Empirical Evaluation of Management Practices",
+          level: "graduate",
+          roles: ["lecturer", "tutor"],
+          dateSpans: [{ start: "2019", end: "2022" }]
+        },
+        {
+          id: "economics-incentives-organisations",
+          title: "Economics of Incentives in Organisations",
+          level: "graduate",
+          roles: ["tutor"],
+          dateSpans: [
+            { start: "2016", end: "2016" },
+            { start: "2020", end: "2022" }
+          ]
+        },
+        {
+          id: "behavioral-management-science",
+          title: "Behavioral Management Science",
+          level: "undergraduate",
+          roles: ["lecturer", "tutor"],
+          dateSpans: [{ start: "2017", end: "2020" }]
+        },
+        {
+          id: "strategic-human-resource-management",
+          title: "Strategic Human Resource Management",
+          level: "graduate",
+          roles: ["tutor"],
+          dateSpans: [{ start: "2016", end: "2019" }]
+        },
+        {
+          id: "human-resource-management-seminar",
+          title: "Seminar on Human Resource Management",
+          level: "graduate",
+          roles: ["lecturer"],
+          dateSpans: [{ start: "2017", end: "2018" }]
+        }
+      ]
+    });
+  });
+
+  it("rejects overlapping teaching date spans at the later span path", () => {
+    const overlapping = structuredClone(validRecord);
+    overlapping.teaching.courses[0].dateSpans = [
+      { start: "2018", end: "2020" },
+      { start: "2020", end: "2022" }
+    ];
+
+    expect(() => parseProfessionalRecord(overlapping)).toThrow(
+      /overlaps an earlier teaching date span.*teaching\.courses\[0\]\.dateSpans\[1\]/s
+    );
+  });
+
+  it("rejects a teaching date span that ends before it starts", () => {
+    const reversed = structuredClone(validRecord);
+    reversed.teaching.courses[0].dateSpans = [{ start: "2022", end: "2021" }];
+
+    expect(() => parseProfessionalRecord(reversed)).toThrow(
+      /must not end before it starts.*teaching\.courses\[0\]\.dateSpans\[0\]\.end/s
+    );
+  });
+
+  it.each(["2021-00", "2021-13", "Spring 2021", "2021-06-01"])(
+    "rejects malformed teaching partial date %s with its record path",
+    (start) => {
+      const invalid = structuredClone(validRecord);
+      invalid.teaching.courses[0].dateSpans[0].start = start;
+
+      expect(() => parseProfessionalRecord(invalid)).toThrow(
+        /YYYY or YYYY-MM.*teaching\.courses\[0\]\.dateSpans\[0\]\.start/s
+      );
+    }
+  );
+
+  it("rejects a teaching course without a date span", () => {
+    const missing = structuredClone(validRecord);
+    missing.teaching.courses[0].dateSpans = [];
+
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /Too small.*teaching\.courses\[0\]\.dateSpans/s
+    );
+  });
+
+  it("rejects duplicate teaching course identifiers at the duplicate path", () => {
+    const duplicate = structuredClone(validRecord);
+    duplicate.teaching.courses.push(structuredClone(duplicate.teaching.courses[0]));
+
+    expect(() => parseProfessionalRecord(duplicate)).toThrow(
+      /Duplicate teaching course id.*teaching\.courses\[1\]\.id/s
+    );
+  });
+
+  it("rejects missing required teaching facts with their path", () => {
+    const missing = structuredClone(validRecord) as {
+      teaching: { courses: Array<Record<string, unknown>> };
+    };
+    delete missing.teaching.courses[0].title;
+
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected string.*teaching\.courses\[0\]\.title/s
+    );
+  });
+
+  it("rejects unknown teaching fields with their path", () => {
+    const unknown = structuredClone(validRecord) as {
+      teaching: { courses: Array<Record<string, unknown>> };
+    };
+    unknown.teaching.courses[0].years = "2020–2021";
+
+    expect(() => parseProfessionalRecord(unknown)).toThrow(
+      /Unrecognized key.*teaching\.courses\[0\]/s
+    );
+  });
+
+  it("rejects missing supervision facts with their path", () => {
+    const missing = structuredClone(validRecord) as {
+      teaching: { supervision: Record<string, unknown> };
+    };
+    delete missing.teaching.supervision.minimumTheses;
+
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected number.*teaching\.supervision\.minimumTheses/s
+    );
   });
 
   it.each(["2021-00", "2021-13", "Summer 2021", "2021-06-01"])(

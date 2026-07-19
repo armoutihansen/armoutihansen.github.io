@@ -12,9 +12,13 @@ import { assertCurrentCv, inspectCvBaseline, renderCv, TYPST_VERSION } from "./c
 
 const testDirectory = mkdtempSync(join(tmpdir(), "professional-record-cv-test-"));
 const brokenEducationSource = `cv/.education-selection-test-${process.pid}.typ`;
+const brokenTeachingSource = `cv/.teaching-selection-test-${process.pid}.typ`;
+const duplicateTeachingSource = `cv/.teaching-duplicate-test-${process.pid}.typ`;
 afterAll(() => {
   rmSync(testDirectory, { recursive: true });
   rmSync(join(process.cwd(), brokenEducationSource), { force: true });
+  rmSync(join(process.cwd(), brokenTeachingSource), { force: true });
+  rmSync(join(process.cwd(), duplicateTeachingSource), { force: true });
 });
 
 describe("verified CV build", () => {
@@ -44,7 +48,7 @@ describe("verified CV build", () => {
     expect(readFileSync(first)).toEqual(readFileSync(second));
   });
 
-  it("preserves the approved experience and education text and two-page rendered layout", () => {
+  it("preserves the approved experience, education, and teaching text and two-page rendered layout", () => {
     const output = join(testDirectory, "baseline.pdf");
     renderCv(output);
 
@@ -82,5 +86,37 @@ describe("verified CV build", () => {
     expect(() =>
       renderCv(join(testDirectory, "broken-education.pdf"), brokenEducationSource)
     ).toThrow(/Unknown Professional record education id: unknown-education/);
+  });
+
+  it("rejects an unknown selected teaching identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace(
+      '"current-topics-microeconomics",',
+      '"unknown-teaching-course",'
+    );
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenTeachingSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "broken-teaching.pdf"), brokenTeachingSource)
+    ).toThrow(
+      /Unknown Professional record teaching course id: unknown-teaching-course/
+    );
+  });
+
+  it("rejects duplicate selected teaching identifiers", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace(
+      'id: "applied-microeconomics-management-research-module"',
+      'id: "current-topics-microeconomics"'
+    );
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicateTeachingSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-teaching.pdf"), duplicateTeachingSource)
+    ).toThrow(
+      /Duplicate CV teaching selection id/
+    );
   });
 });

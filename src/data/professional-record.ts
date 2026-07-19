@@ -9,6 +9,50 @@ const stableIdSchema = z
   .string()
   .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "must be lowercase kebab-case");
 
+type PartialDateSpan = { start: string; end: string | null };
+
+function partialDateIndex(value: string, boundary: "start" | "end"): number {
+  const [year, month] = value.split("-").map(Number);
+  return year * 12 + (month ? month - 1 : boundary === "start" ? 0 : 11);
+}
+
+function rejectOverlappingTeachingSpans(
+  spans: PartialDateSpan[],
+  context: z.core.$RefinementCtx
+): void {
+  spans.forEach((span, index) => {
+    const start = partialDateIndex(span.start, "start");
+    const end =
+      span.end === null
+        ? Number.POSITIVE_INFINITY
+        : partialDateIndex(span.end, "end");
+    if (end < start) {
+      context.addIssue({
+        code: "custom",
+        message: "must not end before it starts",
+        path: [index, "end"]
+      });
+      return;
+    }
+    for (let priorIndex = 0; priorIndex < index; priorIndex += 1) {
+      const prior = spans[priorIndex];
+      const priorStart = partialDateIndex(prior.start, "start");
+      const priorEnd =
+        prior.end === null
+          ? Number.POSITIVE_INFINITY
+          : partialDateIndex(prior.end, "end");
+      if (start <= priorEnd && priorStart <= end) {
+        context.addIssue({
+          code: "custom",
+          message: "overlaps an earlier teaching date span",
+          path: [index]
+        });
+        return;
+      }
+    }
+  });
+}
+
 function requireUniqueIds(domain: string) {
   return (entries: { id: string }[], context: z.core.$RefinementCtx) => {
     const seen = new Set<string>();
@@ -73,10 +117,37 @@ const educationSchema = z
   )
   .superRefine(requireUniqueIds("education"));
 
+const teachingSchema = z.strictObject({
+  supervision: z.strictObject({
+    minimumTheses: z.number().int().positive(),
+    degreeLevels: z.array(z.enum(["bachelor", "master"])).min(1)
+  }),
+  courses: z
+    .array(
+      z.strictObject({
+        id: stableIdSchema,
+        title: z.string().min(1),
+        level: z.enum(["undergraduate", "graduate"]),
+        roles: z.array(z.enum(["lecturer", "tutor"])).min(1),
+        dateSpans: z
+          .array(
+            z.strictObject({
+              start: partialDateSchema,
+              end: partialDateSchema.nullable()
+            })
+          )
+          .min(1)
+          .superRefine(rejectOverlappingTeachingSpans)
+      })
+    )
+    .superRefine(requireUniqueIds("teaching course"))
+});
+
 const professionalRecordSchema = z.strictObject({
   identity: identitySchema,
   experience: experienceSchema,
-  education: educationSchema
+  education: educationSchema,
+  teaching: teachingSchema
 });
 
 export type ProfessionalRecord = z.infer<typeof professionalRecordSchema>;
@@ -84,6 +155,8 @@ export type ProfessionalIdentity = ProfessionalRecord["identity"];
 export type ProfessionalLink = ProfessionalIdentity["links"][number];
 export type ProfessionalExperience = ProfessionalRecord["experience"][number];
 export type ProfessionalEducation = ProfessionalRecord["education"][number];
+export type ProfessionalTeaching = ProfessionalRecord["teaching"];
+export type ProfessionalTeachingCourse = ProfessionalTeaching["courses"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {
   const result = professionalRecordSchema.safeParse(input);

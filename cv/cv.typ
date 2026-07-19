@@ -94,6 +94,7 @@
 // ========================================================== CONTENT ==========
 #let experience-facts = professional-record.experience
 #let education-facts = professional-record.education
+#let teaching-facts = professional-record.teaching.courses
 
 #let professional-link-fact(id) = {
   let matches = identity-facts.links.filter(link => link.id == id)
@@ -114,6 +115,12 @@
 #let education-fact(id) = {
   let matches = education-facts.filter(entry => entry.id == id)
   assert(matches.len() == 1, message: "Unknown Professional record education id: " + id)
+  matches.first()
+}
+
+#let teaching-fact(id) = {
+  let matches = teaching-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record teaching course id: " + id)
   matches.first()
 }
 
@@ -207,13 +214,55 @@
   )
 })
 
-#let teaching_lead = [University lecturer and tutor in applied, behavioral, and organizational economics; supervised 60+ bachelor's and master's theses.]
-#let teaching = (
-  ([Seminar on Current Topics in Microeconomics], "2025 – present", [Undergraduate lecturer]),
-  ([Research Module on Applied Microeconomics & Management], "2022 – 2025", [Graduate lecturer]),
-  ([Empirical Evaluation of Management Practices], "2019 – 2022", [Graduate lecturer]),
-  ([Behavioral Management Science], "2017 – 2020", [Undergraduate lecturer]),
+#let teaching-supervision = professional-record.teaching.supervision
+#let teaching-level-labels = (
+  undergraduate: "Undergraduate",
+  graduate: "Graduate",
 )
+#let teaching-role-labels = (
+  lecturer: "lecturer",
+  tutor: "tutor",
+)
+
+#let teaching-span-label(span) = {
+  if span.end == span.start {
+    span.start
+  } else {
+    span.start + " – " + if span.end == none { "present" } else { span.end }
+  }
+}
+
+#let teaching-presentation = (
+  (id: "current-topics-microeconomics", roles: ("lecturer",), compact-title: false),
+  (id: "applied-microeconomics-management-research-module", roles: ("lecturer",), compact-title: true),
+  (id: "empirical-evaluation-management-practices", roles: ("lecturer",), compact-title: false),
+  (id: "behavioral-management-science", roles: ("lecturer",), compact-title: false),
+)
+#let teaching-selection-ids = teaching-presentation.map(presentation => presentation.id)
+#assert(
+  teaching-selection-ids.len() == teaching-selection-ids.dedup().len(),
+  message: "Duplicate CV teaching selection id",
+)
+
+#let teaching = teaching-presentation.map(presentation => {
+  let fact = teaching-fact(presentation.id)
+  for role in presentation.roles {
+    assert(fact.roles.contains(role), message: "Teaching role is not recorded for " + presentation.id + ": " + role)
+  }
+  let title = if presentation.compact-title {
+    fact.title.replace(" and ", " & ")
+  } else {
+    fact.title
+  }
+  (
+    title,
+    fact.dateSpans.map(teaching-span-label).join(", "),
+    teaching-level-labels.at(fact.level) + " " + presentation.roles.map(role => teaching-role-labels.at(role)).join(" & "),
+  )
+})
+
+#let supervision-levels = teaching-supervision.degreeLevels.map(level => level + "’s").join(" and ")
+#let teaching_lead = [University lecturer and tutor in applied, behavioral, and organizational economics; supervised #teaching-supervision.minimumTheses+ #supervision-levels theses.]
 
 #let skills = (
   ("Programming", ("Python", "R", "SQL", "Stata", "TypeScript")),
