@@ -18,6 +18,8 @@ const brokenSkillSource = `cv/.skill-selection-test-${process.pid}.typ`;
 const duplicateSkillSource = `cv/.skill-duplicate-test-${process.pid}.typ`;
 const brokenLanguageSource = `cv/.language-selection-test-${process.pid}.typ`;
 const duplicateLanguageSource = `cv/.language-duplicate-test-${process.pid}.typ`;
+const brokenPublicationSource = `cv/.publication-selection-test-${process.pid}.typ`;
+const duplicatePublicationSource = `cv/.publication-duplicate-test-${process.pid}.typ`;
 afterAll(() => {
   rmSync(testDirectory, { recursive: true });
   rmSync(join(process.cwd(), brokenEducationSource), { force: true });
@@ -27,6 +29,8 @@ afterAll(() => {
   rmSync(join(process.cwd(), duplicateSkillSource), { force: true });
   rmSync(join(process.cwd(), brokenLanguageSource), { force: true });
   rmSync(join(process.cwd(), duplicateLanguageSource), { force: true });
+  rmSync(join(process.cwd(), brokenPublicationSource), { force: true });
+  rmSync(join(process.cwd(), duplicatePublicationSource), { force: true });
 });
 
 describe("verified CV build", () => {
@@ -170,5 +174,40 @@ describe("verified CV build", () => {
     expect(() =>
       renderCv(join(testDirectory, "duplicate-language.pdf"), duplicateLanguageSource)
     ).toThrow(/Duplicate CV spoken-language selection id/);
+  });
+
+  it("selects publications by stable identifier without owning factual strings", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    expect(source).toContain('"efficiency-wages-motivated-agents"');
+    expect(source).not.toContain("Efficiency Wages with Motivated Agents");
+    expect(source).not.toContain("J. Armouti-Hansen");
+  });
+
+  it("rejects an unknown selected publication identifier", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace(
+      '"efficiency-wages-motivated-agents",',
+      '"unknown-publication",'
+    );
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), brokenPublicationSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "broken-publication.pdf"), brokenPublicationSource)
+    ).toThrow(/Unknown Professional record publication id: unknown-publication/);
+  });
+
+  it("rejects duplicate selected publication identifiers", () => {
+    const source = readFileSync(join(process.cwd(), "cv/cv.typ"), "utf8");
+    const broken = source.replace(
+      '"managing-anticipation-reference-dependent-choice",',
+      '"efficiency-wages-motivated-agents",'
+    );
+    expect(broken).not.toBe(source);
+    writeFileSync(join(process.cwd(), duplicatePublicationSource), broken);
+
+    expect(() =>
+      renderCv(join(testDirectory, "duplicate-publication.pdf"), duplicatePublicationSource)
+    ).toThrow(/Duplicate CV publication selection id/);
   });
 });

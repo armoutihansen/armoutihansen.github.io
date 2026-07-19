@@ -53,7 +53,7 @@ Important files:
 
 - `src/data/profile.ts`: website identity/link selection, headline, summary, and skill groups.
 - `src/data/projects.ts`: project cards shown on the homepage and Projects page.
-- `src/data/publications.ts`: publications, working papers, and research projects.
+- `src/data/publications.ts`: website Research presentation and resolved adapter.
 - `src/data/professional-record.json`: canonical Professional record facts.
 - `src/data/professional-record.ts`: strict Professional record validation.
 - `src/data/github.json`: precomputed GitHub activity data (professional-link facts stay in
@@ -143,7 +143,11 @@ The custom domain is provided by `static/CNAME`, which is copied into the build 
 Most content updates should be made in `src/data/`:
 
 - Add or edit projects in `src/data/projects.ts`.
-- Add or edit publications in `src/data/publications.ts`.
+- Update shared publication people, titles, structured authors, venues, years, details,
+  types, and factual links in `src/data/professional-record.json`.
+- Update website-only Research abstracts, covers, link labels, featured selection, or
+  ordering in `src/data/publications.ts`; update the CV's independent journal selection,
+  abbreviations, ordering, or layout in `cv/cv.typ`.
 - Update shared name, email, location, phone, or professional-link URLs in
   `src/data/professional-record.json`.
 - Update website-only identity positioning, prose, link labels, visibility, ordering, or

@@ -184,5 +184,97 @@
     { "id": "english", "name": "English", "proficiency": "C2" },
     { "id": "german", "name": "German", "proficiency": "C1/C2" },
     { "id": "danish", "name": "Danish", "proficiency": "native" }
+  ],
+  "people": [
+    { "id": "jesper-armouti-hansen", "fullName": "Jesper Armouti-Hansen" },
+    { "id": "lea-cassar", "fullName": "Lea Cassar" },
+    { "id": "anna-dereky", "fullName": "Anna Dereky" },
+    { "id": "florian-engl", "fullName": "Florian Engl" },
+    { "id": "christopher-kops", "fullName": "Christopher Kops" },
+    { "id": "matthias-kraekel", "fullName": "Matthias Kraekel" }
+  ],
+  "publications": [
+    {
+      "id": "efficiency-wages-motivated-agents",
+      "title": "Efficiency Wages with Motivated Agents",
+      "authorIds": ["jesper-armouti-hansen", "lea-cassar", "anna-dereky", "florian-engl"],
+      "venue": "Games and Economic Behavior",
+      "year": "2024",
+      "details": "145, pp. 66–83",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://www.sciencedirect.com/science/article/pii/S0899825624000307" },
+        { "id": "code", "url": "https://github.com/armoutihansen/efficiency-wages" }
+      ]
+    },
+    {
+      "id": "managing-anticipation-reference-dependent-choice",
+      "title": "Managing Anticipation and Reference-Dependent Choice",
+      "authorIds": ["jesper-armouti-hansen", "christopher-kops"],
+      "venue": "Journal of Mathematical Economics",
+      "year": "2024",
+      "details": "112, 102988",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://www.sciencedirect.com/science/article/pii/S0304406824000508" }
+      ]
+    },
+    {
+      "id": "optimal-contracting-endogenous-project-mission",
+      "title": "Optimal Contracting with Endogenous Project Mission",
+      "authorIds": ["jesper-armouti-hansen", "lea-cassar"],
+      "venue": "Journal of the European Economic Association",
+      "year": "2020",
+      "details": "18(5), pp. 2647–2676",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://scholar.google.com/scholar?oi=bibs&cluster=9361077569797977679&btnI=1&hl=en" }
+      ]
+    },
+    {
+      "id": "sequential-rationalization-indecisive-choice",
+      "title": "This or That? Sequential Rationalization of Indecisive Choice Behavior",
+      "authorIds": ["jesper-armouti-hansen", "christopher-kops"],
+      "venue": "Theory and Decision",
+      "year": "2018",
+      "details": "84(4), pp. 507–524",
+      "type": "journal-publication",
+      "links": [
+        { "id": "paper", "url": "https://scholar.google.com/scholar?oi=bibs&cluster=935449046387275988&btnI=1&hl=en" }
+      ]
+    },
+    {
+      "id": "optimal-selling-uncertain-consumption-quality",
+      "title": "On the Optimal Mode of Selling Goods with Uncertain Consumption Quality",
+      "authorIds": ["jesper-armouti-hansen", "matthias-kraekel"],
+      "venue": "Working paper",
+      "year": null,
+      "details": null,
+      "type": "working-paper",
+      "links": [{ "id": "manuscript", "url": "/papers/optimal-selling.pdf" }]
+    },
+    {
+      "id": "predictive-completeness-social-preference-theories",
+      "title": "Predictive Completeness of Social Preference Theories",
+      "authorIds": ["jesper-armouti-hansen"],
+      "venue": "Work in progress",
+      "year": null,
+      "details": "A machine learning benchmark approach",
+      "type": "research-project",
+      "links": [{ "id": "manuscript", "url": "/papers/predictive-completeness.pdf" }]
+    },
+    {
+      "id": "informativeness-frequency-report-scoring-rules",
+      "title": "The Informativeness of Frequency-Report Scoring Rules",
+      "authorIds": ["jesper-armouti-hansen"],
+      "venue": "Working paper",
+      "year": "2026",
+      "details": "Manuscript complete; replication package finalised",
+      "type": "research-project",
+      "links": [
+        { "id": "manuscript", "url": "/papers/frequency-beliefs.pdf" },
+        { "id": "replication-package", "url": "https://github.com/armoutihansen/frequency-beliefs" }
+      ]
+    }
   ]
 }

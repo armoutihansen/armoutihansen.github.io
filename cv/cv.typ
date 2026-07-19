@@ -97,6 +97,8 @@
 #let teaching-facts = professional-record.teaching.courses
 #let skill-facts = professional-record.skills.items
 #let spoken-language-facts = professional-record.spokenLanguages
+#let people-facts = professional-record.people
+#let publication-facts = professional-record.publications
 
 #let professional-link-fact(id) = {
   let matches = identity-facts.links.filter(link => link.id == id)
@@ -135,6 +137,18 @@
 #let spoken-language-fact(id) = {
   let matches = spoken-language-facts.filter(entry => entry.id == id)
   assert(matches.len() == 1, message: "Unknown Professional record spoken language id: " + id)
+  matches.first()
+}
+
+#let person-fact(id) = {
+  let matches = people-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record person id: " + id)
+  matches.first()
+}
+
+#let publication-fact(id) = {
+  let matches = publication-facts.filter(entry => entry.id == id)
+  assert(matches.len() == 1, message: "Unknown Professional record publication id: " + id)
   matches.first()
 }
 
@@ -186,12 +200,32 @@
   )
 })
 
-#let publications = (
-  ([Efficiency Wages with Motivated Agents], ("J. Armouti-Hansen", "L. Cassar", "A. Dereky", "F. Engl"), [Games and Economic Behavior], [145, 66–83], "2024"),
-  ([Managing Anticipation and Reference-Dependent Choice], ("J. Armouti-Hansen", "C. Kops"), [Journal of Mathematical Economics], [112, 102988], "2024"),
-  ([Optimal Contracting with Endogenous Project Mission], ("J. Armouti-Hansen", "L. Cassar"), [Journal of the European Economic Association], [18(5), 2647–2676], "2020"),
-  ([This or That? Sequential Rationalization of Indecisive Choice Behavior], ("J. Armouti-Hansen", "C. Kops"), [Theory and Decision], [84(4), 507–524], "2018"),
+#let publication-selection = (
+  "efficiency-wages-motivated-agents",
+  "managing-anticipation-reference-dependent-choice",
+  "optimal-contracting-endogenous-project-mission",
+  "sequential-rationalization-indecisive-choice",
 )
+#assert(
+  publication-selection.len() == publication-selection.dedup().len(),
+  message: "Duplicate CV publication selection id",
+)
+#let abbreviated-person-name(person-id) = {
+  let parts = person-fact(person-id).fullName.split(" ")
+  parts.first().slice(0, 1) + ". " + parts.slice(1).join(" ")
+}
+#let owner-abbreviated-name = abbreviated-person-name("jesper-armouti-hansen")
+#let publications = publication-selection.map(id => {
+  let fact = publication-fact(id)
+  assert(fact.type == "journal-publication", message: "CV publication selection is not a journal publication: " + id)
+  (
+    fact.title,
+    fact.authorIds.map(abbreviated-person-name),
+    fact.venue,
+    fact.details.replace("pp. ", ""),
+    fact.year,
+  )
+})
 
 #let projects = (
   (title: "CitiBike Demand, Risk & Net Flow", tag: "Operational analysis",
@@ -339,7 +373,7 @@
 #section("Publications", note: "80 citations · Google Scholar")
 #set enum(numbering: n => text(font: mono, size: fs-meta, fill: grey)[#n.], indent: 0pt, body-indent: 0.5em, spacing: s-m)
 #for (title, authors, venue, detail, year) in publications {
-  let auth = authors.map(a => if a == "J. Armouti-Hansen" { text(weight: 600)[#a] } else { [#a] }).join(", ")
+  let auth = authors.map(a => if a == owner-abbreviated-name { text(weight: 600)[#a] } else { [#a] }).join(", ")
   enum.item(block(width: measure)[
     #text(weight: 600)[#title.] #h(0.25em) #auth. #h(0.25em) #emph(venue), #detail (#year).
   ])

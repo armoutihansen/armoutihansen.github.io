@@ -50,7 +50,23 @@ const validRecord = {
     categories: [{ id: "programming-language", name: "Programming language" }],
     items: [{ id: "python", name: "Python", categoryId: "programming-language" }]
   },
-  spokenLanguages: [{ id: "english", name: "English", proficiency: "C2" }]
+  spokenLanguages: [{ id: "english", name: "English", proficiency: "C2" }],
+  people: [
+    { id: "ada-example", fullName: "Ada Example" },
+    { id: "grace-example", fullName: "Grace Example" }
+  ],
+  publications: [
+    {
+      id: "example-paper",
+      title: "An Example Paper",
+      authorIds: ["ada-example", "grace-example"],
+      venue: "Example Journal",
+      year: "2024",
+      details: "12(3), pp. 1–10",
+      type: "journal-publication" as const,
+      links: [{ id: "paper", url: "https://example.test/paper" }]
+    }
+  ]
 };
 
 describe("parseProfessionalRecord", () => {
@@ -218,6 +234,100 @@ describe("parseProfessionalRecord", () => {
       { id: "german", name: "German", proficiency: "C1/C2" },
       { id: "danish", name: "Danish", proficiency: "native" }
     ]);
+  });
+
+  it("parses canonical people and structured publication facts", () => {
+    expect(professionalRecord.people).toContainEqual({
+      id: "jesper-armouti-hansen",
+      fullName: "Jesper Armouti-Hansen"
+    });
+    expect(professionalRecord.publications).toHaveLength(7);
+    expect(professionalRecord.publications[0]).toEqual({
+      id: "efficiency-wages-motivated-agents",
+      title: "Efficiency Wages with Motivated Agents",
+      authorIds: [
+        "jesper-armouti-hansen",
+        "lea-cassar",
+        "anna-dereky",
+        "florian-engl"
+      ],
+      venue: "Games and Economic Behavior",
+      year: "2024",
+      details: "145, pp. 66–83",
+      type: "journal-publication",
+      links: [
+        {
+          id: "paper",
+          url: "https://www.sciencedirect.com/science/article/pii/S0899825624000307"
+        },
+        {
+          id: "code",
+          url: "https://github.com/armoutihansen/efficiency-wages"
+        }
+      ]
+    });
+  });
+
+  it("rejects broken publication person references and duplicate identifiers", () => {
+    const brokenPerson = structuredClone(validRecord);
+    brokenPerson.publications[0].authorIds[1] = "unknown-person";
+    expect(() => parseProfessionalRecord(brokenPerson)).toThrow(
+      /Unknown publication author id: unknown-person.*publications\[0\]\.authorIds\[1\]/s
+    );
+
+    const duplicatePerson = structuredClone(validRecord);
+    duplicatePerson.people.push(structuredClone(duplicatePerson.people[0]));
+    expect(() => parseProfessionalRecord(duplicatePerson)).toThrow(/Duplicate person id/);
+
+    const duplicatePublication = structuredClone(validRecord);
+    duplicatePublication.publications.push(
+      structuredClone(duplicatePublication.publications[0])
+    );
+    expect(() => parseProfessionalRecord(duplicatePublication)).toThrow(
+      /Duplicate publication id/
+    );
+  });
+
+  it("rejects missing and unknown publication facts", () => {
+    const missing = structuredClone(validRecord) as {
+      publications: Array<Record<string, unknown>>;
+    };
+    delete missing.publications[0].venue;
+    expect(() => parseProfessionalRecord(missing)).toThrow(
+      /expected string.*publications\[0\]\.venue/s
+    );
+
+    const unknown = structuredClone(validRecord) as {
+      publications: Array<Record<string, unknown>>;
+    };
+    unknown.publications[0].authors = "Ada Example and Grace Example";
+    expect(() => parseProfessionalRecord(unknown)).toThrow(
+      /Unrecognized key.*publications\[0\]/s
+    );
+  });
+
+  it("rejects duplicate structured authors and factual links", () => {
+    const duplicateAuthor = structuredClone(validRecord);
+    duplicateAuthor.publications[0].authorIds[1] = "ada-example";
+    expect(() => parseProfessionalRecord(duplicateAuthor)).toThrow(
+      /Duplicate publication author id: ada-example/
+    );
+
+    const duplicateLink = structuredClone(validRecord);
+    duplicateLink.publications[0].links.push(
+      structuredClone(duplicateLink.publications[0].links[0])
+    );
+    expect(() => parseProfessionalRecord(duplicateLink)).toThrow(
+      /Duplicate publication link id: paper/
+    );
+  });
+
+  it("rejects malformed publication links", () => {
+    const invalid = structuredClone(validRecord);
+    invalid.publications[0].links[0].url = "example.test/paper";
+    expect(() => parseProfessionalRecord(invalid)).toThrow(
+      /publications\[0\]\.links\[0\]\.url/s
+    );
   });
 
   it("rejects a skill that references an unknown category", () => {

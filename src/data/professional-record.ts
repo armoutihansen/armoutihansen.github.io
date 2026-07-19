@@ -186,14 +186,84 @@ const spokenLanguagesSchema = z
   .min(1)
   .superRefine(requireUniqueIds("spoken language"));
 
-const professionalRecordSchema = z.strictObject({
-  identity: identitySchema,
-  experience: experienceSchema,
-  education: educationSchema,
-  teaching: teachingSchema,
-  skills: skillsSchema,
-  spokenLanguages: spokenLanguagesSchema
-});
+const peopleSchema = z
+  .array(
+    z.strictObject({
+      id: stableIdSchema,
+      fullName: z.string().min(1)
+    })
+  )
+  .min(1)
+  .superRefine(requireUniqueIds("person"));
+
+const publicationUrlSchema = z.union([
+  z.url().refine((url) => /^https?:\/\//.test(url), "must be an HTTP(S) URL"),
+  z.string().regex(/^\/(?!\/)\S+$/, "must be a root-relative URL")
+]);
+
+const publicationSchema = z
+  .strictObject({
+    id: stableIdSchema,
+    title: z.string().min(1),
+    authorIds: z.array(stableIdSchema).min(1),
+    venue: z.string().min(1),
+    year: z.string().regex(/^\d{4}$/, "must be YYYY").nullable(),
+    details: z.string().min(1).nullable(),
+    type: z.enum(["journal-publication", "working-paper", "research-project"]),
+    links: z
+      .array(
+        z.strictObject({
+          id: stableIdSchema,
+          url: publicationUrlSchema
+        })
+      )
+      .min(1)
+      .superRefine(requireUniqueIds("publication link"))
+  })
+  .superRefine((publication, context) => {
+    const seen = new Set<string>();
+    publication.authorIds.forEach((authorId, index) => {
+      if (seen.has(authorId)) {
+        context.addIssue({
+          code: "custom",
+          message: `Duplicate publication author id: ${authorId}`,
+          path: ["authorIds", index]
+        });
+      }
+      seen.add(authorId);
+    });
+  });
+
+const publicationsSchema = z
+  .array(publicationSchema)
+  .min(1)
+  .superRefine(requireUniqueIds("publication"));
+
+const professionalRecordSchema = z
+  .strictObject({
+    identity: identitySchema,
+    experience: experienceSchema,
+    education: educationSchema,
+    teaching: teachingSchema,
+    skills: skillsSchema,
+    spokenLanguages: spokenLanguagesSchema,
+    people: peopleSchema,
+    publications: publicationsSchema
+  })
+  .superRefine((record, context) => {
+    const personIds = new Set(record.people.map((person) => person.id));
+    record.publications.forEach((publication, publicationIndex) => {
+      publication.authorIds.forEach((authorId, authorIndex) => {
+        if (!personIds.has(authorId)) {
+          context.addIssue({
+            code: "custom",
+            message: `Unknown publication author id: ${authorId}`,
+            path: ["publications", publicationIndex, "authorIds", authorIndex]
+          });
+        }
+      });
+    });
+  });
 
 export type ProfessionalRecord = z.infer<typeof professionalRecordSchema>;
 export type ProfessionalIdentity = ProfessionalRecord["identity"];
@@ -205,6 +275,8 @@ export type ProfessionalTeachingCourse = ProfessionalTeaching["courses"][number]
 export type ProfessionalSkills = ProfessionalRecord["skills"];
 export type ProfessionalSkill = ProfessionalSkills["items"][number];
 export type ProfessionalSpokenLanguage = ProfessionalRecord["spokenLanguages"][number];
+export type ProfessionalPerson = ProfessionalRecord["people"][number];
+export type ProfessionalPublication = ProfessionalRecord["publications"][number];
 
 export function parseProfessionalRecord(input: unknown): ProfessionalRecord {
   const result = professionalRecordSchema.safeParse(input);
